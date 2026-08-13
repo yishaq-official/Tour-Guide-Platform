@@ -32,7 +32,14 @@ const heritageSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["Historical", "Natural", "Cultural", "Archaeological"],
-  }
+  },
+  region: { type: String },
+  quickFacts: { type: Object },
+  touristHighlights: [{
+    title: String,
+    description: String
+  }],
+  travelerExperience: [{ type: String }]
 }, { timestamps: true });
 
 export const Heritage = mongoose.model("Heritage", heritageSchema);
