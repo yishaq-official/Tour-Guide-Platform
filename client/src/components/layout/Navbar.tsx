@@ -5,7 +5,7 @@ import { Menu, X, MapPin } from 'lucide-react';
 
 const NAV_LINKS = [
   { name: 'Home', path: '/' },
-  { name: 'Heritages', path: '/heritages' },
+  { name: 'Explore', path: '/explore' },
   { name: 'Services', path: '/services' },
   { name: 'Essentials', path: '/essentials' },
 ];
