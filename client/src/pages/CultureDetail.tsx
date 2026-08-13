@@ -110,7 +110,7 @@ export function CultureDetail() {
               {Object.entries(culture.quickFacts).map(([key, value]) => (
                 <div key={key} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-50">
                   <h4 className="text-sm font-bold text-green-600 uppercase tracking-wider mb-2">{key}</h4>
-                  <p className="text-gray-800 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: value.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }}></p>
+                  <p className="text-gray-800 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: value.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*/g, '') }}></p>
                 </div>
               ))}
             </div>
@@ -128,7 +128,7 @@ export function CultureDetail() {
           </h2>
           <div className="prose prose-lg prose-green max-w-none text-gray-700 leading-loose">
             {culture.history?.split('\n\n').map((paragraph, idx) => (
-              <p key={idx} dangerouslySetInnerHTML={{ __html: paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }} />
+              <p key={idx} dangerouslySetInnerHTML={{ __html: paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*/g, '') }} />
             ))}
           </div>
         </motion.section>
@@ -143,8 +143,8 @@ export function CultureDetail() {
             <div className="grid grid-cols-1 gap-6">
               {culture.culturalHighlights.map((highlight, idx) => (
                 <div key={idx} className="bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300 group">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors" dangerouslySetInnerHTML={{ __html: highlight.title.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }}></h3>
-                  <p className="text-gray-600 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: highlight.description.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }}></p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors" dangerouslySetInnerHTML={{ __html: highlight.title.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*/g, '') }}></h3>
+                  <p className="text-gray-600 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: highlight.description.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*/g, '') }}></p>
                 </div>
               ))}
             </div>
