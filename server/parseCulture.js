@@ -62,12 +62,12 @@ sections.forEach((section, index) => {
 
   const loc = (quickFacts['Location'] || '').replace(/\*/g, '');
 
-  // Image mapping (fallback to existing local images)
-  let image = '/images/lalibela.png'; // default meskel
-  if (name.toLowerCase().includes('fichee')) image = '/images/omo.png';
-  if (name.toLowerCase().includes('gada')) image = '/images/harar.png';
-  if (name.toLowerCase().includes('timket')) image = '/images/gondar.png';
-  if (name.toLowerCase().includes('shuwalid')) image = '/images/harar.png';
+  // Image mapping (using downloaded Wikipedia images)
+  let image = '/images/cultures/meskel.jpg'; // default meskel
+  if (name.toLowerCase().includes('fichee')) image = '/images/cultures/fichee.jpg';
+  if (name.toLowerCase().includes('gada')) image = '/images/cultures/gada.jpg';
+  if (name.toLowerCase().includes('timket')) image = '/images/cultures/timket.jpg';
+  if (name.toLowerCase().includes('shuwalid')) image = '/images/cultures/shuwalid.jpg';
   if (name.toLowerCase().includes('xeer')) image = '/images/awash.png';
   if (name.toLowerCase().includes('gifaataa')) image = '/images/tiya.png';
 

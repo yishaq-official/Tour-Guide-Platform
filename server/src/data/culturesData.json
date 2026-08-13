@@ -3,7 +3,7 @@
     "name": "Meskel (Commemoration Feast of the Finding of the True Holy Cross of Christ)",
     "history": "Meskel is an ancient religious and cultural festival that commemorates the 4th-century discovery of the True Cross upon which Jesus Christ was crucified. According to tradition, **Queen Helena (Empress Eleni)** of the Roman Empire was guided by a revelation: she built a massive bonfire and used the direction of its rising smoke to locate where the cross lay buried in Jerusalem.\n\nIn Ethiopia, this historical tradition merged with seasonal transition rituals. Meskel coincides with the end of the heavy rainy season (*Kiremt*). The landscape transforms as bright yellow flowers called **Adey Abeba** (Meskel daisies) bloom across the highlands, symbolizing peace, spiritual renewal, and agricultural abundance for the coming year.",
     "location": "Celebrated nationwide across Ethiopia; key tourist epicenters include Meskel Square in Addis Ababa, as well as Aksum, Lalibela, Gondar, and the Gurage Zone",
-    "image": "/images/lalibela.png",
+    "image": "/images/cultures/meskel.jpg",
     "isUnesco": true,
     "quickFacts": {
       "UNESCO Designation": "Inscribed in 2013 (Ethiopia's 1st Intangible Cultural Heritage)",
@@ -39,7 +39,7 @@
     "name": "Fichee-Chambalaalla",
     "history": "According to Sidama oral tradition, Fichee commemorates a legendary Sidama woman named **Ficho**. After her marriage, she returned once every year to visit her parents and relatives, bringing along a special traditional dish called ***buurisame*** (prepared from *waasa* / Enset dough, milk, and clarified butter) to share with family and neighbors.\n\nFollowing her passing, her community established an annual gathering in her honor, sharing *buurisame* and exchanging blessings. Over centuries, this gathering evolved into the official Sidama New Year celebration and became the foundation for the indigenous Sidama lunar calendar.",
     "location": "Sidama Region, Southern Ethiopia; main public festivities take place at the Gudumaale ceremonial square in Hawassa along the shores of Lake Hawassa",
-    "image": "/images/omo.png",
+    "image": "/images/cultures/fichee.jpg",
     "isUnesco": true,
     "quickFacts": {
       "UNESCO Designation": "Inscribed in 2015 (Ethiopia's 2nd Intangible Cultural Heritage)",
@@ -79,7 +79,7 @@
     "name": "Gada System",
     "history": "The **Gada System** is an ancient, indigenous democratic socio-political structure developed by the Oromo people. Operating for over five centuries, it comprehensively regulates political, economic, social, legal, and religious affairs within the community.\n\nUnlike hereditary monarchies or dictatorships, Gada functions on a strict system of checks and balances, separation of powers, and rotational leadership. Society is divided into **five generation classes (sets)**. Every eight years, one class assumes the responsibility of executive leadership (*Luba* grade) led by an elected chairperson (**Abbaa Gadaa**), before peacefully handing over authority to the next class.\n\nThe system enforces moral conduct (*Safuu*), protects women's rights, manages environmental resources, and resolves conflicts through dialogue and consensus.",
     "location": "Practiced across the Oromia Region and Oromo communities throughout Ethiopia; major historical Gada centers (Odaa sites) include Oda Nabee (Bishoftu), Oda Bultum (Hararghe), Oda Roba (Bale), Oda Bisil (West Shewa), and Gumi Gaayo (Borana)",
-    "image": "/images/harar.png",
+    "image": "/images/cultures/gada.jpg",
     "isUnesco": true,
     "quickFacts": {
       "UNESCO Designation": "Inscribed in 2016 (Ethiopia's 3rd Intangible Cultural Heritage)",
@@ -115,7 +115,7 @@
     "name": "Timket (Ethiopian Epiphany)",
     "history": "Timket is the Ethiopian Orthodox Tewahedo Church's celebration of Epiphany, commemorating the baptism of Jesus Christ in the Jordan River by John the Baptist.\n\nRather than focusing solely on the biblical event, Timket centers on the sacred presence of the **Tabot**—a consecrated replica of the Tablets of the Law (Ark of the Covenant) housed inside every Ethiopian church. Timket is the only occasion during the entire year when the *Tabots* are wrapped in rich velvet and brocade cloths and carried outside the church sanctuaries in public view, allowing the entire community to share in their blessing.\n\nThe festival serves as a spiritual renewal of baptismal vows, an expression of communal unity, and a vibrant showcase of Ethiopian sacred art, music, and liturgical tradition.",
     "location": "Celebrated nationwide across Ethiopia; major international travel hubs include Gondar (Fasilides' Bath), Addis Ababa (Jan Meda), Lalibela, and Aksum",
-    "image": "/images/gondar.png",
+    "image": "/images/cultures/timket.jpg",
     "isUnesco": true,
     "quickFacts": {
       "UNESCO Designation": "Inscribed in 2019 (Ethiopia's 4th Intangible Cultural Heritage)",
@@ -151,7 +151,7 @@
     "name": "Shuwalid Festival",
     "history": "The **Shuwalid festival** is an annual three-day celebration deeply woven into the spiritual and cultural identity of the Harari people. It marks the successful completion of six days of voluntary fasting (*Sitta Shawwal*) performed immediately after Eid al-Fitr to compensate for any missed days during the holy month of Ramadan.\n\nBeyond its religious foundation, Shuwalid serves as the primary socio-cultural platform for transmitting Harari traditions, oral history, music, and social ethics from community elders to younger generations. It reinforces community solidarity, reconciles past grievances, and fosters peaceful coexistence among the diverse ethnic communities residing in and around Harar.\n\nWith Shuwalid’s inscription, Harar became the first city in Ethiopia to house two distinct UNESCO cultural designations (the physical heritage site of Harar Jugol and the intangible heritage of Shuwalid).",
     "location": "Historic walled city of Harar Jugol, Harari Region, Eastern Ethiopia (held primarily at sacred shrines like Aw Shulum Ahmed and Aw Akebara near the city gates)",
-    "image": "/images/harar.png",
+    "image": "/images/cultures/shuwalid.jpg",
     "isUnesco": true,
     "quickFacts": {
       "UNESCO Designation": "Inscribed in 2023 (Representative List of the Intangible Cultural Heritage of Humanity)",

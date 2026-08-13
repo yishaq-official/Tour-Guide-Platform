@@ -2,13 +2,13 @@ import fs from 'fs';
 import path from 'path';
 
 const images = {
-  'meskel.jpg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Meskel_Festival_in_Addis_Ababa_%2821617478330%29.jpg/800px-Meskel_Festival_in_Addis_Ababa_%2821617478330%29.jpg',
-  'fichee.jpg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Sidama_people.jpg/800px-Sidama_people.jpg',
-  'gada.jpg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Oromo_people_at_Irreechaa_festival.jpg/800px-Oromo_people_at_Irreechaa_festival.jpg',
-  'timket.jpg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Timkat_Festival_in_Gondar_%2821617478330%29.jpg/800px-Timkat_Festival_in_Gondar_%2821617478330%29.jpg',
-  'shuwalid.jpg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Harar_street.jpg/800px-Harar_street.jpg',
-  'xeer.jpg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Dire_Dawa_market.jpg/800px-Dire_Dawa_market.jpg',
-  'gifaataa.jpg': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Sodo_town.jpg/800px-Sodo_town.jpg'
+  'meskel.jpg': 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Meskel_Celebration.jpg',
+  'fichee.jpg': 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Fichchee-_The_New_Year_of_Sidama-_The_Sidama_people_celebrate_the_festival_en_mass_in_their_sacred_place_called_Gudumale_which_is_located_on_the_beautiful_city_of_Hawassa-_2013-12-18_17-37.jpg',
+  'gada.jpg': 'https://upload.wikimedia.org/wikipedia/commons/8/86/Oromo_Cultural_dressing.jpg',
+  'timket.jpg': 'https://upload.wikimedia.org/wikipedia/commons/d/de/Gondar_Fasiladas_Bath_Timket.jpg',
+  'shuwalid.jpg': 'https://upload.wikimedia.org/wikipedia/commons/4/4a/City_Gate%2C_Harar_Jugol_%2814464345823%29.jpg',
+  'xeer.jpg': 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Dire_dawa%2C_edificio_circolare.jpg',
+  'gifaataa.jpg': 'https://upload.wikimedia.org/wikipedia/commons/5/5d/Wolayta_Sodo_Tona_Roundabout.jpg'
 };
 
 async function downloadImages() {
