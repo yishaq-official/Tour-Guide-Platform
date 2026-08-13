@@ -301,7 +301,7 @@
       "lat": 5.25,
       "lng": 37.48
     },
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Konso_terrasses.jpg",
+    "image": "/images/omo.png",
     "isUnesco": true,
     "category": "Historical",
     "region": "South Ethiopia",
@@ -347,7 +347,7 @@
       "lat": 6.13,
       "lng": 38.31
     },
-    "image": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Stelae_at_Tuto_Fela.jpg",
+    "image": "/images/tiya.png",
     "isUnesco": true,
     "category": "Historical",
     "region": "South Ethiopia",
@@ -389,7 +389,7 @@
       "lat": 8.71,
       "lng": 38.6
     },
-    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Melka_Kunture_museum_3.jpg",
+    "image": "/images/awash.png",
     "isUnesco": true,
     "category": "Historical",
     "region": "Central Ethiopia",
