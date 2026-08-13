@@ -125,7 +125,7 @@ export function HeritageDetail() {
                   {Object.entries(heritage.quickFacts).map(([key, value]) => (
                     <div key={key} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-50">
                       <h4 className="text-sm font-bold text-green-600 uppercase tracking-wider mb-2">{key}</h4>
-                      <p className="text-gray-800 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: value }}></p>
+                      <p className="text-gray-800 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: value.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }}></p>
                     </div>
                   ))}
                 </div>
