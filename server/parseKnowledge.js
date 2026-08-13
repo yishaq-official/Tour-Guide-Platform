@@ -94,9 +94,9 @@ sections.forEach((section, index) => {
   if (name.includes('Harar')) image = '/images/harar.png';
   if (name.includes('Tiya')) image = '/images/tiya.png';
   if (name.includes('Omo')) image = '/images/omo.png';
-  if (name.includes('Konso')) image = '/images/konso.jpg';
-  if (name.includes('Gedeo')) image = '/images/gedeo.jpg';
-  if (name.includes('Melka')) image = '/images/melka.jpg';
+  if (name.includes('Konso')) image = '/images/omo.png';
+  if (name.includes('Gedeo')) image = '/images/tiya.png';
+  if (name.includes('Melka')) image = '/images/awash.png';
 
   heritages.push({
     name,
