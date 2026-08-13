@@ -9,7 +9,7 @@ const heritages = [
     history: "Built by King Lalibela in the 12th and 13th centuries, these churches were carved out of solid rock to create a new Jerusalem for those who could not make the pilgrimage to the Holy Land.",
     location: "Amhara Region, Lasta",
     coordinates: { lat: 12.0319, lng: 39.0411 },
-    image: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Church_of_St._George%2C_Lalibela%2C_Ethiopia.jpg",
+    image: "https://images.unsplash.com/photo-1605333391784-3c66048126b8?auto=format&fit=crop&w=800&q=80",
     isUnesco: true,
     category: "Historical"
   },
@@ -19,7 +19,7 @@ const heritages = [
     history: "Founded by Emperor Fasilides in 1636, it served as the capital of the Ethiopian Empire for over two centuries, blending Hindu, Arab, and Jesuit architectural influences.",
     location: "Amhara Region, Gondar",
     coordinates: { lat: 12.6080, lng: 37.4696 },
-    image: "https://upload.wikimedia.org/wikipedia/commons/4/41/Fasil_Ghebbi%2C_Gondar%2C_Ethiopia.jpg",
+    image: "https://images.unsplash.com/photo-1596700858169-e092d6e3c9a0?auto=format&fit=crop&w=800&q=80",
     isUnesco: true,
     category: "Historical"
   },
@@ -29,7 +29,7 @@ const heritages = [
     history: "The massive ruins, dating from between the 1st and the 13th century A.D., include monolithic obelisks, giant stelae, royal tombs and the ruins of ancient castles.",
     location: "Tigray Region",
     coordinates: { lat: 14.1308, lng: 38.7156 },
-    image: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Aksum_Stelae.jpg",
+    image: "https://images.unsplash.com/photo-1590494951478-f75f91ebccf8?auto=format&fit=crop&w=800&q=80",
     isUnesco: true,
     category: "Archaeological"
   },
@@ -39,7 +39,7 @@ const heritages = [
     history: "Established in 1969, the park is home to extremely rare animals such as the Gelada baboon, the Simien fox and the Walia ibex, a goat found nowhere else in the world.",
     location: "Amhara Region",
     coordinates: { lat: 13.1793, lng: 38.0772 },
-    image: "https://upload.wikimedia.org/wikipedia/commons/9/91/Simien_Mountains_National_Park.jpg",
+    image: "https://images.unsplash.com/photo-1596001090333-e96dc6a0c567?auto=format&fit=crop&w=800&q=80",
     isUnesco: true,
     category: "Natural"
   },
@@ -49,7 +49,7 @@ const heritages = [
     history: "Harar Jugol, said to be the fourth holiest city of Islam, numbers 82 mosques, three of which date from the 10th century, and 102 shrines.",
     location: "Harari Region",
     coordinates: { lat: 9.3106, lng: 42.1278 },
-    image: "https://upload.wikimedia.org/wikipedia/commons/3/30/Harar_gate.jpg",
+    image: "https://images.unsplash.com/photo-1616857140880-994b7c6c4c5b?auto=format&fit=crop&w=800&q=80",
     isUnesco: true,
     category: "Cultural"
   }

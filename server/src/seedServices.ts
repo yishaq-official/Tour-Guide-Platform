@@ -10,7 +10,7 @@ const hotels = [
     location: "Addis Ababa",
     rating: 4.8,
     pricePerNight: 250,
-    image: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Sheraton_Addis.jpg", // Fair use placeholder
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
     amenities: ["Free WiFi", "Pool", "Spa", "Fitness Center", "Restaurant"]
   },
   {
@@ -19,7 +19,7 @@ const hotels = [
     location: "Bahir Dar",
     rating: 4.6,
     pricePerNight: 180,
-    image: "https://upload.wikimedia.org/wikipedia/commons/e/ec/Lake_Tana_Bahir_Dar_Ethiopia.jpg", // Fair use placeholder
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
     amenities: ["Lake View", "Spa", "Free Breakfast", "Restaurant"]
   },
   {
@@ -28,7 +28,7 @@ const hotels = [
     location: "Gondar",
     rating: 4.5,
     pricePerNight: 120,
-    image: "https://upload.wikimedia.org/wikipedia/commons/4/41/Fasil_Ghebbi%2C_Gondar%2C_Ethiopia.jpg", // Fair use placeholder
+    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
     amenities: ["Mountain View", "Restaurant", "Bar", "Free Parking"]
   }
 ];
@@ -40,7 +40,7 @@ const vehicles = [
     transmission: "Automatic",
     seats: 7,
     pricePerDay: 150,
-    image: "https://upload.wikimedia.org/wikipedia/commons/b/b5/2016_Toyota_Land_Cruiser_%28VDJ200R%29_Sahara_wagon_%282018-08-06%29_01.jpg",
+    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
     available: true
   },
   {
@@ -49,7 +49,7 @@ const vehicles = [
     transmission: "Automatic",
     seats: 5,
     pricePerDay: 60,
-    image: "https://upload.wikimedia.org/wikipedia/commons/7/7b/2019_Toyota_Corolla_Icon_Tech_HEV_CVT_1.8.jpg",
+    image: "https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=800&q=80",
     available: true
   },
   {
@@ -58,7 +58,7 @@ const vehicles = [
     transmission: "Manual",
     seats: 12,
     pricePerDay: 100,
-    image: "https://upload.wikimedia.org/wikipedia/commons/0/07/2017_Toyota_HiAce_%28TRH223R%29_Commuter_van_%282018-10-01%29_01.jpg",
+    image: "https://images.unsplash.com/photo-1619864708764-da6017bb529f?auto=format&fit=crop&w=800&q=80",
     available: true
   }
 ];
