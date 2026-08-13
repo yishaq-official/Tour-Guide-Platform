@@ -10,7 +10,7 @@ const hotels = [
     location: "Addis Ababa",
     rating: 4.8,
     pricePerNight: 250,
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+    image: "/images/sheraton.png",
     amenities: ["Free WiFi", "Pool", "Spa", "Fitness Center", "Restaurant"]
   },
   {
@@ -19,7 +19,7 @@ const hotels = [
     location: "Bahir Dar",
     rating: 4.6,
     pricePerNight: 180,
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    image: "/images/laketana.png",
     amenities: ["Lake View", "Spa", "Free Breakfast", "Restaurant"]
   },
   {
@@ -28,7 +28,7 @@ const hotels = [
     location: "Gondar",
     rating: 4.5,
     pricePerNight: 120,
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+    image: "/images/gondar_hills.png",
     amenities: ["Mountain View", "Restaurant", "Bar", "Free Parking"]
   }
 ];
@@ -40,7 +40,7 @@ const vehicles = [
     transmission: "Automatic",
     seats: 7,
     pricePerDay: 150,
-    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
+    image: "/images/landcruiser.png",
     available: true
   },
   {
@@ -49,7 +49,7 @@ const vehicles = [
     transmission: "Automatic",
     seats: 5,
     pricePerDay: 60,
-    image: "https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=800&q=80",
+    image: "/images/corolla.png",
     available: true
   },
   {
@@ -58,7 +58,7 @@ const vehicles = [
     transmission: "Manual",
     seats: 12,
     pricePerDay: 100,
-    image: "https://images.unsplash.com/photo-1619864708764-da6017bb529f?auto=format&fit=crop&w=800&q=80",
+    image: "/images/hiace.png",
     available: true
   }
 ];
