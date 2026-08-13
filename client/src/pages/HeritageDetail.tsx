@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, Calendar, Compass } from 'lucide-react';
+import { MapWidget } from '../components/MapWidget';
 
 interface Heritage {
   _id: string;
@@ -12,6 +13,10 @@ interface Heritage {
   image: string;
   isUnesco: boolean;
   category: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export function HeritageDetail() {
@@ -116,6 +121,13 @@ export function HeritageDetail() {
               <p className="text-gray-700 text-lg leading-relaxed">
                 {heritage.history}
               </p>
+            <motion.section 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Location</h2>
+              <MapWidget lat={heritage.coordinates.lat} lng={heritage.coordinates.lng} name={heritage.name} />
             </motion.section>
           </div>
 
