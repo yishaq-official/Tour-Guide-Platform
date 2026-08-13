@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, Calendar, Compass } from 'lucide-react';
 import { MapWidget } from '../components/MapWidget';
+import { WeatherWidget } from '../components/WeatherWidget';
 
 interface Heritage {
   _id: string;
@@ -159,6 +160,8 @@ export function HeritageDetail() {
                   </div>
                 </li>
               </ul>
+              
+              <WeatherWidget lat={heritage.coordinates.lat} lng={heritage.coordinates.lng} />
 
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <button className="w-full py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors">
