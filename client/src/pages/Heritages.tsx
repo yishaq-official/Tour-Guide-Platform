@@ -21,7 +21,7 @@ export function Heritages() {
   const [selectedRegion, setSelectedRegion] = useState('All');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/heritages')
+    fetch('http://localhost:5000/api/heritages')
       .then(res => res.json())
       .then(data => {
         setHeritages(data);
