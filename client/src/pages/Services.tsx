@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X } from 'lucide-react';
 
 interface Hotel {
   _id: string;
@@ -30,6 +30,8 @@ export function Services() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bookingModal, setBookingModal] = useState<{ isOpen: boolean; item: Hotel | Vehicle | null; type: 'hotel' | 'vehicle' }>({ isOpen: false, item: null, type: 'hotel' });
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -128,7 +130,10 @@ export function Services() {
                       <span className="text-2xl font-bold text-gray-900">${hotel.pricePerNight}</span>
                       <span className="text-gray-500 text-sm"> / night</span>
                     </div>
-                    <button className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">
+                    <button 
+                      onClick={() => { setBookingModal({ isOpen: true, item: hotel, type: 'hotel' }); setBookingSuccess(false); }}
+                      className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+                    >
                       Book Now
                     </button>
                   </div>
@@ -173,7 +178,10 @@ export function Services() {
                       <span className="text-2xl font-bold text-gray-900">${vehicle.pricePerDay}</span>
                       <span className="text-gray-500 text-sm"> / day</span>
                     </div>
-                    <button className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors">
+                    <button 
+                      onClick={() => { setBookingModal({ isOpen: true, item: vehicle, type: 'vehicle' }); setBookingSuccess(false); }}
+                      className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
+                    >
                       Rent Now
                     </button>
                   </div>
@@ -183,6 +191,107 @@ export function Services() {
           </div>
         )}
       </div>
+
+      {/* Booking Modal */}
+      <AnimatePresence>
+        {bookingModal.isOpen && bookingModal.item && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setBookingModal({ ...bookingModal, isOpen: false })}
+              className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden z-10"
+            >
+              <div className="flex justify-between items-center p-6 border-b border-gray-100">
+                <h3 className="text-xl font-bold text-gray-900">
+                  {bookingModal.type === 'hotel' ? 'Book Hotel' : 'Rent Vehicle'}
+                </h3>
+                <button 
+                  onClick={() => setBookingModal({ ...bookingModal, isOpen: false })}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+                  <img src={bookingModal.item.image} alt={bookingModal.item.name} className="w-16 h-16 rounded-lg object-cover" />
+                  <div>
+                    <h4 className="font-bold text-gray-900">{bookingModal.item.name}</h4>
+                    <p className="text-sm text-gray-500">
+                      {bookingModal.type === 'hotel' 
+                        ? `$${(bookingModal.item as Hotel).pricePerNight} / night` 
+                        : `$${(bookingModal.item as Vehicle).pricePerDay} / day`}
+                    </p>
+                  </div>
+                </div>
+
+                {bookingSuccess ? (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-8"
+                  >
+                    <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle2 className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Reservation Confirmed!</h3>
+                    <p className="text-gray-600">Your mock booking was successful. Check your email for details.</p>
+                    <button 
+                      onClick={() => setBookingModal({ ...bookingModal, isOpen: false })}
+                      className="mt-6 w-full py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors"
+                    >
+                      Close
+                    </button>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={(e) => { e.preventDefault(); setBookingSuccess(true); }} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          {bookingModal.type === 'hotel' ? 'Check-in' : 'Pick-up'}
+                        </label>
+                        <input type="date" required className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          {bookingModal.type === 'hotel' ? 'Check-out' : 'Drop-off'}
+                        </label>
+                        <input type="date" required className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                      <input type="text" required placeholder="John Doe" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                      <input type="email" required placeholder="john@example.com" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                    </div>
+
+                    <button 
+                      type="submit"
+                      className="w-full py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors mt-2"
+                    >
+                      Confirm Reservation
+                    </button>
+                  </form>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
