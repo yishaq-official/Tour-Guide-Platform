@@ -121,6 +121,8 @@ export function HeritageDetail() {
               <p className="text-gray-700 text-lg leading-relaxed">
                 {heritage.history}
               </p>
+            </motion.section>
+
             <motion.section 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
