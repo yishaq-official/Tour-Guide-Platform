@@ -39,6 +39,7 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Tourist Info</h3>
             <ul className="space-y-2 text-sm">
+              <li><Link to="/transport" className="hover:text-white transition-colors">Transport & Travel</Link></li>
               <li><Link to="/essentials" className="hover:text-white transition-colors">Visa Requirements</Link></li>
               <li><Link to="/essentials" className="hover:text-white transition-colors">SIM & Telecom</Link></li>
               <li><Link to="/essentials" className="hover:text-white transition-colors">Banking & ATMs</Link></li>
