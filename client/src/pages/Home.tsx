@@ -10,7 +10,7 @@ export function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/c/c2/Church_of_St._George%2C_Lalibela%2C_Ethiopia.jpg"
+            src="https://images.unsplash.com/photo-1605333391784-3c66048126b8?auto=format&fit=crop&w=1600&q=80"
             alt="Lalibela Rock-Hewn Church"
             className="w-full h-full object-cover"
           />
@@ -88,7 +88,7 @@ export function Home() {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-1/2">
               <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/4/41/Fasil_Ghebbi%2C_Gondar%2C_Ethiopia.jpg" 
+                src="https://images.unsplash.com/photo-1596700858169-e092d6e3c9a0?auto=format&fit=crop&w=800&q=80" 
                 alt="Fasil Ghebbi Castles in Gondar" 
                 className="rounded-2xl shadow-xl w-full h-[400px] object-cover"
               />
