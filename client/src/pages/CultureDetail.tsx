@@ -1,0 +1,180 @@
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowLeft, MapPin, Compass, Info, CheckCircle2 } from 'lucide-react';
+
+interface Highlight {
+  title: string;
+  description: string;
+}
+
+interface Culture {
+  _id: string;
+  name: string;
+  history: string;
+  location: string;
+  image: string;
+  isUnesco: boolean;
+  quickFacts: Record<string, string>;
+  culturalHighlights: Highlight[];
+  travelerExperience: string[];
+}
+
+export function CultureDetail() {
+  const { id } = useParams<{ id: string }>();
+  const [culture, setCulture] = useState<Culture | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/cultures/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setCulture(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to fetch culture details", err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-600"></div>
+      </div>
+    );
+  }
+
+  if (!culture) {
+    return (
+      <div className="text-center py-32 bg-gray-50 min-h-screen">
+        <h2 className="text-3xl font-bold text-gray-900">Culture not found</h2>
+        <Link to="/explore" className="text-green-600 mt-6 inline-block hover:underline text-lg">Return to Gallery</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full bg-white pb-24">
+      {/* Hero Image Section */}
+      <div className="relative h-[60vh] md:h-[75vh] w-full">
+        <img 
+          src={culture.image} 
+          alt={culture.name} 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent" />
+        
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
+          <div className="max-w-7xl mx-auto">
+            <Link to="/explore" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors text-sm font-semibold uppercase tracking-wider bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Gallery
+            </Link>
+            
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              {culture.isUnesco && (
+                <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wide">
+                  UNESCO Intangible Heritage
+                </span>
+              )}
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
+              {culture.name}
+            </h1>
+            
+            <div className="flex items-start md:items-center text-white/90 max-w-3xl">
+              <MapPin className="w-6 h-6 mr-3 text-green-400 shrink-0 mt-1 md:mt-0" />
+              <span className="text-xl md:text-2xl font-light drop-shadow-md">{culture.location}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        
+        {/* Quick Facts Grid */}
+        {culture.quickFacts && Object.keys(culture.quickFacts).length > 0 && (
+          <motion.section 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+            className="bg-green-50/50 rounded-3xl p-8 border border-green-100 mb-16"
+          >
+            <div className="flex items-center mb-8">
+              <Info className="w-8 h-8 text-green-600 mr-3" />
+              <h2 className="text-3xl font-bold text-gray-900">Quick Facts</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {Object.entries(culture.quickFacts).map(([key, value]) => (
+                <div key={key} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-50">
+                  <h4 className="text-sm font-bold text-green-600 uppercase tracking-wider mb-2">{key}</h4>
+                  <p className="text-gray-800 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: value.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }}></p>
+                </div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* History Section */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-16"
+        >
+          <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center">
+            <Compass className="w-8 h-8 text-gray-900 mr-3" />
+            History & Significance
+          </h2>
+          <div className="prose prose-lg prose-green max-w-none text-gray-700 leading-loose">
+            {culture.history?.split('\n\n').map((paragraph, idx) => (
+              <p key={idx} dangerouslySetInnerHTML={{ __html: paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }} />
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Cultural Highlights */}
+        {culture.culturalHighlights && culture.culturalHighlights.length > 0 && (
+          <motion.section 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}
+            className="mb-16"
+          >
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Key Cultural Highlights & Rituals</h2>
+            <div className="grid grid-cols-1 gap-6">
+              {culture.culturalHighlights.map((highlight, idx) => (
+                <div key={idx} className="bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-xl transition-shadow duration-300 group">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors" dangerouslySetInnerHTML={{ __html: highlight.title.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }}></h3>
+                  <p className="text-gray-600 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: highlight.description.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>') }}></p>
+                </div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+
+        {/* Traveler Experience */}
+        {culture.travelerExperience && culture.travelerExperience.length > 0 && (
+          <motion.section 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">What Travelers Experience</h2>
+            <ul className="space-y-4">
+              {culture.travelerExperience.map((exp, idx) => {
+                const [title, ...rest] = exp.split(': ');
+                const desc = rest.join(': ');
+                return (
+                  <li key={idx} className="flex items-start bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <CheckCircle2 className="w-8 h-8 text-green-500 mr-4 shrink-0 mt-1" />
+                    <div>
+                      <strong className="text-xl text-gray-900 block mb-2">{title}</strong>
+                      <span className="text-gray-600 text-lg leading-relaxed">{desc || exp}</span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </motion.section>
+        )}
+      </div>
+    </div>
+  );
+}

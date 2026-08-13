@@ -35,7 +35,7 @@ export function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <Link
-                to="/heritages"
+                to="/explore"
                 className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-gray-900 bg-yellow-400 hover:bg-yellow-500 transition-colors shadow-lg shadow-yellow-500/30"
               >
                 Explore Heritages
@@ -119,7 +119,7 @@ export function Home() {
                 </li>
               </ul>
               <div className="mt-8">
-                <Link to="/heritages" className="text-green-600 font-semibold hover:text-green-700 inline-flex items-center">
+                <Link to="/explore" className="text-green-600 font-semibold hover:text-green-700 inline-flex items-center">
                   Read more about our heritage
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>

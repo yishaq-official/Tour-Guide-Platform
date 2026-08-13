@@ -28,8 +28,8 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Explore</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/heritages" className="hover:text-white transition-colors">UNESCO Heritages</Link></li>
-              <li><Link to="/heritages" className="hover:text-white transition-colors">Historical Places</Link></li>
+              <li><Link to="/explore" className="hover:text-white transition-colors">UNESCO Heritages</Link></li>
+              <li><Link to="/explore" className="hover:text-white transition-colors">Historical Places</Link></li>
               <li><Link to="/services" className="hover:text-white transition-colors">Hotels & Stays</Link></li>
               <li><Link to="/services" className="hover:text-white transition-colors">Car Rentals</Link></li>
             </ul>
