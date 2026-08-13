@@ -169,7 +169,7 @@ export function Explore() {
                     <span className="leading-relaxed">{item.location}</span>
                   </div>
                   <p className="text-gray-600 text-base mb-8 line-clamp-3 leading-relaxed">
-                    {item.history}
+                    {item.history.replace(/\*/g, '')}
                   </p>
                   <Link 
                     to={`/explore/${activeTab === 'heritages' ? 'heritage' : 'culture'}/${item._id}`}

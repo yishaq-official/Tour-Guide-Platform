@@ -94,9 +94,9 @@ sections.forEach((section, index) => {
   if (name.includes('Harar')) image = '/images/harar.png';
   if (name.includes('Tiya')) image = '/images/tiya.png';
   if (name.includes('Omo')) image = '/images/omo.png';
-  if (name.includes('Konso')) image = 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Konso_terrasses.jpg';
-  if (name.includes('Gedeo')) image = 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Stelae_at_Tuto_Fela.jpg';
-  if (name.includes('Melka')) image = 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Melka_Kunture_museum_3.jpg';
+  if (name.includes('Konso')) image = '/images/konso.jpg';
+  if (name.includes('Gedeo')) image = '/images/gedeo.jpg';
+  if (name.includes('Melka')) image = '/images/melka.jpg';
 
   heritages.push({
     name,
