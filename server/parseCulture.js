@@ -60,16 +60,16 @@ sections.forEach((section, index) => {
   
   if (currentHighlight) highlights.push(currentHighlight);
 
-  const loc = quickFacts['Location'] || '';
+  const loc = (quickFacts['Location'] || '').replace(/\*/g, '');
 
-  // Image mapping (fallback to Wikimedia)
-  let image = 'https://upload.wikimedia.org/wikipedia/commons/2/29/Meskel_Festival%2C_Addis_Ababa.jpg'; // default meskel
-  if (name.toLowerCase().includes('fichee')) image = 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Sidama_people_celebrating_Fichee-Chambalaalla.jpg';
-  if (name.toLowerCase().includes('gada')) image = 'https://upload.wikimedia.org/wikipedia/commons/f/fc/Oromo_gadaa.jpg';
-  if (name.toLowerCase().includes('timket')) image = 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Timkat_Addis_Ababa.jpg';
-  if (name.toLowerCase().includes('shuwalid')) image = 'https://upload.wikimedia.org/wikipedia/commons/6/67/Harar_gate.jpg';
-  if (name.toLowerCase().includes('xeer')) image = 'https://upload.wikimedia.org/wikipedia/commons/1/15/Dire_Dawa_station.jpg';
-  if (name.toLowerCase().includes('gifaataa')) image = 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Wolaita_Sodo_Landscape.jpg';
+  // Image mapping (fallback to existing local images)
+  let image = '/images/lalibela.png'; // default meskel
+  if (name.toLowerCase().includes('fichee')) image = '/images/omo.png';
+  if (name.toLowerCase().includes('gada')) image = '/images/harar.png';
+  if (name.toLowerCase().includes('timket')) image = '/images/gondar.png';
+  if (name.toLowerCase().includes('shuwalid')) image = '/images/harar.png';
+  if (name.toLowerCase().includes('xeer')) image = '/images/awash.png';
+  if (name.toLowerCase().includes('gifaataa')) image = '/images/tiya.png';
 
   cultures.push({
     name,
