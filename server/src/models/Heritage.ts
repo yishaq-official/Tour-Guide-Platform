@@ -7,7 +7,6 @@ const heritageSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
   },
   history: {
     type: String,
