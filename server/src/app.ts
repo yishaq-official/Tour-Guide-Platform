@@ -1,0 +1,20 @@
+import express from "express";
+import { auth } from "./lib/auth.js";
+import { toNodeHandler } from "better-auth/node";
+import cors from "cors";
+import type {Request, Response} from "express";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const app = express();
+
+app.use(cors());
+app.all("/api/auth/*", toNodeHandler(auth));
+app.use(express.json());
+
+app.get("/api/hello", (req: Request, res: Response) => {
+    res.send("Hello World");
+});
+
+export default app;
