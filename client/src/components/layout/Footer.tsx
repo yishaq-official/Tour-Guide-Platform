@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Mail, Phone, Facebook, Twitter, Instagram } from 'lucide-react';
+import { MapPin, Mail, Phone, Globe } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -19,13 +19,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram className="w-5 h-5" />
+                <Globe className="w-5 h-5" />
               </a>
             </div>
           </div>
