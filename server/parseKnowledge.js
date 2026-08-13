@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 const markdown = fs.readFileSync('src/knowledge.md', 'utf-8');
 
