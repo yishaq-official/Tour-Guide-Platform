@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Heritage } from "../models/Heritage.js";
 
 export const getAllHeritages = async (req: Request, res: Response) => {

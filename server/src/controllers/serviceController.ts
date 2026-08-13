@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { Hotel } from "../models/Hotel.js";
 import { Vehicle } from "../models/Vehicle.js";
 

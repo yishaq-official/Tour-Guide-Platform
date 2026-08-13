@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors());
-app.all("/api/auth/*", toNodeHandler(auth));
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json());
 
 app.use("/api/heritages", heritageRoutes);
