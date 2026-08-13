@@ -5,6 +5,7 @@ import { Heritages } from './pages/Heritages';
 import { HeritageDetail } from './pages/HeritageDetail';
 import { TransportInfo } from './pages/TransportInfo';
 import { Services } from './pages/Services';
+import { Essentials } from './pages/Essentials';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route path="heritages/:id" element={<HeritageDetail />} />
           <Route path="transport" element={<TransportInfo />} />
           <Route path="services" element={<Services />} />
-          <Route path="essentials" element={<div className="p-20 text-center text-2xl font-bold text-gray-700">Essentials Page (Coming Soon)</div>} />
+          <Route path="essentials" element={<Essentials />} />
         </Route>
       </Routes>
     </BrowserRouter>
