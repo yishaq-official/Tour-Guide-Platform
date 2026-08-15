@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X } from 'lucide-react';
 
@@ -184,17 +185,12 @@ export function Services() {
                       <span className="text-2xl font-bold text-gray-900">${hotel.pricePerNight}</span>
                       <span className="text-gray-500 text-sm"> / night</span>
                     </div>
-                    <button 
-                      onClick={() => { 
-                        setBookingModal({ isOpen: true, item: hotel, type: 'hotel' }); 
-                        setBookingSuccess(false); 
-                        setBookingError('');
-                        setBookingFormData({ startDate: '', endDate: '', customerName: '', customerEmail: '' });
-                      }}
+                    <Link 
+                      to={`/services/hotel/${hotel._id}`}
                       className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
                     >
-                      Book Now
-                    </button>
+                      View Details
+                    </Link>
                   </div>
                 </div>
               </motion.div>
