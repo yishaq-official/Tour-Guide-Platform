@@ -12,6 +12,16 @@ export const getAllHotels = async (req: Request, res: Response) => {
   }
 };
 
+export const getHotelById = async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    if (!hotel) return res.status(404).json({ message: "Hotel not found" });
+    res.json(hotel);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
 export const getAllVehicles = async (req: Request, res: Response) => {
   try {
     const vehicles = await Vehicle.find();
