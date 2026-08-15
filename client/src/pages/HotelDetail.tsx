@@ -261,13 +261,11 @@ export function HotelDetail() {
             </section>
 
             <section className="h-80 rounded-3xl overflow-hidden border border-gray-200 shadow-sm">
-              <MapWidget markers={[{ 
-                id: hotel._id, 
-                name: hotel.name, 
-                lat: hotel.coordinates?.lat || 9.03, 
-                lng: hotel.coordinates?.lng || 38.74, 
-                type: 'Heritage' // Using generic marker type
-              }]} />
+              <MapWidget 
+                name={hotel.name} 
+                lat={hotel.coordinates?.lat || 9.03} 
+                lng={hotel.coordinates?.lng || 38.74} 
+              />
             </section>
           </div>
 
