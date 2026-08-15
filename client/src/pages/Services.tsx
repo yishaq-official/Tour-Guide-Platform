@@ -32,14 +32,22 @@ export function Services() {
   const [loading, setLoading] = useState(true);
   const [bookingModal, setBookingModal] = useState<{ isOpen: boolean; item: Hotel | Vehicle | null; type: 'hotel' | 'vehicle' }>({ isOpen: false, item: null, type: 'hotel' });
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bookingError, setBookingError] = useState('');
+  const [bookingFormData, setBookingFormData] = useState({
+    startDate: '',
+    endDate: '',
+    customerName: '',
+    customerEmail: ''
+  });
 
   useEffect(() => {
     setLoading(true);
     const fetchServices = async () => {
       try {
         const [hotelsRes, vehiclesRes] = await Promise.all([
-          fetch('http://localhost:3000/api/services/hotels'),
-          fetch('http://localhost:3000/api/services/vehicles')
+          fetch('http://localhost:5000/api/services/hotels'),
+          fetch('http://localhost:5000/api/services/vehicles')
         ]);
         
         const hotelsData = await hotelsRes.json();
@@ -56,6 +64,52 @@ export function Services() {
     
     fetchServices();
   }, []);
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!bookingModal.item) return;
+
+    setIsSubmitting(true);
+    setBookingError('');
+
+    try {
+      const isHotel = bookingModal.type === 'hotel';
+      const pricePerUnit = isHotel 
+        ? (bookingModal.item as Hotel).pricePerNight 
+        : (bookingModal.item as Vehicle).pricePerDay;
+
+      // Calculate total price based on dates
+      const start = new Date(bookingFormData.startDate);
+      const end = new Date(bookingFormData.endDate);
+      const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+      const totalPrice = days * pricePerUnit;
+
+      const response = await fetch('http://localhost:5000/api/services/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          itemId: bookingModal.item._id,
+          itemModel: isHotel ? 'Hotel' : 'Vehicle',
+          customerName: bookingFormData.customerName,
+          customerEmail: bookingFormData.customerEmail,
+          startDate: bookingFormData.startDate,
+          endDate: bookingFormData.endDate,
+          totalPrice
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create booking');
+      }
+
+      setBookingSuccess(true);
+    } catch (err) {
+      console.error(err);
+      setBookingError('An error occurred while confirming your reservation. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="w-full bg-gray-50 min-h-screen py-12">
@@ -131,7 +185,12 @@ export function Services() {
                       <span className="text-gray-500 text-sm"> / night</span>
                     </div>
                     <button 
-                      onClick={() => { setBookingModal({ isOpen: true, item: hotel, type: 'hotel' }); setBookingSuccess(false); }}
+                      onClick={() => { 
+                        setBookingModal({ isOpen: true, item: hotel, type: 'hotel' }); 
+                        setBookingSuccess(false); 
+                        setBookingError('');
+                        setBookingFormData({ startDate: '', endDate: '', customerName: '', customerEmail: '' });
+                      }}
                       className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
                     >
                       Book Now
@@ -179,7 +238,12 @@ export function Services() {
                       <span className="text-gray-500 text-sm"> / day</span>
                     </div>
                     <button 
-                      onClick={() => { setBookingModal({ isOpen: true, item: vehicle, type: 'vehicle' }); setBookingSuccess(false); }}
+                      onClick={() => { 
+                        setBookingModal({ isOpen: true, item: vehicle, type: 'vehicle' }); 
+                        setBookingSuccess(false); 
+                        setBookingError('');
+                        setBookingFormData({ startDate: '', endDate: '', customerName: '', customerEmail: '' });
+                      }}
                       className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
                     >
                       Rent Now
@@ -244,7 +308,7 @@ export function Services() {
                       <CheckCircle2 className="w-8 h-8" />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Reservation Confirmed!</h3>
-                    <p className="text-gray-600">Your mock booking was successful. Check your email for details.</p>
+                    <p className="text-gray-600">Your booking was successfully processed. Check your email for details.</p>
                     <button 
                       onClick={() => setBookingModal({ ...bookingModal, isOpen: false })}
                       className="mt-6 w-full py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors"
@@ -253,37 +317,75 @@ export function Services() {
                     </button>
                   </motion.div>
                 ) : (
-                  <form onSubmit={(e) => { e.preventDefault(); setBookingSuccess(true); }} className="space-y-4">
+                  <form onSubmit={handleBookingSubmit} className="space-y-4">
+                    {bookingError && (
+                      <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
+                        {bookingError}
+                      </div>
+                    )}
+                    
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           {bookingModal.type === 'hotel' ? 'Check-in' : 'Pick-up'}
                         </label>
-                        <input type="date" required className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                        <input 
+                          type="date" 
+                          required 
+                          value={bookingFormData.startDate}
+                          onChange={e => setBookingFormData({...bookingFormData, startDate: e.target.value})}
+                          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
+                        />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           {bookingModal.type === 'hotel' ? 'Check-out' : 'Drop-off'}
                         </label>
-                        <input type="date" required className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                        <input 
+                          type="date" 
+                          required 
+                          min={bookingFormData.startDate}
+                          value={bookingFormData.endDate}
+                          onChange={e => setBookingFormData({...bookingFormData, endDate: e.target.value})}
+                          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
+                        />
                       </div>
                     </div>
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                      <input type="text" required placeholder="John Doe" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                      <input 
+                        type="text" 
+                        required 
+                        placeholder="John Doe" 
+                        value={bookingFormData.customerName}
+                        onChange={e => setBookingFormData({...bookingFormData, customerName: e.target.value})}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
+                      />
                     </div>
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                      <input type="email" required placeholder="john@example.com" className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" />
+                      <input 
+                        type="email" 
+                        required 
+                        placeholder="john@example.com" 
+                        value={bookingFormData.customerEmail}
+                        onChange={e => setBookingFormData({...bookingFormData, customerEmail: e.target.value})}
+                        className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
+                      />
                     </div>
 
                     <button 
                       type="submit"
-                      className="w-full py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors mt-2"
+                      disabled={isSubmitting}
+                      className="w-full py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors mt-2 disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center"
                     >
-                      Confirm Reservation
+                      {isSubmitting ? (
+                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                      ) : (
+                        "Confirm Reservation"
+                      )}
                     </button>
                   </form>
                 )}
