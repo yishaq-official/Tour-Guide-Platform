@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Search, Filter } from 'lucide-react';
 
@@ -22,7 +22,12 @@ interface Culture extends BaseItem {
 }
 
 export function Explore() {
-  const [activeTab, setActiveTab] = useState<'cultures' | 'heritages'>('cultures');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') === 'heritages' ? 'heritages' : 'cultures';
+  
+  const handleTabChange = (tab: 'cultures' | 'heritages') => {
+    setSearchParams({ tab });
+  };
   
   const [heritages, setHeritages] = useState<Heritage[]>([]);
   const [cultures, setCultures] = useState<Culture[]>([]);
@@ -68,7 +73,7 @@ export function Explore() {
           
           <div className="inline-flex bg-gray-100 p-1.5 rounded-2xl mb-8 shadow-inner">
             <button
-              onClick={() => setActiveTab('cultures')}
+              onClick={() => handleTabChange('cultures')}
               className={`px-8 py-3 rounded-xl font-bold text-sm md:text-base transition-all duration-300 ${
                 activeTab === 'cultures' 
                   ? 'bg-white text-green-700 shadow-md' 
@@ -78,7 +83,7 @@ export function Explore() {
               Cultures & Festivals
             </button>
             <button
-              onClick={() => setActiveTab('heritages')}
+              onClick={() => handleTabChange('heritages')}
               className={`px-8 py-3 rounded-xl font-bold text-sm md:text-base transition-all duration-300 ${
                 activeTab === 'heritages' 
                   ? 'bg-white text-green-700 shadow-md' 

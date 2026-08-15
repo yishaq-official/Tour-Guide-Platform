@@ -50,7 +50,7 @@ export function CultureDetail() {
     return (
       <div className="text-center py-32 bg-gray-50 min-h-screen">
         <h2 className="text-3xl font-bold text-gray-900">Culture not found</h2>
-        <Link to="/explore" className="text-green-600 mt-6 inline-block hover:underline text-lg">Return to Gallery</Link>
+        <Link to="/explore?tab=cultures" className="text-green-600 mt-6 inline-block hover:underline text-lg">Return to Gallery</Link>
       </div>
     );
   }
@@ -68,7 +68,7 @@ export function CultureDetail() {
         
         <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
           <div className="max-w-7xl mx-auto">
-            <Link to="/explore" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors text-sm font-semibold uppercase tracking-wider bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20">
+            <Link to="/explore?tab=cultures" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors text-sm font-semibold uppercase tracking-wider bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Gallery
             </Link>
