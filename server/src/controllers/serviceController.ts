@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { Hotel } from "../models/Hotel.js";
 import { Vehicle } from "../models/Vehicle.js";
+import { Booking } from "../models/Booking.js";
 
 export const getAllHotels = async (req: Request, res: Response) => {
   try {
