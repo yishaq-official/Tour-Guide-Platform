@@ -20,3 +20,31 @@ export const getAllVehicles = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server Error", error });
   }
 };
+
+export const createBooking = async (req: Request, res: Response) => {
+  try {
+    const { itemId, itemModel, customerName, customerEmail, startDate, endDate, totalPrice } = req.body;
+    
+    // Basic validation
+    if (!itemId || !itemModel || !customerName || !customerEmail || !startDate || !endDate || !totalPrice) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const newBooking = new Booking({
+      itemId,
+      itemModel,
+      customerName,
+      customerEmail,
+      startDate,
+      endDate,
+      totalPrice
+    });
+
+    await newBooking.save();
+    
+    res.status(201).json({ message: "Booking confirmed successfully", booking: newBooking });
+  } catch (error) {
+    console.error("Booking Error:", error);
+    res.status(500).json({ message: "Failed to create booking", error });
+  }
+};
