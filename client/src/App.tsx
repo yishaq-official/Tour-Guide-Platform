@@ -7,6 +7,7 @@ import { CultureDetail } from './pages/CultureDetail';
 import { TransportInfo } from './pages/TransportInfo';
 import { Services } from './pages/Services';
 import { HotelDetail } from './pages/HotelDetail';
+import { VehicleDetail } from './pages/VehicleDetail';
 import { Essentials } from './pages/Essentials';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="transport" element={<TransportInfo />} />
           <Route path="services" element={<Services />} />
           <Route path="services/hotel/:id" element={<HotelDetail />} />
+          <Route path="services/vehicle/:id" element={<VehicleDetail />} />
           <Route path="essentials" element={<Essentials />} />
         </Route>
       </Routes>

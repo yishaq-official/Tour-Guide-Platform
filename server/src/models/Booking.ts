@@ -9,6 +9,8 @@ const bookingSchema = new mongoose.Schema({
   guests: { type: Number, required: true, default: 1 },
   roomType: { type: String },
   specialRequests: { type: String },
+  pickupLocation: { type: String },
+  dropoffLocation: { type: String },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
   totalPrice: { type: Number, required: true },

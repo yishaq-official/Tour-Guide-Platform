@@ -233,17 +233,12 @@ export function Services() {
                       <span className="text-2xl font-bold text-gray-900">${vehicle.pricePerDay}</span>
                       <span className="text-gray-500 text-sm"> / day</span>
                     </div>
-                    <button 
-                      onClick={() => { 
-                        setBookingModal({ isOpen: true, item: vehicle, type: 'vehicle' }); 
-                        setBookingSuccess(false); 
-                        setBookingError('');
-                        setBookingFormData({ startDate: '', endDate: '', customerName: '', customerEmail: '' });
-                      }}
+                    <Link 
+                      to={`/services/vehicle/${vehicle._id}`}
                       className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
                     >
-                      Rent Now
-                    </button>
+                      View Details
+                    </Link>
                   </div>
                 </div>
               </motion.div>

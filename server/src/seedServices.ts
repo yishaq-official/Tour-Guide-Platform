@@ -136,6 +136,11 @@ const vehicles = [
     seats: 7,
     pricePerDay: 150,
     image: "/images/landcruiser.png",
+    gallery: ["/images/landcruiser.png", "/images/corolla.png", "/images/hiace.png"],
+    description: "The ultimate 4x4 for Ethiopian roads. Whether you are driving through Addis Ababa or tackling the rugged terrain of the Omo Valley, this Land Cruiser offers unmatched reliability, comfort, and safety.",
+    provider: { name: "Ethio Premium Car Rents", rating: 4.9, phone: "+251 911 123 456" },
+    features: ["4WD", "Air Conditioning", "Leather Seats", "GPS Navigation", "Bluetooth", "Spare Tire"],
+    policies: { mileage: "150 km/day included. $0.50 per extra km.", fuel: "Full-to-Full", cancellation: "Free cancellation up to 48 hours before." },
     available: true
   },
   {
@@ -145,6 +150,11 @@ const vehicles = [
     seats: 5,
     pricePerDay: 60,
     image: "/images/corolla.png",
+    gallery: ["/images/corolla.png", "/images/landcruiser.png", "/images/hiace.png"],
+    description: "A reliable, comfortable, and fuel-efficient sedan perfect for city tours, business meetings, and smooth highway trips. Highly recommended for navigating urban environments.",
+    provider: { name: "City Drive Ethiopia", rating: 4.5, phone: "+251 922 234 567" },
+    features: ["Air Conditioning", "Bluetooth", "Backup Camera", "USB Ports", "Cruise Control"],
+    policies: { mileage: "Unlimited mileage within city limits.", fuel: "Full-to-Full", cancellation: "Free cancellation up to 24 hours before pick-up." },
     available: true
   },
   {
@@ -154,6 +164,11 @@ const vehicles = [
     seats: 12,
     pricePerDay: 100,
     image: "/images/hiace.png",
+    gallery: ["/images/hiace.png", "/images/landcruiser.png", "/images/corolla.png"],
+    description: "Perfect for large group tours, family trips, and corporate outings. The Toyota HiAce offers exceptional reliability, spacious seating, and plenty of luggage room for long journeys.",
+    provider: { name: "Ethio Tour & Travel", rating: 4.8, phone: "+251 911 234 567" },
+    features: ["Air Conditioning", "Large Luggage Space", "Radio/CD Player", "Comfortable Seating", "First Aid Kit"],
+    policies: { mileage: "Unlimited mileage.", fuel: "Full-to-Full", cancellation: "Free cancellation up to 48 hours before pick-up." },
     available: true
   },
   {
@@ -163,6 +178,11 @@ const vehicles = [
     seats: 7,
     pricePerDay: 170,
     image: "/images/landcruiser.png",
+    gallery: ["/images/landcruiser.png", "/images/corolla.png", "/images/hiace.png"],
+    description: "A robust and powerful 4x4, ideal for tackling Ethiopia's rugged terrain. Features a highly comfortable interior, advanced safety systems, and unmatched off-road capability.",
+    provider: { name: "Adventure Car Rents", rating: 4.9, phone: "+251 933 345 678" },
+    features: ["4WD", "Air Conditioning", "Leather Seats", "GPS Navigation", "Bluetooth", "Spare Tire"],
+    policies: { mileage: "200 km/day included. $0.50 per extra km.", fuel: "Full-to-Full", cancellation: "Strict: 50% refund up to 7 days before." },
     available: true
   },
   {
@@ -172,6 +192,11 @@ const vehicles = [
     seats: 5,
     pricePerDay: 85,
     image: "/images/corolla.png",
+    gallery: ["/images/corolla.png", "/images/landcruiser.png", "/images/hiace.png"],
+    description: "A modern and compact SUV that strikes the perfect balance between city driving and highway cruising. Offers a smooth ride and excellent fuel economy.",
+    provider: { name: "Addis Rent-A-Car", rating: 4.4, phone: "+251 944 456 789" },
+    features: ["Air Conditioning", "Bluetooth", "Backup Camera", "USB Ports", "Cruise Control"],
+    policies: { mileage: "Unlimited mileage.", fuel: "Full-to-Full", cancellation: "Free cancellation up to 24 hours before pick-up." },
     available: true
   },
   {
@@ -181,6 +206,11 @@ const vehicles = [
     seats: 4,
     pricePerDay: 45,
     image: "/images/corolla.png",
+    gallery: ["/images/corolla.png", "/images/corolla.png", "/images/corolla.png"],
+    description: "An economical and zippy compact car. Excellent for navigating the busy streets of Addis Ababa with ease. Highly fuel-efficient and easy to park.",
+    provider: { name: "Budget Rents Addis", rating: 4.2, phone: "+251 955 567 890" },
+    features: ["Air Conditioning", "Radio/USB", "Compact Size", "High Fuel Economy"],
+    policies: { mileage: "100 km/day included. $0.20 per extra km.", fuel: "Same to Same", cancellation: "Free cancellation up to 24 hours before." },
     available: true
   }
 ];

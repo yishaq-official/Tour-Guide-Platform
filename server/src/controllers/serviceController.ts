@@ -31,6 +31,16 @@ export const getAllVehicles = async (req: Request, res: Response) => {
   }
 };
 
+export const getVehicleById = async (req: Request, res: Response) => {
+  try {
+    const vehicle = await Vehicle.findById(req.params.id);
+    if (!vehicle) return res.status(404).json({ message: "Vehicle not found" });
+    res.json(vehicle);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
 export const createBooking = async (req: Request, res: Response) => {
   try {
     const { itemId, itemModel, customerName, customerEmail, startDate, endDate, totalPrice } = req.body;
