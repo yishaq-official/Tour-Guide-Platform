@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, CheckCircle2, X, Users, Cog, Star, ShieldCheck, MapPin, Fuel, Calendar, PhoneCall, Info } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface Provider {
   name: string;
@@ -54,7 +55,7 @@ export function VehicleDetail() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/services/vehicles/${id}`)
+    fetch(`${API_URL}/services/vehicles/${id}`)
       .then(res => res.json())
       .then(data => {
         setVehicle(data);
@@ -82,7 +83,7 @@ export function VehicleDetail() {
       const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
       const totalPrice = days * vehicle.pricePerDay;
 
-      const response = await fetch('http://localhost:5000/api/services/book', {
+      const response = await fetch(`${API_URL}/services/book`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

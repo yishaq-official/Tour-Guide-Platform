@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, Compass, Info, CheckCircle2 } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface Highlight {
   title: string;

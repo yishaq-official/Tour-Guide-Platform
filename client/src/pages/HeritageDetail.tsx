@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin, Compass, Info, CheckCircle2, Car } from 'lucide-react';
 import { MapWidget } from '../components/MapWidget';
 import { WeatherWidget } from '../components/WeatherWidget';
+import { API_URL } from '../config';
 
 interface TouristHighlight {
   title: string;
