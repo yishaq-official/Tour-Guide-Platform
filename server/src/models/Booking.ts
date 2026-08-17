@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema({
+  userId: { type: String }, // Better-Auth uses string IDs
   itemId: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'itemModel' },
   itemModel: { type: String, required: true, enum: ['Hotel', 'Vehicle'] },
   customerName: { type: String, required: true },
