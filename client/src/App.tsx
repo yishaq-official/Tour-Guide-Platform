@@ -11,6 +11,8 @@ import { VehicleDetail } from './pages/VehicleDetail';
 import { Essentials } from './pages/Essentials';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
+import { MyTrips } from './pages/MyTrips';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -28,6 +30,10 @@ function App() {
           <Route path="services/hotel/:id" element={<HotelDetail />} />
           <Route path="services/vehicle/:id" element={<VehicleDetail />} />
           <Route path="essentials" element={<Essentials />} />
+          
+          <Route element={<ProtectedRoute />}>
+            <Route path="my-trips" element={<MyTrips />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

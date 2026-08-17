@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MapPin, Compass, Info, CheckCircle2 } from 'lucide-react';
-import { API_URL } from '../config';
+import { ArrowLeft, MapPin, Compass, Info, CheckCircle2, Heart } from 'lucide-react';
+import { MapWidget } from '../components/MapWidget';
+import { API_URL, apiFetch } from '../config';
+import { useSession } from '../lib/auth-client';
 
 interface Highlight {
   title: string;
@@ -26,6 +28,10 @@ export function CultureDetail() {
   const [culture, setCulture] = useState<Culture | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  const { data: session } = useSession();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -44,7 +50,36 @@ export function CultureDetail() {
         setError('Failed to load culture details. Please check your connection and try again.');
         setLoading(false);
       });
-  }, [id]);
+      
+    if (session) {
+      apiFetch(`${API_URL}/user/favorites`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setIsFavorite(data.some((f: any) => f.itemId && f.itemId._id === id || f.itemId === id));
+          }
+        })
+        .catch(console.error);
+    }
+  }, [id, session]);
+
+  const toggleFavorite = async () => {
+    if (!session) return;
+    setIsTogglingFavorite(true);
+    try {
+      const res = await apiFetch(`${API_URL}/user/favorites`, {
+        method: 'POST',
+        body: JSON.stringify({ itemId: id, itemModel: 'Culture' })
+      });
+      if (res.ok) {
+        setIsFavorite(!isFavorite);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsTogglingFavorite(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -87,12 +122,25 @@ export function CultureDetail() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent" />
         
+        <div className="absolute top-8 left-8 md:top-12 md:left-12 z-20 flex justify-between right-8 md:right-12">
+          <Link to="/explore?tab=cultures" className="inline-flex items-center text-white/80 hover:text-white transition-colors text-sm font-semibold uppercase tracking-wider bg-black/20 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Explore
+          </Link>
+          
+          {session && (
+            <button 
+              onClick={toggleFavorite}
+              disabled={isTogglingFavorite}
+              className={`p-3 rounded-full backdrop-blur-md border border-white/20 transition-all ${isFavorite ? 'bg-red-500/80 text-white' : 'bg-black/40 text-white/80 hover:bg-black/60 hover:text-white'}`}
+            >
+              <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+            </button>
+          )}
+        </div>
+        
         <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
           <div className="max-w-7xl mx-auto">
-            <Link to="/explore?tab=cultures" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors text-sm font-semibold uppercase tracking-wider bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm border border-white/20">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Gallery
-            </Link>
             
             <div className="flex flex-wrap items-center gap-3 mb-6">
               {culture.isUnesco && (

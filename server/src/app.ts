@@ -13,7 +13,10 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true
+}));
 app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json());
 

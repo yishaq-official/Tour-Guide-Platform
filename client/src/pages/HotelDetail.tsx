@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, MapPin, Star, CheckCircle2, X, Wifi, Coffee, Utensils, Car, Users, Clock, Info } from 'lucide-react';
+import { ArrowLeft, MapPin, Star, CheckCircle2, X, Wifi, Coffee, Utensils, Car, Users, Clock, Info, Heart } from 'lucide-react';
 import { MapWidget } from '../components/MapWidget';
-import { API_URL } from '../config';
+import { API_URL, apiFetch } from '../config';
+import { useSession } from '../lib/auth-client';
 
 interface RoomType {
   name: string;
@@ -44,6 +45,10 @@ export function HotelDetail() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingError, setBookingError] = useState('');
   
+  const { data: session } = useSession();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
+  
   const [bookingData, setBookingData] = useState({
     startDate: '',
     endDate: '',
@@ -74,7 +79,36 @@ export function HotelDetail() {
         console.error(err);
         setLoading(false);
       });
-  }, [id]);
+
+    if (session) {
+      apiFetch(`${API_URL}/user/favorites`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setIsFavorite(data.some((f: any) => f.itemId && (typeof f.itemId === 'string' ? f.itemId === id : f.itemId._id === id)));
+          }
+        })
+        .catch(console.error);
+    }
+  }, [id, session]);
+
+  const toggleFavorite = async () => {
+    if (!session) return;
+    setIsTogglingFavorite(true);
+    try {
+      const res = await apiFetch(`${API_URL}/user/favorites`, {
+        method: 'POST',
+        body: JSON.stringify({ itemId: id, itemModel: 'Hotel' })
+      });
+      if (res.ok) {
+        setIsFavorite(!isFavorite);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsTogglingFavorite(false);
+    }
+  };
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -192,10 +226,20 @@ export function HotelDetail() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
         
-        <div className="absolute top-8 left-8 md:top-12 md:left-12 z-10">
+        <div className="absolute top-8 left-8 md:top-12 md:left-12 z-10 flex justify-between right-8 md:right-12">
           <Link to="/services" className="inline-flex items-center text-white/80 hover:text-white transition-colors text-sm font-semibold uppercase tracking-wider bg-black/20 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Services
           </Link>
+          
+          {session && (
+            <button 
+              onClick={toggleFavorite}
+              disabled={isTogglingFavorite}
+              className={`p-3 rounded-full backdrop-blur-md border border-white/20 transition-all ${isFavorite ? 'bg-red-500/80 text-white' : 'bg-black/40 text-white/80 hover:bg-black/60 hover:text-white'}`}
+            >
+              <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+            </button>
+          )}
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 z-10">

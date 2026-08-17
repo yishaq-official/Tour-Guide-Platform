@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, X, Users, Cog, Star, ShieldCheck, MapPin, Fuel, Calendar, PhoneCall, Info } from 'lucide-react';
-import { API_URL } from '../config';
+import { ArrowLeft, Users, Briefcase, Cog, MapPin, Calendar, PhoneCall, User, CheckCircle2, Heart, X, Fuel, ShieldCheck, Star, Info } from 'lucide-react';
+import { API_URL, apiFetch } from '../config';
+import { useSession } from '../lib/auth-client';
 
 interface Provider {
   name: string;
@@ -43,6 +44,10 @@ export function VehicleDetail() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingError, setBookingError] = useState('');
   
+  const { data: session } = useSession();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
+
   const [bookingData, setBookingData] = useState({
     startDate: '',
     endDate: '',
@@ -71,10 +76,40 @@ export function VehicleDetail() {
         setLoading(false);
       })
       .catch(err => {
-        console.error(err);
+        console.error("Failed to fetch vehicle details", err);
+        setError('Failed to load vehicle details. Please check your connection and try again.');
         setLoading(false);
       });
-  }, [id]);
+
+    if (session) {
+      apiFetch(`${API_URL}/user/favorites`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setIsFavorite(data.some((f: any) => f.itemId && f.itemId._id === id || f.itemId === id));
+          }
+        })
+        .catch(console.error);
+    }
+  }, [id, session]);
+
+  const toggleFavorite = async () => {
+    if (!session) return;
+    setIsTogglingFavorite(true);
+    try {
+      const res = await apiFetch(`${API_URL}/user/favorites`, {
+        method: 'POST',
+        body: JSON.stringify({ itemId: id, itemModel: 'Vehicle' })
+      });
+      if (res.ok) {
+        setIsFavorite(!isFavorite);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsTogglingFavorite(false);
+    }
+  };
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,10 +204,20 @@ export function VehicleDetail() {
     <div className="min-h-screen bg-white">
       {/* Hero Gallery */}
       <div className="relative h-[50vh] md:h-[60vh] bg-gray-100 overflow-hidden pt-20">
-        <div className="absolute top-24 left-8 md:top-28 md:left-12 z-20">
+        <div className="absolute top-24 left-8 md:top-28 md:left-12 z-20 flex justify-between right-8 md:right-12">
           <Link to="/services" className="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors text-sm font-semibold uppercase tracking-wider bg-white/80 px-4 py-2 rounded-full backdrop-blur-md border border-gray-200 shadow-sm">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Services
           </Link>
+          
+          {session && (
+            <button 
+              onClick={toggleFavorite}
+              disabled={isTogglingFavorite}
+              className={`p-3 rounded-full backdrop-blur-md border transition-all ${isFavorite ? 'bg-red-50 text-red-500 border-red-100' : 'bg-white/80 text-gray-400 border-gray-200 hover:text-red-500 hover:bg-white'}`}
+            >
+              <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+            </button>
+          )}
         </div>
 
         <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
