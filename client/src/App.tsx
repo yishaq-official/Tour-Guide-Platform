@@ -9,11 +9,15 @@ import { Services } from './pages/Services';
 import { HotelDetail } from './pages/HotelDetail';
 import { VehicleDetail } from './pages/VehicleDetail';
 import { Essentials } from './pages/Essentials';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
