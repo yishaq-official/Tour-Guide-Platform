@@ -77,6 +77,22 @@ export function HotelDetail() {
     setIsSubmitting(true);
     setBookingError('');
 
+    // Client-side Validation
+    const start = new Date(bookingData.startDate);
+    const end = new Date(bookingData.endDate);
+    
+    if (end <= start) {
+      setBookingError('Check-out date must be after check-in date.');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    if (bookingData.guests < 1) {
+      setBookingError('Number of guests must be at least 1.');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const selectedRoom = hotel.roomTypes.find(r => r.name === bookingData.roomType) || hotel.roomTypes[0];
       const pricePerUnit = selectedRoom ? selectedRoom.pricePerNight : hotel.pricePerNight;

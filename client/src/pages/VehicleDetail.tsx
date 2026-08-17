@@ -77,6 +77,22 @@ export function VehicleDetail() {
     setIsSubmitting(true);
     setBookingError('');
 
+    // Client-side Validation
+    const start = new Date(bookingData.startDate);
+    const end = new Date(bookingData.endDate);
+    
+    if (end < start) {
+      setBookingError('Drop-off date cannot be before pick-up date.');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    if (bookingData.guests < 1 || bookingData.guests > vehicle.seats) {
+      setBookingError(`Number of passengers must be between 1 and ${vehicle.seats}.`);
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const start = new Date(bookingData.startDate);
       const end = new Date(bookingData.endDate);
