@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, MapPin } from 'lucide-react';
+import { Menu, X, MapPin, User as UserIcon, LogOut, Navigation } from 'lucide-react';
+import { useSession, signOut } from '../../lib/auth-client';
 
 const NAV_LINKS = [
   { name: 'Home', path: '/' },
@@ -12,7 +13,14 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
+  const { data: session, isPending } = useSession();
+
+  const handleSignOut = async () => {
+    await signOut();
+    window.location.href = '/';
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -55,6 +63,49 @@ export function Navbar() {
             })}
           </nav>
 
+          {/* Auth Actions - Desktop */}
+          <div className="hidden md:flex items-center gap-4">
+            {isPending ? (
+              <div className="w-8 h-8 border-2 border-gray-200 border-t-green-600 rounded-full animate-spin" />
+            ) : session ? (
+              <div className="relative">
+                <button 
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center gap-2 p-1 pr-3 bg-gray-50 rounded-full border border-gray-200 hover:border-green-500 transition-colors"
+                >
+                  <div className="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold text-sm">
+                    {session.user.name?.[0]?.toUpperCase() || 'U'}
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">{session.user.name?.split(' ')[0]}</span>
+                </button>
+                
+                <AnimatePresence>
+                  {dropdownOpen && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
+                    >
+                      <Link to="/my-trips" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                        <Navigation className="w-4 h-4 mr-2" /> My Trips
+                      </Link>
+                      <div className="h-px bg-gray-100 my-2" />
+                      <button onClick={handleSignOut} className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link to="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">Sign In</Link>
+                <Link to="/signup" className="text-sm font-bold text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors">Sign Up</Link>
+              </div>
+            )}
+          </div>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -92,6 +143,46 @@ export function Navbar() {
                   </Link>
                 );
               })}
+              
+              {!isPending && (
+                <div className="pt-4 mt-4 border-t border-gray-100">
+                  {session ? (
+                    <div className="space-y-1">
+                      <div className="px-3 py-2 flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold">
+                          {session.user.name?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900">{session.user.name}</div>
+                          <div className="text-xs text-gray-500">{session.user.email}</div>
+                        </div>
+                      </div>
+                      <Link
+                        to="/my-trips"
+                        onClick={() => setIsOpen(false)}
+                        className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-green-600 transition-colors"
+                      >
+                        <Navigation className="w-5 h-5 inline mr-2" /> My Trips
+                      </Link>
+                      <button
+                        onClick={() => { setIsOpen(false); handleSignOut(); }}
+                        className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <LogOut className="w-5 h-5 inline mr-2" /> Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 gap-4 px-3">
+                      <Link to="/login" onClick={() => setIsOpen(false)} className="flex justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Sign In
+                      </Link>
+                      <Link to="/signup" onClick={() => setIsOpen(false)} className="flex justify-center px-4 py-2 border border-transparent rounded-lg text-sm font-bold text-white bg-green-600 hover:bg-green-700">
+                        Sign Up
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </motion.div>
         )}
