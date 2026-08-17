@@ -98,7 +98,7 @@ export function HotelDetail() {
     try {
       const res = await apiFetch(`${API_URL}/user/favorites`, {
         method: 'POST',
-        body: JSON.stringify({ itemId: id, itemModel: 'Hotel' })
+        body: JSON.stringify({ itemId: id, itemModel: 'Hotel', userId: session?.user?.id || undefined })
       });
       if (res.ok) {
         setIsFavorite(!isFavorite);
@@ -142,9 +142,8 @@ export function HotelDetail() {
       const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
       const totalPrice = days * pricePerUnit;
 
-      const response = await fetch(`${API_URL}/services/book`, {
+      const response = await apiFetch(`${API_URL}/services/book`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           itemId: hotel._id,
           itemModel: 'Hotel',
@@ -156,7 +155,8 @@ export function HotelDetail() {
           specialRequests: bookingData.specialRequests,
           startDate: bookingData.startDate,
           endDate: bookingData.endDate,
-          totalPrice
+          totalPrice,
+          userId: session?.user?.id
         })
       });
 

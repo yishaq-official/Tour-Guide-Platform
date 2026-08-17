@@ -43,7 +43,7 @@ export const getVehicleById = async (req: Request, res: Response) => {
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
-    const { itemId, itemModel, customerName, customerEmail, startDate, endDate, totalPrice } = req.body;
+    const { itemId, itemModel, customerName, customerEmail, startDate, endDate, totalPrice, userId } = req.body;
     
     // Basic validation
     if (!itemId || !itemModel || !customerName || !customerEmail || !startDate || !endDate || !totalPrice) {
@@ -57,7 +57,8 @@ export const createBooking = async (req: Request, res: Response) => {
       customerEmail,
       startDate,
       endDate,
-      totalPrice
+      totalPrice,
+      userId
     });
 
     await newBooking.save();

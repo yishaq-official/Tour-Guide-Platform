@@ -6,7 +6,8 @@ import {
     getItinerary, 
     addToItinerary, 
     removeFromItinerary,
-    getUserBookings
+    getUserBookings,
+    cancelBooking
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -22,5 +23,6 @@ router.post("/itinerary", addToItinerary);
 router.delete("/itinerary/:id", removeFromItinerary);
 
 router.get("/bookings", getUserBookings);
+router.put("/bookings/:id/cancel", cancelBooking);
 
 export default router;

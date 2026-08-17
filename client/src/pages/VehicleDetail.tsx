@@ -99,7 +99,11 @@ export function VehicleDetail() {
     try {
       const res = await apiFetch(`${API_URL}/user/favorites`, {
         method: 'POST',
-        body: JSON.stringify({ itemId: id, itemModel: 'Vehicle' })
+        body: JSON.stringify({ 
+          itemId: id, 
+          itemModel: 'Vehicle',
+          userId: session?.user?.id || undefined
+        })
       });
       if (res.ok) {
         setIsFavorite(!isFavorite);
@@ -140,9 +144,8 @@ export function VehicleDetail() {
       const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
       const totalPrice = days * vehicle.pricePerDay;
 
-      const response = await fetch(`${API_URL}/services/book`, {
+      const response = await apiFetch(`${API_URL}/services/book`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           itemId: vehicle._id,
           itemModel: 'Vehicle',
@@ -155,7 +158,8 @@ export function VehicleDetail() {
           specialRequests: bookingData.specialRequests,
           startDate: bookingData.startDate,
           endDate: bookingData.endDate,
-          totalPrice
+          totalPrice,
+          userId: session?.user?.id
         })
       });
 

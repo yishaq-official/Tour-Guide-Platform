@@ -87,3 +87,17 @@ export const getUserBookings = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server Error", error });
   }
 };
+
+export const cancelBooking = async (req: Request, res: Response) => {
+  try {
+    const booking = await Booking.findOne({ _id: req.params.id, userId: req.user.id });
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found or unauthorized" });
+    }
+    booking.status = 'Cancelled';
+    await booking.save();
+    res.json({ message: "Booking cancelled successfully", booking });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
