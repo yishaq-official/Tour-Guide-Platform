@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, MapPin, Star, CheckCircle2, X, Wifi, Coffee, Utensils, Car, Users, Clock, Info } from 'lucide-react';
 import { MapWidget } from '../components/MapWidget';
+import { API_URL } from '../config';
 
 interface RoomType {
   name: string;
@@ -54,7 +55,7 @@ export function HotelDetail() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/services/hotels/${id}`)
+    fetch(`${API_URL}/services/hotels/${id}`)
       .then(res => res.json())
       .then(data => {
         setHotel(data);
@@ -85,7 +86,7 @@ export function HotelDetail() {
       const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
       const totalPrice = days * pricePerUnit;
 
-      const response = await fetch('http://localhost:5000/api/services/book', {
+      const response = await fetch(`${API_URL}/services/book`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

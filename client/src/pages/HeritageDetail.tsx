@@ -34,7 +34,7 @@ export function HeritageDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/heritages/${id}`)
+    fetch(`${API_URL}/heritages/${id}`)
       .then(res => res.json())
       .then(data => {
         setHeritage(data);

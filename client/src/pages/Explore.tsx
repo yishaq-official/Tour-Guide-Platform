@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Search, Filter } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface BaseItem {
   _id: string;
@@ -39,8 +40,8 @@ export function Explore() {
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      fetch('http://localhost:5000/api/heritages').then(res => res.json()),
-      fetch('http://localhost:5000/api/cultures').then(res => res.json())
+      fetch(`${API_URL}/heritages`).then(res => res.json()),
+      fetch(`${API_URL}/cultures`).then(res => res.json())
     ])
     .then(([heritagesData, culturesData]) => {
       setHeritages(heritagesData);

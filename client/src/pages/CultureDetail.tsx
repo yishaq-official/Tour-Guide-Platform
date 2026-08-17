@@ -26,7 +26,7 @@ export function CultureDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/cultures/${id}`)
+    fetch(`${API_URL}/cultures/${id}`)
       .then(res => res.json())
       .then(data => {
         setCulture(data);

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface Hotel {
   _id: string;
@@ -47,8 +48,8 @@ export function Services() {
     const fetchServices = async () => {
       try {
         const [hotelsRes, vehiclesRes] = await Promise.all([
-          fetch('http://localhost:5000/api/services/hotels'),
-          fetch('http://localhost:5000/api/services/vehicles')
+          fetch(`${API_URL}/services/hotels`),
+          fetch(`${API_URL}/services/vehicles`)
         ]);
         
         const hotelsData = await hotelsRes.json();
@@ -85,7 +86,7 @@ export function Services() {
       const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
       const totalPrice = days * pricePerUnit;
 
-      const response = await fetch('http://localhost:5000/api/services/book', {
+      const response = await fetch(`${API_URL}/services/book`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
