@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X } from 'lucide-react';
 import { API_URL } from '../config';
@@ -27,7 +27,12 @@ interface Vehicle {
 }
 
 export function Services() {
-  const [activeTab, setActiveTab] = useState<'hotels' | 'vehicles'>('hotels');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') === 'vehicles' ? 'vehicles' : 'hotels';
+  
+  const handleTabChange = (tab: 'hotels' | 'vehicles') => {
+    setSearchParams({ tab }, { replace: true });
+  };
   
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -136,7 +141,7 @@ export function Services() {
         <div className="flex justify-center mb-12">
           <div className="bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm inline-flex">
             <button
-              onClick={() => setActiveTab('hotels')}
+              onClick={() => handleTabChange('hotels')}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === 'hotels' ? 'bg-green-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'
               }`}
@@ -145,7 +150,7 @@ export function Services() {
               Hotels & Stays
             </button>
             <button
-              onClick={() => setActiveTab('vehicles')}
+              onClick={() => handleTabChange('vehicles')}
               className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === 'vehicles' ? 'bg-green-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'
               }`}

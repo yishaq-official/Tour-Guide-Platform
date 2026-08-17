@@ -25,18 +25,29 @@ interface Culture extends BaseItem {
 export function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') === 'heritages' ? 'heritages' : 'cultures';
+  const search = searchParams.get('search') || '';
+  const selectedRegion = searchParams.get('region') || 'All';
+  
+  const updateParams = (updates: Record<string, string>) => {
+    const params = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value && value !== 'All') {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+    setSearchParams(params, { replace: true });
+  };
   
   const handleTabChange = (tab: 'cultures' | 'heritages') => {
-    setSearchParams({ tab });
+    updateParams({ tab, search: '', region: 'All' });
   };
   
   const [heritages, setHeritages] = useState<Heritage[]>([]);
   const [cultures, setCultures] = useState<Culture[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  const [search, setSearch] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('All');
 
   useEffect(() => {
     setLoading(true);
@@ -119,7 +130,7 @@ export function Explore() {
               <div className="relative w-full sm:w-64">
                 <select
                   value={selectedRegion}
-                  onChange={(e) => setSelectedRegion(e.target.value)}
+                  onChange={(e) => updateParams({ region: e.target.value })}
                   className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none appearance-none cursor-pointer shadow-sm"
                 >
                   {regions.map(r => <option key={r} value={r}>{r}</option>)}
@@ -133,7 +144,7 @@ export function Explore() {
                 type="text" 
                 placeholder={`Search ${activeTab}...`} 
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => updateParams({ search: e.target.value })}
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-shadow shadow-sm"
               />
               <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
@@ -205,7 +216,7 @@ export function Explore() {
             ) : filteredItems.length === 0 ? (
               <div className="col-span-full text-center py-20 text-gray-500 text-lg">
                 <p className="mb-4">No results found for "{search}"</p>
-                <button onClick={() => {setSearch(''); setSelectedRegion('All');}} className="text-green-600 font-medium hover:underline">Clear Filters</button>
+                <button onClick={() => updateParams({ search: '', region: 'All' })} className="text-green-600 font-medium hover:underline">Clear Filters</button>
               </div>
             ) : null}
           </div>

@@ -37,6 +37,7 @@ export function HotelDetail() {
   const { id } = useParams();
   const [hotel, setHotel] = useState<Hotel | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
@@ -55,8 +56,13 @@ export function HotelDetail() {
   });
 
   useEffect(() => {
+    setLoading(true);
+    setError('');
     fetch(`${API_URL}/services/hotels/${id}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch hotel details');
+        return res.json();
+      })
       .then(data => {
         setHotel(data);
         if (data.roomTypes && data.roomTypes.length > 0) {
@@ -135,6 +141,19 @@ export function HotelDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-32 bg-gray-50 min-h-screen">
+        <h2 className="text-3xl font-bold text-red-600 mb-4">Oops!</h2>
+        <p className="text-gray-600 text-lg mb-6">{error}</p>
+        <button onClick={() => window.location.reload()} className="px-6 py-2 bg-green-600 text-white rounded-lg">Try Again</button>
+        <div className="mt-4">
+          <Link to="/services" className="text-green-600 hover:underline">Return to Services</Link>
+        </div>
       </div>
     );
   }
