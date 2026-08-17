@@ -32,6 +32,7 @@ export function Services() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [bookingModal, setBookingModal] = useState<{ isOpen: boolean; item: Hotel | Vehicle | null; type: 'hotel' | 'vehicle' }>({ isOpen: false, item: null, type: 'hotel' });
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,12 +46,17 @@ export function Services() {
 
   useEffect(() => {
     setLoading(true);
+    setError('');
     const fetchServices = async () => {
       try {
         const [hotelsRes, vehiclesRes] = await Promise.all([
           fetch(`${API_URL}/services/hotels`),
           fetch(`${API_URL}/services/vehicles`)
         ]);
+        
+        if (!hotelsRes.ok || !vehiclesRes.ok) {
+          throw new Error('Failed to fetch services data');
+        }
         
         const hotelsData = await hotelsRes.json();
         const vehiclesData = await vehiclesRes.json();
@@ -60,6 +66,7 @@ export function Services() {
         setLoading(false);
       } catch (err) {
         console.error("Failed to fetch services", err);
+        setError('Failed to load services. Please check your connection and try again.');
         setLoading(false);
       }
     };
@@ -153,6 +160,11 @@ export function Services() {
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <p className="text-red-500 text-lg mb-4">{error}</p>
+            <button onClick={() => window.location.reload()} className="px-6 py-2 bg-green-600 text-white rounded-lg">Try Again</button>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

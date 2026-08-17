@@ -33,15 +33,23 @@ export function Explore() {
   const [heritages, setHeritages] = useState<Heritage[]>([]);
   const [cultures, setCultures] = useState<Culture[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   
   const [search, setSearch] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('All');
 
   useEffect(() => {
     setLoading(true);
+    setError('');
     Promise.all([
-      fetch(`${API_URL}/heritages`).then(res => res.json()),
-      fetch(`${API_URL}/cultures`).then(res => res.json())
+      fetch(`${API_URL}/heritages`).then(res => {
+        if (!res.ok) throw new Error('Failed to fetch heritages');
+        return res.json();
+      }),
+      fetch(`${API_URL}/cultures`).then(res => {
+        if (!res.ok) throw new Error('Failed to fetch cultures');
+        return res.json();
+      })
     ])
     .then(([heritagesData, culturesData]) => {
       setHeritages(heritagesData);
@@ -50,6 +58,7 @@ export function Explore() {
     })
     .catch(err => {
       console.error("Failed to fetch data", err);
+      setError('Failed to load explore data. Please check your connection and try again.');
       setLoading(false);
     });
   }, []);
@@ -188,11 +197,17 @@ export function Explore() {
             ))}
             </AnimatePresence>
             
-            {filteredItems.length === 0 && (
-              <div className="col-span-full text-center py-20 text-gray-500 text-lg">
-                No results found for "{search}"
+            {error ? (
+              <div className="col-span-full text-center py-20">
+                <p className="text-red-500 text-lg mb-4">{error}</p>
+                <button onClick={() => window.location.reload()} className="px-6 py-2 bg-green-600 text-white rounded-lg">Try Again</button>
               </div>
-            )}
+            ) : filteredItems.length === 0 ? (
+              <div className="col-span-full text-center py-20 text-gray-500 text-lg">
+                <p className="mb-4">No results found for "{search}"</p>
+                <button onClick={() => {setSearch(''); setSelectedRegion('All');}} className="text-green-600 font-medium hover:underline">Clear Filters</button>
+              </div>
+            ) : null}
           </div>
         )}
       </div>
