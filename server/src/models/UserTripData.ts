@@ -8,6 +8,7 @@ const favoriteSchema = new mongoose.Schema({
 
 const itineraryItemSchema = new mongoose.Schema({
   day: { type: Number, required: true },
+  order: { type: Number, default: 0 },
   itemId: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'itinerary.itemModel' },
   itemModel: { type: String, required: true, enum: ['Heritage', 'Culture', 'Hotel', 'Vehicle'] },
   notes: { type: String }

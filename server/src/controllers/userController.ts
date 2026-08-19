@@ -79,6 +79,27 @@ export const removeFromItinerary = async (req: Request, res: Response) => {
   }
 };
 
+export const syncItinerary = async (req: Request, res: Response) => {
+  try {
+    const { itinerary } = req.body;
+    
+    if (!Array.isArray(itinerary)) {
+      return res.status(400).json({ message: "Itinerary must be an array" });
+    }
+
+    const data = await getOrCreateTripData(req.user.id);
+    
+    // Replace the entire itinerary array with the incoming sorted/synced array
+    data.itinerary = itinerary;
+    await data.save();
+    await data.populate('itinerary.itemId');
+    
+    res.json(data.itinerary);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
 export const getUserBookings = async (req: Request, res: Response) => {
   try {
     const bookings = await Booking.find({ userId: req.user.id }).populate('itemId');

@@ -6,6 +6,7 @@ import {
     getItinerary, 
     addToItinerary, 
     removeFromItinerary,
+    syncItinerary,
     getUserBookings,
     cancelBooking
 } from "../controllers/userController.js";
@@ -20,6 +21,7 @@ router.post("/favorites", toggleFavorite);
 
 router.get("/itinerary", getItinerary);
 router.post("/itinerary", addToItinerary);
+router.put("/itinerary/sync", syncItinerary);
 router.delete("/itinerary/:id", removeFromItinerary);
 
 router.get("/bookings", getUserBookings);

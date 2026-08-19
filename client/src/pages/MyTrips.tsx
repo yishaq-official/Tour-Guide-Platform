@@ -3,11 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Calendar, CreditCard, Trash2, MapPin, Loader2, ArrowRight, Clock, Ban } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { API_URL, apiFetch } from '../config';
+import { ItineraryBoard } from '../components/ItineraryBoard';
 
 export function MyTrips() {
   const [activeTab, setActiveTab] = useState<'favorites' | 'itinerary' | 'bookings'>('favorites');
   const [favorites, setFavorites] = useState<any[]>([]);
   const [bookings, setBookings] = useState<any[]>([]);
+  const [itinerary, setItinerary] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,11 +17,31 @@ export function MyTrips() {
       fetchFavorites();
     } else if (activeTab === 'bookings') {
       fetchBookings();
-    } else {
-      // Fetch itinerary
-      setLoading(false);
+    } else if (activeTab === 'itinerary') {
+      fetchFavoritesAndItinerary();
     }
   }, [activeTab]);
+
+  const fetchFavoritesAndItinerary = async () => {
+    setLoading(true);
+    try {
+      const [favRes, itinRes] = await Promise.all([
+        apiFetch(`${API_URL}/user/favorites`),
+        apiFetch(`${API_URL}/user/itinerary`)
+      ]);
+      
+      if (favRes.ok) {
+        setFavorites(await favRes.json());
+      }
+      if (itinRes.ok) {
+        setItinerary(await itinRes.json());
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchFavorites = async () => {
     setLoading(true);
@@ -174,13 +196,7 @@ export function MyTrips() {
               )}
             </div>
           ) : activeTab === 'itinerary' ? (
-            <div className="text-center py-24">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 text-blue-500 mb-4">
-                <Calendar className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Itinerary Builder</h3>
-              <p className="text-gray-500">Coming soon! Organize your saved places into a day-by-day plan.</p>
-            </div>
+            <ItineraryBoard favorites={favorites} initialItinerary={itinerary} />
           ) : activeTab === 'bookings' ? (
             <div>
               {bookings.length === 0 ? (
