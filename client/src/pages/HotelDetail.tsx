@@ -304,16 +304,27 @@ export function HotelDetail() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Room Types</h2>
               <div className="space-y-4">
                 {hotel.roomTypes && hotel.roomTypes.map((room, idx) => (
-                  <div key={idx} className="flex justify-between items-center p-6 border border-gray-200 rounded-2xl hover:border-green-500 transition-colors bg-white">
+                  <div key={idx} className="flex flex-col md:flex-row justify-between items-start md:items-center p-6 border border-gray-200 rounded-2xl hover:border-green-500 transition-colors bg-white gap-4">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 mb-1">{room.name}</h3>
                       <div className="flex items-center text-sm text-gray-500">
                         <Users className="w-4 h-4 mr-1.5" /> Up to {room.capacity} Guests
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-900">${room.pricePerNight}</div>
-                      <div className="text-sm text-gray-500">per night</div>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
+                      <div className="text-left md:text-right">
+                        <div className="text-2xl font-bold text-gray-900">${room.pricePerNight}</div>
+                        <div className="text-sm text-gray-500">per night</div>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          setBookingData(prev => ({ ...prev, roomType: room.name }));
+                          setIsBookingModalOpen(true);
+                        }}
+                        className="px-6 py-2.5 bg-green-50 text-green-700 font-bold rounded-xl border border-green-200 hover:bg-green-600 hover:text-white hover:border-green-600 transition-all w-full sm:w-auto shrink-0 whitespace-nowrap"
+                      >
+                        Select Room
+                      </button>
                     </div>
                   </div>
                 ))}
