@@ -21,7 +21,8 @@ const hotelSchema = new mongoose.Schema({
   roomTypes: [{
     name: { type: String, required: true },
     pricePerNight: { type: Number, required: true },
-    capacity: { type: Number, required: true }
+    capacity: { type: Number, required: true },
+    image: { type: String, required: false }
   }],
 }, { timestamps: true });
 

@@ -10,6 +10,7 @@ interface RoomType {
   name: string;
   pricePerNight: number;
   capacity: number;
+  image?: string;
 }
 
 interface Hotel {
@@ -304,11 +305,18 @@ export function HotelDetail() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Available Room Types</h2>
               <div className="space-y-4">
                 {hotel.roomTypes && hotel.roomTypes.map((room, idx) => (
-                  <div key={idx} className="flex flex-col md:flex-row justify-between items-start md:items-center p-6 border border-gray-200 rounded-2xl hover:border-green-500 transition-colors bg-white gap-4">
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">{room.name}</h3>
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Users className="w-4 h-4 mr-1.5" /> Up to {room.capacity} Guests
+                  <div key={idx} className="flex flex-col md:flex-row justify-between items-start md:items-center p-6 border border-gray-200 rounded-2xl hover:border-green-500 transition-colors bg-white gap-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                      <img 
+                        src={room.image || 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&q=80&w=300'} 
+                        alt={room.name} 
+                        className="w-full sm:w-24 h-48 sm:h-24 object-cover rounded-xl shadow-sm"
+                      />
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-900 mb-1">{room.name}</h3>
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Users className="w-4 h-4 mr-1.5" /> Up to {room.capacity} Guests
+                        </div>
                       </div>
                     </div>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
