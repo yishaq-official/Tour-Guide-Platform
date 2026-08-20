@@ -13,6 +13,8 @@ import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { MyTrips } from './pages/MyTrips';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { AdminRoute } from './components/AdminRoute';
+import { AdminDashboard } from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -33,6 +35,10 @@ function App() {
           
           <Route element={<ProtectedRoute />}>
             <Route path="my-trips" element={<MyTrips />} />
+          </Route>
+
+          <Route element={<AdminRoute />}>
+            <Route path="admin" element={<AdminDashboard />} />
           </Route>
         </Route>
       </Routes>
