@@ -105,3 +105,39 @@ export const deleteHotel = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server Error", error });
   }
 };
+
+export const createVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicle = new Vehicle(req.body);
+    await vehicle.save();
+    res.status(201).json(vehicle);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const updateVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicle = await Vehicle.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!vehicle) {
+      res.status(404).json({ message: "Vehicle not found" });
+      return;
+    }
+    res.json(vehicle);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const deleteVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicle = await Vehicle.findByIdAndDelete(req.params.id);
+    if (!vehicle) {
+      res.status(404).json({ message: "Vehicle not found" });
+      return;
+    }
+    res.json({ message: "Vehicle deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
