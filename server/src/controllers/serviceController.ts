@@ -69,3 +69,39 @@ export const createBooking = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to create booking", error });
   }
 };
+
+export const createHotel = async (req: Request, res: Response) => {
+  try {
+    const hotel = new Hotel(req.body);
+    await hotel.save();
+    res.status(201).json(hotel);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const updateHotel = async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!hotel) {
+      res.status(404).json({ message: "Hotel not found" });
+      return;
+    }
+    res.json(hotel);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const deleteHotel = async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.findByIdAndDelete(req.params.id);
+    if (!hotel) {
+      res.status(404).json({ message: "Hotel not found" });
+      return;
+    }
+    res.json({ message: "Hotel deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
