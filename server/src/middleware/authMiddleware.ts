@@ -27,3 +27,15 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     res.status(500).json({ message: "Authentication Error", error });
   }
 };
+
+export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized: No active session" });
+  }
+  
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Forbidden: Admin access required" });
+  }
+  
+  next();
+};
