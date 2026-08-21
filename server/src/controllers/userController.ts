@@ -89,8 +89,8 @@ export const syncItinerary = async (req: Request, res: Response) => {
 
     const data = await getOrCreateTripData(req.user.id);
     
-    // Replace the entire itinerary array with the incoming sorted/synced array
-    data.itinerary = itinerary;
+        // Replace the entire itinerary array with the incoming sorted/synced array
+    data.itinerary = itinerary as any;
     await data.save();
     await data.populate('itinerary.itemId');
     
