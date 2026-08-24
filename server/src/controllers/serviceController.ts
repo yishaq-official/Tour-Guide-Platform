@@ -43,11 +43,26 @@ export const getVehicleById = async (req: Request, res: Response) => {
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
-    const { itemId, itemModel, customerName, customerEmail, startDate, endDate, totalPrice, userId } = req.body;
+    const { 
+      itemId, 
+      itemModel, 
+      customerName, 
+      customerEmail, 
+      phone,
+      guests,
+      roomType,
+      specialRequests,
+      pickupLocation,
+      dropoffLocation,
+      startDate,
+      endDate,
+      totalPrice, 
+      userId 
+    } = req.body;
     
     // Basic validation
-    if (!itemId || !itemModel || !customerName || !customerEmail || !startDate || !endDate || !totalPrice) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!itemId || !itemModel || !customerName || !customerEmail || !phone || !startDate || !endDate || !totalPrice) {
+      return res.status(400).json({ message: "All fields are required (itemId, itemModel, customerName, customerEmail, phone, startDate, endDate, totalPrice)" });
     }
 
     const newBooking = new Booking({
@@ -55,6 +70,12 @@ export const createBooking = async (req: Request, res: Response) => {
       itemModel,
       customerName,
       customerEmail,
+      phone,
+      guests: guests || 1,
+      roomType,
+      specialRequests,
+      pickupLocation,
+      dropoffLocation,
       startDate,
       endDate,
       totalPrice,

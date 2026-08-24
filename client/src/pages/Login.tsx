@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, LogIn, ArrowLeft } from 'lucide-react';
 import { authClient } from '../lib/auth-client';
@@ -10,6 +10,9 @@ export function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || '/explore';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +27,7 @@ export function Login() {
       if (error) {
           setError(error.message || 'Failed to login');
       } else {
-          navigate('/explore');
+          navigate(from);
       }
     } catch (err) {
       setError('An unexpected error occurred.');
@@ -37,7 +40,7 @@ export function Login() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "http://localhost:5173/explore"
+        callbackURL: window.location.origin + from
       });
     } catch (err) {
       setError('Failed to login with Google.');

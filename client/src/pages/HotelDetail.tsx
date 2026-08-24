@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, MapPin, Star, CheckCircle2, X, Wifi, Coffee, Utensils, Car, Users, Clock, Info, Heart, Maximize2 } from 'lucide-react';
 import { MapWidget } from '../components/MapWidget';
@@ -37,6 +37,7 @@ interface Hotel {
 
 export function HotelDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [hotel, setHotel] = useState<Hotel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -62,6 +63,27 @@ export function HotelDetail() {
   });
   
   const [selectedRoomImage, setSelectedRoomImage] = useState<{ src: string, name: string } | null>(null);
+
+  useEffect(() => {
+    if (session?.user) {
+      setBookingData(prev => ({
+        ...prev,
+        customerName: session.user.name || '',
+        customerEmail: session.user.email || '',
+      }));
+    }
+  }, [session]);
+
+  const handleBookClick = (roomName?: string) => {
+    if (!session) {
+      navigate('/login', { state: { from: `/services/hotel/${id}` } });
+      return;
+    }
+    if (roomName) {
+      setBookingData(prev => ({ ...prev, roomType: roomName }));
+    }
+    setIsBookingModalOpen(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -262,7 +284,7 @@ export function HotelDetail() {
               <span className="text-white/80 text-sm font-medium mb-1">Starting from</span>
               <div className="text-white font-bold text-4xl mb-4">${hotel.pricePerNight}<span className="text-lg text-white/60 font-normal">/night</span></div>
               <button 
-                onClick={() => setIsBookingModalOpen(true)}
+                onClick={() => handleBookClick()}
                 className="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-lg"
               >
                 Reserve a Room
@@ -340,10 +362,7 @@ export function HotelDetail() {
                             <div className="text-2xl font-extrabold text-green-700">${room.pricePerNight}</div>
                           </div>
                           <button 
-                            onClick={() => {
-                              setBookingData(prev => ({ ...prev, roomType: room.name }));
-                              setIsBookingModalOpen(true);
-                            }}
+                            onClick={() => handleBookClick(room.name)}
                             className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-all shadow-md shadow-green-600/10 whitespace-nowrap text-center"
                           >
                             Select Room

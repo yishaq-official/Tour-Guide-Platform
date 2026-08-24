@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Users, Briefcase, Cog, MapPin, Calendar, PhoneCall, User, CheckCircle2, Heart, X, Fuel, ShieldCheck, Star, Info } from 'lucide-react';
+import { ArrowLeft, Users, Cog, MapPin, Calendar, PhoneCall, CheckCircle2, Heart, X, Fuel, ShieldCheck, Star, Info } from 'lucide-react';
 import { API_URL, apiFetch } from '../config';
 import { useSession } from '../lib/auth-client';
 
@@ -35,6 +35,7 @@ interface Vehicle {
 
 export function VehicleDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -59,6 +60,24 @@ export function VehicleDetail() {
     dropoffLocation: '',
     specialRequests: ''
   });
+
+  useEffect(() => {
+    if (session?.user) {
+      setBookingData(prev => ({
+        ...prev,
+        customerName: session.user.name || '',
+        customerEmail: session.user.email || '',
+      }));
+    }
+  }, [session]);
+
+  const handleBookClick = () => {
+    if (!session) {
+      navigate('/login', { state: { from: `/services/vehicle/${id}` } });
+      return;
+    }
+    setIsBookingModalOpen(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -378,7 +397,7 @@ export function VehicleDetail() {
               </ul>
               
               <button 
-                onClick={() => setIsBookingModalOpen(true)}
+                onClick={handleBookClick}
                 disabled={!vehicle.available}
                 className="w-full py-4 bg-gray-900 hover:bg-green-600 text-white font-bold rounded-xl transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed shadow-md"
               >
