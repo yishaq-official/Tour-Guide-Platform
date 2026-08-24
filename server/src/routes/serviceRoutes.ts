@@ -16,9 +16,14 @@ import {
   updatePartnerHotel,
   deletePartnerHotel,
   getPartnerBookings,
-  updateBookingStatus
+  updateBookingStatus,
+  getPartnerVehicles,
+  createPartnerVehicle,
+  updatePartnerVehicle,
+  deletePartnerVehicle,
+  getPartnerVehicleBookings
 } from "../controllers/serviceController.js";
-import { requireAuth, requireAdmin, requireHotel } from "../middleware/authMiddleware.js";
+import { requireAuth, requireAdmin, requireHotel, requirePartner } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -37,12 +42,21 @@ router.post("/vehicles", requireAuth, requireAdmin, createVehicle);
 router.put("/vehicles/:id", requireAuth, requireAdmin, updateVehicle);
 router.delete("/vehicles/:id", requireAuth, requireAdmin, deleteVehicle);
 
-// Partner-scoped routes (accessible by 'hotel' partner role or 'admin')
+// Hotel Partner-scoped routes (accessible by 'hotel' partner role or 'admin')
 router.get("/partner/hotels", requireAuth, requireHotel, getPartnerHotels);
 router.post("/partner/hotels", requireAuth, requireHotel, createPartnerHotel);
 router.put("/partner/hotels/:id", requireAuth, requireHotel, updatePartnerHotel);
 router.delete("/partner/hotels/:id", requireAuth, requireHotel, deletePartnerHotel);
 router.get("/partner/bookings", requireAuth, requireHotel, getPartnerBookings);
-router.put("/partner/bookings/:id/status", requireAuth, requireHotel, updateBookingStatus);
+
+// Car Rental Partner-scoped routes (accessible by 'car' partner role or 'admin')
+router.get("/partner/vehicles", requireAuth, requirePartner, getPartnerVehicles);
+router.post("/partner/vehicles", requireAuth, requirePartner, createPartnerVehicle);
+router.put("/partner/vehicles/:id", requireAuth, requirePartner, updatePartnerVehicle);
+router.delete("/partner/vehicles/:id", requireAuth, requirePartner, deletePartnerVehicle);
+router.get("/partner/vehicle-bookings", requireAuth, requirePartner, getPartnerVehicleBookings);
+
+// Booking status updates (shared by all partners, role authorization checked dynamically inside handler)
+router.put("/partner/bookings/:id/status", requireAuth, requirePartner, updateBookingStatus);
 
 export default router;
