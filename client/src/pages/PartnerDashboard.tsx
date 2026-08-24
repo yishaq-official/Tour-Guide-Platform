@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { API_URL, apiFetch } from '../config';
 import { useSession } from '../lib/auth-client';
+import { PartnerNavbar } from '../components/layout/PartnerNavbar';
 
 // Leaflet Imports for coordinate selector map
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
@@ -491,8 +492,10 @@ export function PartnerDashboard() {
     .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
 
   return (
-    <div className="min-h-screen bg-gray-50/50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50/50 flex flex-col">
+      <PartnerNavbar />
+      <div className="flex-1 py-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
         {/* Workspace selector for admin accounts */}
         {userRole === 'admin' && (
           <div className="bg-white border border-gray-150 rounded-2xl p-4 mb-8 shadow-sm flex items-center justify-between">
@@ -1389,6 +1392,7 @@ export function PartnerDashboard() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
