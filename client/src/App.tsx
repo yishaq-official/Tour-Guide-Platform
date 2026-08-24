@@ -17,6 +17,7 @@ import { AdminRoute } from './components/AdminRoute';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { PartnerRoute } from './components/PartnerRoute';
 import { PartnerDashboard } from './pages/PartnerDashboard';
+import { PartnerLanding } from './pages/PartnerLanding';
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        
+        {/* Main Website Route Group with Layout */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="explore" element={<Explore />} />
@@ -39,12 +42,16 @@ function App() {
             <Route path="my-trips" element={<MyTrips />} />
           </Route>
 
-          <Route element={<PartnerRoute />}>
-            <Route path="partner" element={<PartnerDashboard />} />
-          </Route>
-
           <Route element={<AdminRoute />}>
             <Route path="admin" element={<AdminDashboard />} />
+          </Route>
+        </Route>
+
+        {/* Dedicated Partner Portal Route Group */}
+        <Route path="/partner">
+          <Route index element={<PartnerLanding />} />
+          <Route element={<PartnerRoute />}>
+            <Route path="dashboard" element={<PartnerDashboard />} />
           </Route>
         </Route>
       </Routes>
