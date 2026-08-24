@@ -247,13 +247,20 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
     
     // Authorization check
     if (req.user.role !== "admin") {
-      if (booking.itemModel !== "Hotel") {
+      if (booking.itemModel === "Hotel") {
+        const hotel = await Hotel.findById(booking.itemId);
+        if (!hotel || hotel.ownerId !== req.user.id) {
+          res.status(403).json({ message: "Forbidden: Not authorized to manage bookings for this hotel" });
+          return;
+        }
+      } else if (booking.itemModel === "Vehicle") {
+        const vehicle = await Vehicle.findById(booking.itemId);
+        if (!vehicle || vehicle.ownerId !== req.user.id) {
+          res.status(403).json({ message: "Forbidden: Not authorized to manage bookings for this vehicle" });
+          return;
+        }
+      } else {
         res.status(403).json({ message: "Forbidden: Not authorized to manage this booking" });
-        return;
-      }
-      const hotel = await Hotel.findById(booking.itemId);
-      if (!hotel || hotel.ownerId !== req.user.id) {
-        res.status(403).json({ message: "Forbidden: Not authorized to manage bookings for this hotel" });
         return;
       }
     }
@@ -263,5 +270,74 @@ export const updateBookingStatus = async (req: Request, res: Response) => {
     res.json({ message: "Booking status updated successfully", booking });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+export const getPartnerVehicles = async (req: Request, res: Response) => {
+  try {
+    const vehicles = await Vehicle.find({ ownerId: req.user.id });
+    res.json(vehicles);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch vehicles", error });
+  }
+};
+
+export const createPartnerVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicle = new Vehicle({
+      ...req.body,
+      ownerId: req.user.id
+    });
+    await vehicle.save();
+    res.status(201).json(vehicle);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const updatePartnerVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicle = await Vehicle.findById(req.params.id);
+    if (!vehicle) {
+      res.status(404).json({ message: "Vehicle not found" });
+      return;
+    }
+    if (vehicle.ownerId !== req.user.id && req.user.role !== "admin") {
+      res.status(403).json({ message: "Forbidden: Not the owner of this vehicle" });
+      return;
+    }
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    res.json(updatedVehicle);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const deletePartnerVehicle = async (req: Request, res: Response) => {
+  try {
+    const vehicle = await Vehicle.findById(req.params.id);
+    if (!vehicle) {
+      res.status(404).json({ message: "Vehicle not found" });
+      return;
+    }
+    if (vehicle.ownerId !== req.user.id && req.user.role !== "admin") {
+      res.status(403).json({ message: "Forbidden: Not the owner of this vehicle" });
+      return;
+    }
+    await Vehicle.findByIdAndDelete(req.params.id);
+    res.json({ message: "Vehicle deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+export const getPartnerVehicleBookings = async (req: Request, res: Response) => {
+  try {
+    const vehicles = await Vehicle.find({ ownerId: req.user.id });
+    const vehicleIds = vehicles.map(v => v._id);
+    const bookings = await Booking.find({ itemId: { $in: vehicleIds }, itemModel: "Vehicle" });
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch bookings", error });
   }
 };
