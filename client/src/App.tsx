@@ -15,6 +15,8 @@ import { MyTrips } from './pages/MyTrips';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AdminRoute } from './components/AdminRoute';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { PartnerRoute } from './components/PartnerRoute';
+import { PartnerDashboard } from './pages/PartnerDashboard';
 
 function App() {
   return (
@@ -35,6 +37,10 @@ function App() {
           
           <Route element={<ProtectedRoute />}>
             <Route path="my-trips" element={<MyTrips />} />
+          </Route>
+
+          <Route element={<PartnerRoute />}>
+            <Route path="partner" element={<PartnerDashboard />} />
           </Route>
 
           <Route element={<AdminRoute />}>

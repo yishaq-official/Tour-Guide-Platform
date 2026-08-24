@@ -162,3 +162,106 @@ export const deleteVehicle = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server Error", error });
   }
 };
+
+export const getPartnerHotels = async (req: Request, res: Response) => {
+  try {
+    const hotels = await Hotel.find({ ownerId: req.user.id });
+    res.json(hotels);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch hotels", error });
+  }
+};
+
+export const createPartnerHotel = async (req: Request, res: Response) => {
+  try {
+    const hotel = new Hotel({
+      ...req.body,
+      ownerId: req.user.id
+    });
+    await hotel.save();
+    res.status(201).json(hotel);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const updatePartnerHotel = async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    if (!hotel) {
+      res.status(404).json({ message: "Hotel not found" });
+      return;
+    }
+    if (hotel.ownerId !== req.user.id && req.user.role !== "admin") {
+      res.status(403).json({ message: "Forbidden: Not the owner of this hotel" });
+      return;
+    }
+    const updatedHotel = await Hotel.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    res.json(updatedHotel);
+  } catch (error) {
+    res.status(400).json({ message: "Invalid data", error });
+  }
+};
+
+export const deletePartnerHotel = async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    if (!hotel) {
+      res.status(404).json({ message: "Hotel not found" });
+      return;
+    }
+    if (hotel.ownerId !== req.user.id && req.user.role !== "admin") {
+      res.status(403).json({ message: "Forbidden: Not the owner of this hotel" });
+      return;
+    }
+    await Hotel.findByIdAndDelete(req.params.id);
+    res.json({ message: "Hotel deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+export const getPartnerBookings = async (req: Request, res: Response) => {
+  try {
+    const hotels = await Hotel.find({ ownerId: req.user.id });
+    const hotelIds = hotels.map(h => h._id);
+    const bookings = await Booking.find({ itemId: { $in: hotelIds }, itemModel: "Hotel" });
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch bookings", error });
+  }
+};
+
+export const updateBookingStatus = async (req: Request, res: Response) => {
+  try {
+    const { status } = req.body;
+    if (!["Pending", "Confirmed", "Cancelled"].includes(status)) {
+      res.status(400).json({ message: "Invalid status" });
+      return;
+    }
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      res.status(404).json({ message: "Booking not found" });
+      return;
+    }
+    
+    // Authorization check
+    if (req.user.role !== "admin") {
+      if (booking.itemModel !== "Hotel") {
+        res.status(403).json({ message: "Forbidden: Not authorized to manage this booking" });
+        return;
+      }
+      const hotel = await Hotel.findById(booking.itemId);
+      if (!hotel || hotel.ownerId !== req.user.id) {
+        res.status(403).json({ message: "Forbidden: Not authorized to manage bookings for this hotel" });
+        return;
+      }
+    }
+    
+    booking.status = status;
+    await booking.save();
+    res.json({ message: "Booking status updated successfully", booking });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};

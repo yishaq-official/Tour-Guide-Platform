@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, MapPin, User as UserIcon, LogOut, Navigation } from 'lucide-react';
+import { Menu, X, MapPin, LogOut, Navigation, Building, ShieldAlert } from 'lucide-react';
 import { useSession, signOut } from '../../lib/auth-client';
 
 const NAV_LINKS = [
@@ -85,11 +85,24 @@ export function Navbar() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
+                      className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
                     >
                       <Link to="/my-trips" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
                         <Navigation className="w-4 h-4 mr-2" /> My Trips
                       </Link>
+                      
+                      {session.user && (session.user as any).role === 'hotel' && (
+                        <Link to="/partner" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                          <Building className="w-4 h-4 mr-2" /> Partner Dashboard
+                        </Link>
+                      )}
+
+                      {session.user && (session.user as any).role === 'admin' && (
+                        <Link to="/admin" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                          <ShieldAlert className="w-4 h-4 mr-2" /> Admin Panel
+                        </Link>
+                      )}
+
                       <div className="h-px bg-gray-100 my-2" />
                       <button onClick={handleSignOut} className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
                         <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -164,6 +177,26 @@ export function Navbar() {
                       >
                         <Navigation className="w-5 h-5 inline mr-2" /> My Trips
                       </Link>
+
+                      {session.user && (session.user as any).role === 'hotel' && (
+                        <Link
+                          to="/partner"
+                          onClick={() => setIsOpen(false)}
+                          className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-green-600 transition-colors"
+                        >
+                          <Building className="w-5 h-5 inline mr-2" /> Partner Dashboard
+                        </Link>
+                      )}
+
+                      {session.user && (session.user as any).role === 'admin' && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setIsOpen(false)}
+                          className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-green-600 transition-colors"
+                        >
+                          <ShieldAlert className="w-5 h-5 inline mr-2" /> Admin Panel
+                        </Link>
+                      )}
                       <button
                         onClick={() => { setIsOpen(false); handleSignOut(); }}
                         className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 transition-colors"

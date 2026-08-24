@@ -10,6 +10,7 @@ export function Signup() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState('user');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,7 +26,8 @@ export function Signup() {
           email,
           password,
           name,
-      });
+          role,
+      } as any);
       if (error) {
           setError(error.message || 'Failed to create account');
       } else {
@@ -136,6 +138,34 @@ export function Signup() {
                   className="appearance-none block w-full pl-10 px-3 py-3 border border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   placeholder="••••••••"
                 />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setRole('user')}
+                  className={`py-3 px-4 border rounded-xl text-sm font-medium transition-all ${
+                    role === 'user'
+                      ? 'border-green-600 bg-green-50 text-green-700 ring-2 ring-green-600/20'
+                      : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Traveler
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('hotel')}
+                  className={`py-3 px-4 border rounded-xl text-sm font-medium transition-all ${
+                    role === 'hotel'
+                      ? 'border-green-600 bg-green-50 text-green-700 ring-2 ring-green-600/20'
+                      : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Hotel Partner
+                </button>
               </div>
             </div>
 
