@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Building, Plus, Trash2, Edit3, Loader2, Star, MapPin, Users, X,
-  DollarSign, Calendar, Clock, ClipboardList, Info, Check, AlertTriangle,
-  Car, Key, Compass, Settings, ShieldCheck, CheckCircle2, Sparkles,
-  ArrowRight, BadgeCheck, Layers
+  DollarSign, Clock, ClipboardList, AlertTriangle,
+  Car, Key, Compass, ShieldCheck, CheckCircle2, Sparkles,
+  ArrowRight, BadgeCheck
 } from 'lucide-react';
 import { API_URL, apiFetch } from '../config';
 import { useSession } from '../lib/auth-client';
@@ -28,6 +28,47 @@ L.Icon.Default.mergeOptions({
 });
 
 type TabType = 'hotels' | 'vehicles' | 'reservations';
+
+type RoomType = {
+  name: string;
+  pricePerNight: number;
+  capacity: number;
+  image: string;
+};
+
+type HotelFormData = {
+  name: string;
+  description: string;
+  location: string;
+  rating: number;
+  pricePerNight: number;
+  image: string;
+  galleryRaw: string;
+  amenitiesRaw: string;
+  lat: number;
+  lng: number;
+  checkIn: string;
+  checkOut: string;
+  cancellation: string;
+  roomTypes: RoomType[];
+};
+
+type VehicleFormData = {
+  name: string;
+  type: string;
+  transmission: string;
+  seats: number;
+  pricePerDay: number;
+  image: string;
+  galleryRaw: string;
+  description: string;
+  providerName: string;
+  providerPhone: string;
+  featuresRaw: string;
+  policyMileage: string;
+  policyFuel: string;
+  policyCancellation: string;
+};
 
 const panelClass =
   'rounded-[2rem] border border-white/10 bg-white/[0.92] shadow-[0_30px_90px_rgba(15,23,42,0.12)] backdrop-blur-xl';
@@ -121,7 +162,7 @@ export function PartnerDashboard() {
   const [editVehicle, setEditVehicle] = useState<any | null>(null);
 
   // Hotel Form States
-  const [hotelFormData, setHotelFormData] = useState<any>({
+  const [hotelFormData, setHotelFormData] = useState<HotelFormData>({
     name: '',
     description: '',
     location: '',
@@ -139,7 +180,7 @@ export function PartnerDashboard() {
   });
 
   // Room type builder modal helper
-  const [newRoom, setNewRoom] = useState({
+  const [newRoom, setNewRoom] = useState<RoomType>({
     name: '',
     pricePerNight: 50,
     capacity: 2,
@@ -147,7 +188,7 @@ export function PartnerDashboard() {
   });
 
   // Vehicle Form States
-  const [vehicleFormData, setVehicleFormData] = useState<any>({
+  const [vehicleFormData, setVehicleFormData] = useState<VehicleFormData>({
     name: '',
     type: 'SUV',
     transmission: 'Automatic',
