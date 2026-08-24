@@ -142,20 +142,43 @@ export function PartnerDashboard() {
       const isHotelView = userRole === 'hotel' || (userRole === 'admin' && activeWorkspace === 'hotel');
       
       if (isHotelView) {
-        const hotelsData = await apiFetch(`${API_URL}/services/partner/hotels`);
-        setHotels(hotelsData || []);
+        const hotelsRes = await apiFetch(`${API_URL}/services/partner/hotels`);
+        if (hotelsRes.ok) {
+          const data = await hotelsRes.json();
+          setHotels(Array.isArray(data) ? data : []);
+        } else {
+          setHotels([]);
+        }
         
-        const bookingsData = await apiFetch(`${API_URL}/services/partner/bookings`);
-        setBookings(bookingsData || []);
+        const bookingsRes = await apiFetch(`${API_URL}/services/partner/bookings`);
+        if (bookingsRes.ok) {
+          const data = await bookingsRes.json();
+          setBookings(Array.isArray(data) ? data : []);
+        } else {
+          setBookings([]);
+        }
       } else {
-        const vehiclesData = await apiFetch(`${API_URL}/services/partner/vehicles`);
-        setVehicles(vehiclesData || []);
+        const vehiclesRes = await apiFetch(`${API_URL}/services/partner/vehicles`);
+        if (vehiclesRes.ok) {
+          const data = await vehiclesRes.json();
+          setVehicles(Array.isArray(data) ? data : []);
+        } else {
+          setVehicles([]);
+        }
 
-        const bookingsData = await apiFetch(`${API_URL}/services/partner/vehicle-bookings`);
-        setBookings(bookingsData || []);
+        const bookingsRes = await apiFetch(`${API_URL}/services/partner/vehicle-bookings`);
+        if (bookingsRes.ok) {
+          const data = await bookingsRes.json();
+          setBookings(Array.isArray(data) ? data : []);
+        } else {
+          setBookings([]);
+        }
       }
     } catch (err) {
       console.error("Failed to fetch dashboard data:", err);
+      setHotels([]);
+      setVehicles([]);
+      setBookings([]);
     } finally {
       setLoading(false);
     }
@@ -271,9 +294,12 @@ export function PartnerDashboard() {
         body: JSON.stringify(payload)
       });
 
-      if (response) {
+      if (response.ok) {
         setIsHotelModalOpen(false);
         fetchData();
+      } else {
+        const errData = await response.json();
+        alert(errData.message || "Failed to save hotel property.");
       }
     } catch (err) {
       console.error("Error saving hotel:", err);
@@ -284,8 +310,12 @@ export function PartnerDashboard() {
   const handleHotelDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this hotel?")) return;
     try {
-      await apiFetch(`${API_URL}/services/partner/hotels/${id}`, { method: 'DELETE' });
-      fetchData();
+      const response = await apiFetch(`${API_URL}/services/partner/hotels/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        fetchData();
+      } else {
+        alert("Failed to delete hotel.");
+      }
     } catch (err) {
       console.error("Error deleting hotel:", err);
       alert("Failed to delete hotel.");
@@ -380,9 +410,12 @@ export function PartnerDashboard() {
         body: JSON.stringify(payload)
       });
 
-      if (response) {
+      if (response.ok) {
         setIsVehicleModalOpen(false);
         fetchData();
+      } else {
+        const errData = await response.json();
+        alert(errData.message || "Failed to save vehicle listing.");
       }
     } catch (err) {
       console.error("Error saving vehicle:", err);
@@ -393,8 +426,12 @@ export function PartnerDashboard() {
   const handleVehicleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this vehicle from your fleet?")) return;
     try {
-      await apiFetch(`${API_URL}/services/partner/vehicles/${id}`, { method: 'DELETE' });
-      fetchData();
+      const response = await apiFetch(`${API_URL}/services/partner/vehicles/${id}`, { method: 'DELETE' });
+      if (response.ok) {
+        fetchData();
+      } else {
+        alert("Failed to delete vehicle.");
+      }
     } catch (err) {
       console.error("Error deleting vehicle:", err);
       alert("Failed to delete vehicle.");
@@ -409,8 +446,10 @@ export function PartnerDashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
-      if (response) {
+      if (response.ok) {
         fetchData();
+      } else {
+        alert("Failed to update status.");
       }
     } catch (err) {
       console.error("Error updating booking status:", err);
