@@ -91,8 +91,8 @@ export function Navbar() {
                         <Navigation className="w-4 h-4 mr-2" /> My Trips
                       </Link>
                       
-                      {session.user && (session.user as any).role === 'hotel' && (
-                        <Link to="/partner" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
+                      {session.user && ['hotel', 'car', 'agency'].includes((session.user as any).role) && (
+                        <Link to="/partner/dashboard" onClick={() => setDropdownOpen(false)} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-green-600 transition-colors">
                           <Building className="w-4 h-4 mr-2" /> Partner Dashboard
                         </Link>
                       )}
@@ -178,9 +178,9 @@ export function Navbar() {
                         <Navigation className="w-5 h-5 inline mr-2" /> My Trips
                       </Link>
 
-                      {session.user && (session.user as any).role === 'hotel' && (
+                      {session.user && ['hotel', 'car', 'agency'].includes((session.user as any).role) && (
                         <Link
-                          to="/partner"
+                          to="/partner/dashboard"
                           onClick={() => setIsOpen(false)}
                           className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-green-600 transition-colors"
                         >

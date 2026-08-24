@@ -17,8 +17,8 @@ export function PartnerRoute() {
   }
 
   const role = (session.user as any).role;
-  if (role !== 'hotel' && role !== 'admin') {
-    return <Navigate to="/" replace />;
+  if (role !== 'hotel' && role !== 'car' && role !== 'agency' && role !== 'admin') {
+    return <Navigate to="/partner" replace />;
   }
 
   return <Outlet />;
