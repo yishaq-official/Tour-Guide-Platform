@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MapPin, Search, Filter, Landmark, Sparkles, ScrollText, Users, Award, 
-  Star, X, RotateCcw, ArrowRight
+  Star, X, RotateCcw, ArrowRight, AlertCircle
 } from 'lucide-react';
 import { API_URL } from '../config';
 
@@ -280,8 +280,24 @@ export function Explore() {
 
         {/* Content Area */}
         {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="bg-white rounded-3xl overflow-hidden border border-gray-150 shadow-sm animate-pulse flex flex-col h-full">
+                <div className="aspect-[16/10] bg-gray-200" />
+                <div className="p-6 sm:p-7 flex-grow flex flex-col justify-between space-y-4">
+                  <div className="space-y-3">
+                    <div className="h-6 bg-gray-200 rounded-lg w-3/4" />
+                    <div className="h-4 bg-gray-200 rounded-md w-1/2" />
+                    <div className="space-y-2 pt-2">
+                      <div className="h-3 bg-gray-150 rounded w-full" />
+                      <div className="h-3 bg-gray-150 rounded w-5/6" />
+                      <div className="h-3 bg-gray-150 rounded w-2/3" />
+                    </div>
+                  </div>
+                  <div className="h-12 bg-gray-200 rounded-2xl w-full" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -353,24 +369,33 @@ export function Explore() {
             </AnimatePresence>
             
             {error ? (
-              <div className="col-span-full text-center py-20">
-                <p className="text-red-500 text-lg mb-4">{error}</p>
-                <button onClick={() => window.location.reload()} className="px-6 py-2 bg-green-600 text-white rounded-lg">Try Again</button>
+              <div className="col-span-full text-center py-16 bg-red-50/50 rounded-3xl border border-red-100 p-8">
+                <div className="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <AlertCircle className="w-7 h-7" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Failed to Load Explore Data</h3>
+                <p className="text-red-600 text-sm mb-6 max-w-md mx-auto">{error}</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-md"
+                >
+                  Try Again
+                </button>
               </div>
             ) : filteredItems.length === 0 ? (
               <div className="col-span-full text-center py-20 bg-white rounded-3xl border border-gray-150 p-8 shadow-sm">
-                <div className="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8" />
+                <div className="w-16 h-16 bg-gray-100 text-gray-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner">
+                  <Search className="w-8 h-8 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">No results matching your filters</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">No results matching your query</h3>
                 <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
-                  Try clearing your active search query or selecting a different category filter.
+                  {search ? `We couldn't find any items matching "${search}".` : "No heritage or cultural items match your selected filters."}
                 </p>
                 <button 
                   onClick={clearAllFilters} 
-                  className="px-6 py-2.5 bg-green-700 hover:bg-green-800 text-white font-bold rounded-xl transition-all shadow-md"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-green-700 hover:bg-green-800 text-white font-bold text-sm rounded-2xl transition-all shadow-md shadow-green-700/20"
                 >
-                  Reset All Filters
+                  <RotateCcw className="w-4 h-4" /> Reset All Filters
                 </button>
               </div>
             ) : null}
