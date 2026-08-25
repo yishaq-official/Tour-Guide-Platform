@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Search, Filter } from 'lucide-react';
+import { MapPin, Search, Filter, Landmark, Sparkles, ScrollText, Users, Award } from 'lucide-react';
 import { API_URL } from '../config';
 
 interface BaseItem {
@@ -85,43 +85,82 @@ export function Explore() {
   });
 
   return (
-    <div className="w-full bg-[#f8f9fa] min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-[#f8f9fa] min-h-screen pb-16">
+      {/* Immersive Hero Banner & Stats Bar */}
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-green-950 text-white relative overflow-hidden py-16 px-4 sm:px-6 lg:px-8 mb-12 shadow-xl">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
         
-        {/* Header & Tabs */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">Explore Ethiopia</h1>
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <span className="bg-green-500/20 text-green-300 border border-green-500/30 text-xs font-extrabold uppercase px-3.5 py-1 rounded-full tracking-wider mb-4 inline-flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-green-400" />
+            Uncover Timeless Wonders
+          </span>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4">
+            Explore Ethiopia
+          </h1>
           
-          <div className="inline-flex bg-gray-100 p-1.5 rounded-2xl mb-8 shadow-inner">
+          <p className="text-gray-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-8">
+            {activeTab === 'cultures' 
+              ? "Discover the vibrant, living traditions, colorful ceremonies, and ancient festivals that define Ethiopian identity."
+              : "Journey through 3,000 years of recorded history. From monolithic rock-hewn churches to majestic highlands."
+            }
+          </p>
+
+          {/* Glassmorphic Navigation Tabs */}
+          <div className="inline-flex bg-white/10 backdrop-blur-md p-1.5 rounded-2xl border border-white/15 mb-10 shadow-2xl">
             <button
               onClick={() => handleTabChange('cultures')}
-              className={`px-8 py-3 rounded-xl font-bold text-sm md:text-base transition-all duration-300 ${
+              className={`px-6 sm:px-8 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 ${
                 activeTab === 'cultures' 
-                  ? 'bg-white text-green-700 shadow-md' 
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-green-800 shadow-lg scale-[1.02]' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
               Cultures & Festivals
             </button>
             <button
               onClick={() => handleTabChange('heritages')}
-              className={`px-8 py-3 rounded-xl font-bold text-sm md:text-base transition-all duration-300 ${
+              className={`px-6 sm:px-8 py-3 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 ${
                 activeTab === 'heritages' 
-                  ? 'bg-white text-green-700 shadow-md' 
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-green-800 shadow-lg scale-[1.02]' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
               Heritage Sites
             </button>
           </div>
-          
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            {activeTab === 'cultures' 
-              ? "Discover the vibrant, living traditions and spectacular festivals that have defined Ethiopian identity for millennia."
-              : "Explore the rich historical and natural wonders of Ethiopia. From ancient obelisks to breathtaking national parks."
-            }
-          </p>
+
+          {/* Cultural Stats Counter Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+            <div className="p-3 text-center">
+              <Landmark className="w-5 h-5 text-green-400 mx-auto mb-1" />
+              <div className="text-2xl font-black text-white">9</div>
+              <div className="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">UNESCO World Heritages</div>
+            </div>
+
+            <div className="p-3 text-center">
+              <ScrollText className="w-5 h-5 text-green-400 mx-auto mb-1" />
+              <div className="text-2xl font-black text-white">3,000+</div>
+              <div className="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">Years of History</div>
+            </div>
+
+            <div className="p-3 text-center">
+              <Users className="w-5 h-5 text-green-400 mx-auto mb-1" />
+              <div className="text-2xl font-black text-white">80+</div>
+              <div className="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">Living Traditions</div>
+            </div>
+
+            <div className="p-3 text-center">
+              <Award className="w-5 h-5 text-green-400 mx-auto mb-1" />
+              <div className="text-2xl font-black text-white">4</div>
+              <div className="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">Intangible Treasures</div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Search & Filter */}
         <div className="flex flex-col md:flex-row justify-end items-end mb-12 gap-6">
