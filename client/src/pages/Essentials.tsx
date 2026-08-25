@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
-  Smartphone, Landmark, FileText, PhoneCall, ShieldAlert, CreditCard, 
+  Smartphone, Landmark, FileText, PhoneCall, CreditCard, 
   Car, Wallet, CheckCircle2, ArrowRight, Globe, Download, QrCode, Zap, MapPin,
-  Volume2, MessageSquareQuote, ZapOff, Info, Heart, Check, HelpCircle
+  Volume2, MessageSquareQuote, ZapOff, Heart
 } from 'lucide-react';
 
 interface Phrase {
@@ -314,7 +314,7 @@ export function Essentials() {
           className="bg-white rounded-3xl shadow-sm border border-gray-150 p-8 sm:p-10"
         >
           <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-            <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shadow-inner">
+            <div className="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center shadow-inner">
               <Car className="w-7 h-7" />
             </div>
             <div>
@@ -337,7 +337,7 @@ export function Essentials() {
 
             <div className="bg-gray-50 p-5 rounded-2xl border border-gray-150 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] font-black text-blue-700 uppercase bg-blue-100 px-2 py-0.5 rounded">Established</span>
+                <span className="text-[10px] font-black text-emerald-700 uppercase bg-emerald-100 px-2 py-0.5 rounded">Established</span>
                 <h3 className="text-lg font-bold text-gray-900 mt-2 mb-1">RIDE Transport</h3>
                 <p className="text-xs text-gray-600 leading-relaxed mb-4">
                   Highly reliable service with fast driver dispatches for airport pickups and city tours.
@@ -359,7 +359,7 @@ export function Essentials() {
 
             <div className="bg-gray-50 p-5 rounded-2xl border border-gray-150 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] font-black text-purple-700 uppercase bg-purple-100 px-2 py-0.5 rounded">Flexible Fleet</span>
+                <span className="text-[10px] font-black text-teal-700 uppercase bg-teal-100 px-2 py-0.5 rounded">Flexible Fleet</span>
                 <h3 className="text-lg font-bold text-gray-900 mt-2 mb-1">ZayRide</h3>
                 <p className="text-xs text-gray-600 leading-relaxed mb-4">
                   Offers options for compact cars, mini-vans, and scheduled long-distance trips.
@@ -370,40 +370,40 @@ export function Essentials() {
           </div>
 
           {/* Ride Booking Steps */}
-          <div className="bg-blue-900 text-white p-6 sm:p-8 rounded-2xl">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-blue-300">
+          <div className="bg-green-950 text-white p-6 sm:p-8 rounded-2xl">
+            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-green-300">
               <MapPin className="w-5 h-5" /> How to Book a Ride-Hailing Taxi
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-blue-950/60 p-5 rounded-xl border border-blue-800">
-                <div className="text-xs font-black text-blue-400 mb-2">STEP 1</div>
+              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
+                <div className="text-xs font-black text-green-400 mb-2">STEP 1</div>
                 <h4 className="font-bold text-sm text-white mb-2">Install App</h4>
-                <p className="text-xs text-blue-200 leading-relaxed">
+                <p className="text-xs text-green-200 leading-relaxed">
                   Download <strong>Feres</strong> or <strong>RIDE</strong> from App Store or Google Play Store.
                 </p>
               </div>
 
-              <div className="bg-blue-950/60 p-5 rounded-xl border border-blue-800">
-                <div className="text-xs font-black text-blue-400 mb-2">STEP 2</div>
+              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
+                <div className="text-xs font-black text-green-400 mb-2">STEP 2</div>
                 <h4 className="font-bold text-sm text-white mb-2">Register Number</h4>
-                <p className="text-xs text-blue-200 leading-relaxed">
+                <p className="text-xs text-green-200 leading-relaxed">
                   Enter your local Ethiopian mobile phone number to receive a verification OTP code.
                 </p>
               </div>
 
-              <div className="bg-blue-950/60 p-5 rounded-xl border border-blue-800">
-                <div className="text-xs font-black text-blue-400 mb-2">STEP 3</div>
+              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
+                <div className="text-xs font-black text-green-400 mb-2">STEP 3</div>
                 <h4 className="font-bold text-sm text-white mb-2">Set Destination</h4>
-                <p className="text-xs text-blue-200 leading-relaxed">
+                <p className="text-xs text-green-200 leading-relaxed">
                   Turn on location permissions, select pickup point (e.g. Bole Airport), enter destination, and confirm ride.
                 </p>
               </div>
 
-              <div className="bg-blue-950/60 p-5 rounded-xl border border-blue-800">
-                <div className="text-xs font-black text-blue-400 mb-2">STEP 4</div>
+              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
+                <div className="text-xs font-black text-green-400 mb-2">STEP 4</div>
                 <h4 className="font-bold text-sm text-white mb-2">Pay & Travel</h4>
-                <p className="text-xs text-blue-200 leading-relaxed">
+                <p className="text-xs text-green-200 leading-relaxed">
                   Pay your driver at the end of the journey using local cash, Telebirr, or M-PESA.
                 </p>
               </div>
@@ -460,7 +460,7 @@ export function Essentials() {
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-6 border-b border-gray-100">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center shadow-inner">
+              <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center shadow-inner">
                 <MessageSquareQuote className="w-7 h-7" />
               </div>
               <div>
@@ -474,7 +474,7 @@ export function Essentials() {
               <button
                 onClick={() => setActivePhraseTab('all')}
                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  activePhraseTab === 'all' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500'
+                  activePhraseTab === 'all' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500'
                 }`}
               >
                 All Words
@@ -482,7 +482,7 @@ export function Essentials() {
               <button
                 onClick={() => setActivePhraseTab('greetings')}
                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  activePhraseTab === 'greetings' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500'
+                  activePhraseTab === 'greetings' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500'
                 }`}
               >
                 Greetings
@@ -490,7 +490,7 @@ export function Essentials() {
               <button
                 onClick={() => setActivePhraseTab('dining')}
                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  activePhraseTab === 'dining' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500'
+                  activePhraseTab === 'dining' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500'
                 }`}
               >
                 Shopping & Dining
@@ -498,7 +498,7 @@ export function Essentials() {
               <button
                 onClick={() => setActivePhraseTab('directions')}
                 className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  activePhraseTab === 'directions' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500'
+                  activePhraseTab === 'directions' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500'
                 }`}
               >
                 Directions
@@ -511,18 +511,18 @@ export function Essentials() {
             {filteredPhrases.map((phrase, idx) => (
               <div 
                 key={idx}
-                className="bg-gray-50 hover:bg-purple-50/50 p-4 rounded-2xl border border-gray-150 transition-all flex items-center justify-between group"
+                className="bg-gray-50 hover:bg-green-50/50 p-4 rounded-2xl border border-gray-150 transition-all flex items-center justify-between group"
               >
                 <div>
                   <div className="text-2xl font-bold text-gray-900 font-serif">{phrase.amharic}</div>
-                  <div className="text-sm font-bold text-purple-700 mt-0.5">{phrase.script} <span className="text-xs font-normal text-gray-400">({phrase.phonetic})</span></div>
+                  <div className="text-sm font-bold text-green-700 mt-0.5">{phrase.script} <span className="text-xs font-normal text-gray-400">({phrase.phonetic})</span></div>
                   <div className="text-xs font-medium text-gray-600 mt-1">{phrase.english}</div>
                 </div>
 
                 <button
                   onClick={() => speakPhrase(phrase.script)}
                   className={`p-3 rounded-xl transition-colors ${
-                    playedPhrase === phrase.script ? 'bg-purple-600 text-white' : 'bg-white text-gray-500 group-hover:text-purple-600 shadow-sm border border-gray-150'
+                    playedPhrase === phrase.script ? 'bg-green-600 text-white' : 'bg-white text-gray-500 group-hover:text-green-600 shadow-sm border border-gray-150'
                   }`}
                   title="Listen Pronunciation"
                 >
@@ -533,29 +533,29 @@ export function Essentials() {
           </div>
 
           {/* Cultural Etiquette & Tipping Guide */}
-          <div className="bg-gradient-to-r from-purple-900 to-indigo-900 text-white p-6 sm:p-8 rounded-2xl">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-purple-300">
-              <Heart className="w-5 h-5" /> Tipping Customs & Cultural Etiquette
+          <div className="bg-gradient-to-r from-green-900 via-emerald-900 to-gray-900 text-white p-6 sm:p-8 rounded-2xl">
+            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-green-300">
+              <Heart className="w-5 h-5 text-green-400" /> Tipping Customs & Cultural Etiquette
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-purple-950/60 p-5 rounded-xl border border-purple-800">
+              <div className="bg-green-950/60 p-5 rounded-xl border border-green-800">
                 <h4 className="font-bold text-sm text-white mb-2">Restaurant Tipping</h4>
-                <p className="text-xs text-purple-200 leading-relaxed">
+                <p className="text-xs text-green-200 leading-relaxed">
                   Tipping 5% to 10% of the total bill is customary at sit-down restaurants and cafes. A small cash tip of 50-100 ETB for hotel porters is appreciated.
                 </p>
               </div>
 
-              <div className="bg-purple-950/60 p-5 rounded-xl border border-purple-800">
+              <div className="bg-green-950/60 p-5 rounded-xl border border-green-800">
                 <h4 className="font-bold text-sm text-white mb-2">Coffee Ceremony Ritual</h4>
-                <p className="text-xs text-purple-200 leading-relaxed">
+                <p className="text-xs text-green-200 leading-relaxed">
                   If invited to a traditional Ethiopian coffee ceremony (Buna), it is respectful to accept at least the first round (*Abol*). It is customary to compliment the hostess.
                 </p>
               </div>
 
-              <div className="bg-purple-950/60 p-5 rounded-xl border border-purple-800">
+              <div className="bg-green-950/60 p-5 rounded-xl border border-green-800">
                 <h4 className="font-bold text-sm text-white mb-2">Greetings & Handshakes</h4>
-                <p className="text-xs text-purple-200 leading-relaxed">
+                <p className="text-xs text-green-200 leading-relaxed">
                   Light shoulder-bumping (*Gursha* / shoulder touch) during handshakes is a common sign of warm friendship and respect between acquaintances.
                 </p>
               </div>
