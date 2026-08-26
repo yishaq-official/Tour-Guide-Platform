@@ -175,33 +175,33 @@ export function Essentials() {
           </div>
 
           {/* SIM Process */}
-          <div className="bg-gray-900 text-white p-6 sm:p-8 rounded-2xl">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-green-400">
-              <Zap className="w-5 h-5" /> Step-by-Step Process to Acquire a SIM Card
+          <div className="bg-gradient-to-br from-emerald-950 via-gray-900 to-green-950 text-white p-6 sm:p-8 rounded-3xl border border-emerald-800/40 shadow-xl">
+            <h3 className="text-lg font-extrabold mb-6 flex items-center gap-2.5 text-emerald-400">
+              <Zap className="w-5 h-5 text-emerald-400 animate-pulse" /> Step-by-Step Process to Acquire a SIM Card
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-gray-800/80 p-5 rounded-xl border border-gray-700">
-                <span className="w-7 h-7 bg-green-500 text-gray-900 text-xs font-black rounded-full flex items-center justify-center mb-3">1</span>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="w-8 h-8 bg-emerald-500 text-gray-950 font-black rounded-xl flex items-center justify-center mb-4 text-xs shadow-md">1</div>
                 <h4 className="font-bold text-sm text-white mb-2">Visit Official Kiosk</h4>
-                <p className="text-xs text-gray-300 leading-relaxed">
-                  Head to the official SIM booth inside <strong>Addis Ababa Bole Airport (Terminal 2 Arrivals)</strong> or any official city branch.
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
+                  Head to the official SIM booth inside <strong className="text-emerald-300">Addis Ababa Bole Airport (Terminal 2 Arrivals)</strong> or any official city branch.
                 </p>
               </div>
 
-              <div className="bg-gray-800/80 p-5 rounded-xl border border-gray-700">
-                <span className="w-7 h-7 bg-green-500 text-gray-900 text-xs font-black rounded-full flex items-center justify-center mb-3">2</span>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="w-8 h-8 bg-emerald-500 text-gray-950 font-black rounded-xl flex items-center justify-center mb-4 text-xs shadow-md">2</div>
                 <h4 className="font-bold text-sm text-white mb-2">Present Original Passport</h4>
-                <p className="text-xs text-gray-300 leading-relaxed">
-                  Provide your <strong>original physical passport</strong>. Ethiopian telecom regulations mandate biometric registration for SIM activation.
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
+                  Provide your <strong className="text-emerald-300">original physical passport</strong>. Ethiopian telecom regulations mandate biometric registration for SIM activation.
                 </p>
               </div>
 
-              <div className="bg-gray-800/80 p-5 rounded-xl border border-gray-700">
-                <span className="w-7 h-7 bg-green-500 text-gray-900 text-xs font-black rounded-full flex items-center justify-center mb-3">3</span>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="w-8 h-8 bg-emerald-500 text-gray-950 font-black rounded-xl flex items-center justify-center mb-4 text-xs shadow-md">3</div>
                 <h4 className="font-bold text-sm text-white mb-2">Activate Package</h4>
-                <p className="text-xs text-gray-300 leading-relaxed">
-                  Insert the SIM, enable mobile roaming/data, and dial <strong>*999#</strong> (Ethio Telecom) or <strong>*777#</strong> (Safaricom) to select your package.
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
+                  Insert the SIM, enable mobile roaming/data, and dial <strong className="text-emerald-300">*999#</strong> (Ethio Telecom) or <strong className="text-emerald-300">*777#</strong> (Safaricom) to select your package.
                 </p>
               </div>
             </div>
