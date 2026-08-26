@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <MapPin className="w-6 h-6 text-green-500" />
+              <img src="/images/logo.png" alt="TravelAssist Logo" className="w-10 h-10 object-contain brightness-110" />
               <span className="font-bold text-xl text-white tracking-tight">
                 Travel<span className="text-green-500">Assist</span>
               </span>
