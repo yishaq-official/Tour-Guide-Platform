@@ -126,24 +126,51 @@ export function Services() {
   };
 
   return (
-    <div className="w-full bg-gray-50 min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-gray-50/50 min-h-screen pb-24">
+      {/* Immersive Hero Header */}
+      <div className="relative bg-gradient-to-r from-gray-950 via-gray-900 to-green-950 text-white py-16 sm:py-20 mb-12 rounded-b-3xl sm:rounded-b-[2.5rem] overflow-hidden shadow-2xl">
+        <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
         
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Travel Services</h1>
-          <p className="text-lg text-gray-600">
-            Book the best accommodations and reliable transportation to make your Ethiopian journey unforgettable.
-          </p>
-        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-black uppercase tracking-wider mb-6 border border-emerald-500/30 backdrop-blur-md"
+          >
+            <Building2 className="w-4 h-4 text-emerald-400" />
+            <span>Ethiopian Hospitality & Transport</span>
+          </motion.div>
 
-        {/* Custom Tabs */}
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
+          >
+            Premium Travel <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-200">Services</span>
+          </motion.h1>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"
+          >
+            Book verified luxury accommodations and reliable vehicle rentals to make your journey across Ethiopia effortless and memorable.
+          </motion.p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Custom Tabs Switcher */}
         <div className="flex justify-center mb-12">
-          <div className="bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm inline-flex">
+          <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-2xl border border-gray-200 shadow-md inline-flex gap-2">
             <button
               onClick={() => handleTabChange('hotels')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                activeTab === 'hotels' ? 'bg-green-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-200 ${
+                activeTab === 'hotels' 
+                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-600/20 scale-[1.02]' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/60'
               }`}
             >
               <Building2 className="w-4 h-4" />
@@ -151,8 +178,10 @@ export function Services() {
             </button>
             <button
               onClick={() => handleTabChange('vehicles')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                activeTab === 'vehicles' ? 'bg-green-600 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-200 ${
+                activeTab === 'vehicles' 
+                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-600/20 scale-[1.02]' 
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/60'
               }`}
             >
               <CarFront className="w-4 h-4" />
