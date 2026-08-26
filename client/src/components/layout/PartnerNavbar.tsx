@@ -40,7 +40,7 @@ export function PartnerNavbar() {
           {/* Logo and Brand */}
           <div className="flex items-center">
             <Link to="/partner" className="flex items-center gap-2.5">
-              <img src="/images/logo.png" alt="TravelAssist Logo" className="w-9 h-9 object-contain" />
+              <img src="/logo.png" alt="TravelAssist Logo" className="h-10 w-auto object-contain" />
               <span className="text-xl font-black text-green-700 tracking-tight flex items-center">
                 Travel<span className="text-gray-900">Assist</span> <span className="text-gray-400 font-medium text-sm ml-1.5 border-l border-gray-200 pl-2">Partner Portal</span>
               </span>

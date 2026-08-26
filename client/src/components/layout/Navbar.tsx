@@ -32,9 +32,9 @@ export function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <img 
-              src="/images/logo.png" 
+              src="/logo.png" 
               alt="TravelAssist Logo" 
-              className="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
+              className="h-10 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
             />
             <span className="font-bold text-xl text-gray-900 tracking-tight">
               Travel<span className="text-green-700">Assist</span>
