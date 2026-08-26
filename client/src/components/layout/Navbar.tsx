@@ -30,11 +30,11 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-1 group">
             <img 
               src="/logo.png" 
               alt="TravelAssist Logo" 
-              className="h-14 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
+              className="h-13 w-auto object-contain mt-1 drop-shadow-sm group-hover:scale-105 transition-transform" 
             />
             <span className="font-bold text-xl text-gray-900 tracking-tight">
               Travel<span className="text-green-700">Assist</span>
