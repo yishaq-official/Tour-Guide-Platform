@@ -135,9 +135,9 @@ export function Services() {
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-black uppercase tracking-wider mb-6 border border-emerald-500/30 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 via-teal-500/25 to-green-500/20 text-emerald-300 text-xs font-black uppercase tracking-widest mb-6 border border-emerald-400/40 backdrop-blur-xl shadow-[0_0_20px_rgba(16,185,129,0.2)]"
           >
-            <Building2 className="w-4 h-4 text-emerald-400" />
+            <Building2 className="w-4 h-4 text-emerald-400 animate-pulse" />
             <span>Ethiopian Hospitality & Transport</span>
           </motion.div>
 

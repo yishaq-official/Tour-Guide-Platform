@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { 
   Smartphone, Landmark, FileText, PhoneCall, CreditCard, 
   Car, Wallet, CheckCircle2, ArrowRight, Globe, Download, QrCode, Zap, MapPin,
-  Volume2, MessageSquareQuote, ZapOff, Heart
+  Volume2, MessageSquareQuote, ZapOff, Heart, Sparkles
 } from 'lucide-react';
 
 interface Phrase {
@@ -65,9 +65,10 @@ export function Essentials() {
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-green-950 text-white py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <span className="bg-green-500/20 text-green-300 border border-green-500/30 text-xs font-extrabold uppercase px-3.5 py-1 rounded-full tracking-wider mb-4 inline-block">
-            Official Tourist Handbook
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 via-teal-500/25 to-green-500/20 text-emerald-300 text-xs font-black uppercase tracking-widest mb-6 border border-emerald-400/40 backdrop-blur-xl shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+            <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
+            <span>Official Tourist Handbook</span>
+          </div>
           <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight">Ethiopia Tourist Essentials</h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Your complete guide to mobile networks, digital wallets, ride-hailing apps, power standards, visas, and interactive Amharic phrasebook.

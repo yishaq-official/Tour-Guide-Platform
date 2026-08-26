@@ -126,10 +126,10 @@ export function Explore() {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
         
         <div className="max-w-5xl mx-auto text-center relative z-10">
-          <span className="bg-green-500/20 text-green-300 border border-green-500/30 text-xs font-extrabold uppercase px-3.5 py-1 rounded-full tracking-wider mb-4 inline-flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-green-400" />
-            Uncover Timeless Wonders
-          </span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/20 via-teal-500/25 to-green-500/20 text-emerald-300 text-xs font-black uppercase tracking-widest mb-6 border border-emerald-400/40 backdrop-blur-xl shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+            <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
+            <span>Uncover Timeless Wonders</span>
+          </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4">
             Explore Ethiopia
