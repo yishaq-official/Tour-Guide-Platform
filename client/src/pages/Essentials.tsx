@@ -261,40 +261,40 @@ export function Essentials() {
           </div>
 
           {/* Wallet Setup Steps */}
-          <div className="bg-gray-50 p-6 sm:p-8 rounded-2xl border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <Download className="w-5 h-5 text-green-700" /> How to Set Up & Use Mobile Money as a Tourist
+          <div className="bg-gradient-to-br from-emerald-950 via-gray-900 to-green-950 text-white p-6 sm:p-8 rounded-3xl border border-emerald-800/40 shadow-xl">
+            <h3 className="text-lg font-extrabold text-white mb-6 flex items-center gap-2.5">
+              <Download className="w-5 h-5 text-emerald-400 animate-pulse" /> How to Set Up & Use Mobile Money as a Tourist
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                <div className="text-xs font-black text-green-700 mb-2">STEP 1</div>
-                <h4 className="font-bold text-sm text-gray-900 mb-2">Download App</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Install <strong>Telebirr</strong> or <strong>M-PESA Ethiopia</strong> from Google Play Store or Apple App Store.
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 1</div>
+                <h4 className="font-bold text-sm text-white mb-2">Download App</h4>
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
+                  Install <strong className="text-emerald-300">Telebirr</strong> or <strong className="text-emerald-300">M-PESA Ethiopia</strong> from Google Play Store or Apple App Store.
                 </p>
               </div>
 
-              <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                <div className="text-xs font-black text-green-700 mb-2">STEP 2</div>
-                <h4 className="font-bold text-sm text-gray-900 mb-2">Register Number</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 2</div>
+                <h4 className="font-bold text-sm text-white mb-2">Register Number</h4>
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Open the app and complete quick SMS registration using your active local Ethiopian phone number.
                 </p>
               </div>
 
-              <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                <div className="text-xs font-black text-green-700 mb-2">STEP 3</div>
-                <h4 className="font-bold text-sm text-gray-900 mb-2">Cash-In / Top Up</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 3</div>
+                <h4 className="font-bold text-sm text-white mb-2">Cash-In / Top Up</h4>
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Visit any official agent booth, bank branch, or airport kiosk to deposit local cash (ETB) into your wallet.
                 </p>
               </div>
 
-              <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                <div className="text-xs font-black text-green-700 mb-2">STEP 4</div>
-                <h4 className="font-bold text-sm text-gray-900 mb-2">Scan & Pay</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 4</div>
+                <h4 className="font-bold text-sm text-white mb-2">Scan & Pay</h4>
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Scan the merchant's printed QR code or enter their Till Number at checkout to pay instantly without physical cash.
                 </p>
               </div>
@@ -367,40 +367,40 @@ export function Essentials() {
           </div>
 
           {/* Ride Booking Steps */}
-          <div className="bg-green-950 text-white p-6 sm:p-8 rounded-2xl">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-green-300">
-              <MapPin className="w-5 h-5" /> How to Book a Ride-Hailing Taxi
+          <div className="bg-gradient-to-br from-emerald-950 via-gray-900 to-green-950 text-white p-6 sm:p-8 rounded-3xl border border-emerald-800/40 shadow-xl">
+            <h3 className="text-lg font-extrabold mb-6 flex items-center gap-2.5 text-emerald-400">
+              <MapPin className="w-5 h-5 text-emerald-400 animate-pulse" /> How to Book a Ride-Hailing Taxi
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
-                <div className="text-xs font-black text-green-400 mb-2">STEP 1</div>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 1</div>
                 <h4 className="font-bold text-sm text-white mb-2">Install App</h4>
-                <p className="text-xs text-green-200 leading-relaxed">
-                  Download <strong>Feres</strong> or <strong>RIDE</strong> from App Store or Google Play Store.
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
+                  Download <strong className="text-emerald-300">Feres</strong> or <strong className="text-emerald-300">RIDE</strong> from App Store or Google Play Store.
                 </p>
               </div>
 
-              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
-                <div className="text-xs font-black text-green-400 mb-2">STEP 2</div>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 2</div>
                 <h4 className="font-bold text-sm text-white mb-2">Register Number</h4>
-                <p className="text-xs text-green-200 leading-relaxed">
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Enter your local Ethiopian mobile phone number to receive a verification OTP code.
                 </p>
               </div>
 
-              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
-                <div className="text-xs font-black text-green-400 mb-2">STEP 3</div>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 3</div>
                 <h4 className="font-bold text-sm text-white mb-2">Set Destination</h4>
-                <p className="text-xs text-green-200 leading-relaxed">
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Turn on location permissions, select pickup point (e.g. Bole Airport), enter destination, and confirm ride.
                 </p>
               </div>
 
-              <div className="bg-green-900/60 p-5 rounded-xl border border-green-800">
-                <div className="text-xs font-black text-green-400 mb-2">STEP 4</div>
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
+                <div className="text-xs font-black text-emerald-400 mb-2">STEP 4</div>
                 <h4 className="font-bold text-sm text-white mb-2">Pay & Travel</h4>
-                <p className="text-xs text-green-200 leading-relaxed">
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Pay your driver at the end of the journey using local cash, Telebirr, or M-PESA.
                 </p>
               </div>
@@ -530,29 +530,29 @@ export function Essentials() {
           </div>
 
           {/* Cultural Etiquette & Tipping Guide */}
-          <div className="bg-gradient-to-r from-green-900 via-emerald-900 to-gray-900 text-white p-6 sm:p-8 rounded-2xl">
-            <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-green-300">
-              <Heart className="w-5 h-5 text-green-400" /> Tipping Customs & Cultural Etiquette
+          <div className="bg-gradient-to-br from-emerald-950 via-gray-900 to-green-950 text-white p-6 sm:p-8 rounded-3xl border border-emerald-800/40 shadow-xl">
+            <h3 className="text-lg font-extrabold mb-6 flex items-center gap-2.5 text-emerald-400">
+              <Heart className="w-5 h-5 text-emerald-400 animate-pulse" /> Tipping Customs & Cultural Etiquette
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-green-950/60 p-5 rounded-xl border border-green-800">
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
                 <h4 className="font-bold text-sm text-white mb-2">Restaurant Tipping</h4>
-                <p className="text-xs text-green-200 leading-relaxed">
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Tipping 5% to 10% of the total bill is customary at sit-down restaurants and cafes. A small cash tip of 50-100 ETB for hotel porters is appreciated.
                 </p>
               </div>
 
-              <div className="bg-green-950/60 p-5 rounded-xl border border-green-800">
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
                 <h4 className="font-bold text-sm text-white mb-2">Coffee Ceremony Ritual</h4>
-                <p className="text-xs text-green-200 leading-relaxed">
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   If invited to a traditional Ethiopian coffee ceremony (Buna), it is respectful to accept at least the first round (*Abol*). It is customary to compliment the hostess.
                 </p>
               </div>
 
-              <div className="bg-green-950/60 p-5 rounded-xl border border-green-800">
+              <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/20 hover:border-emerald-500/40 transition-colors">
                 <h4 className="font-bold text-sm text-white mb-2">Greetings & Handshakes</h4>
-                <p className="text-xs text-green-200 leading-relaxed">
+                <p className="text-xs text-emerald-100/80 leading-relaxed">
                   Light shoulder-bumping (*Gursha* / shoulder touch) during handshakes is a common sign of warm friendship and respect between acquaintances.
                 </p>
               </div>
