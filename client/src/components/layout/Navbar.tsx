@@ -34,7 +34,7 @@ export function Navbar() {
             <img 
               src="/logo.png" 
               alt="TravelAssist Logo" 
-              className="h-10 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
+              className="h-14 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform" 
             />
             <span className="font-bold text-xl text-gray-900 tracking-tight">
               Travel<span className="text-green-700">Assist</span>

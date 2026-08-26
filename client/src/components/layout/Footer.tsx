@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <img src="/logo.png" alt="TravelAssist Logo" className="h-10 w-auto object-contain brightness-110" />
+              <img src="/logo.png" alt="TravelAssist Logo" className="h-16 w-auto object-contain brightness-110" />
               <span className="font-bold text-xl text-white tracking-tight">
                 Travel<span className="text-green-500">Assist</span>
               </span>
