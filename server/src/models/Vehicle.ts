@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const vehicleSchema = new mongoose.Schema({
+  ownerId: { type: String, required: false },
   name: { type: String, required: true }, // e.g., "Toyota Land Cruiser"
   type: { type: String, required: true, enum: ["SUV", "Sedan", "Minivan"] },
   transmission: { type: String, required: true, enum: ["Automatic", "Manual"] },

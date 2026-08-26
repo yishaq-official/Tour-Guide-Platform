@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MapPin, Compass, Info, CheckCircle2, Heart } from 'lucide-react';
-import { MapWidget } from '../components/MapWidget';
+import { 
+  ArrowLeft, MapPin, Compass, Info, CheckCircle2, Heart, 
+  Volume2, VolumeX, Star, Calendar, Landmark, Globe, Award, Sparkles 
+} from 'lucide-react';
 import { API_URL, apiFetch } from '../config';
 import { useSession } from '../lib/auth-client';
 
@@ -32,6 +34,33 @@ export function CultureDetail() {
   const { data: session } = useSession();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
+  const toggleAudioGuide = () => {
+    if (!('speechSynthesis' in window) || !culture) return;
+    
+    if (isPlayingAudio) {
+      window.speechSynthesis.cancel();
+      setIsPlayingAudio(false);
+    } else {
+      window.speechSynthesis.cancel();
+      const textToRead = `${culture.name}. Located in ${culture.location}. ${culture.history.replace(/\*/g, '')}`;
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.rate = 0.9;
+      utterance.onend = () => setIsPlayingAudio(false);
+      utterance.onerror = () => setIsPlayingAudio(false);
+      window.speechSynthesis.speak(utterance);
+      setIsPlayingAudio(true);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, [id]);
 
   useEffect(() => {
     setLoading(true);
@@ -114,74 +143,174 @@ export function CultureDetail() {
   return (
     <div className="w-full bg-white pb-24">
       {/* Hero Image Section */}
-      <div className="relative h-[60vh] md:h-[75vh] w-full">
+      <div className="relative h-[65vh] md:h-[80vh] w-full bg-gray-900">
         <img 
           src={culture.image} 
           alt={culture.name} 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-black/30" />
         
-        <div className="absolute top-8 left-8 md:top-12 md:left-12 z-20 flex justify-between right-8 md:right-12">
-          <Link to="/explore?tab=cultures" className="inline-flex items-center text-white/80 hover:text-white transition-colors text-sm font-semibold uppercase tracking-wider bg-black/20 px-4 py-2 rounded-full backdrop-blur-md border border-white/10">
+        {/* Top Glassmorphic Navigation Bar */}
+        <div className="absolute top-6 left-6 right-6 md:top-10 md:left-10 md:right-10 z-20 flex justify-between items-center">
+          <Link to="/explore?tab=cultures" className="inline-flex items-center text-white/90 hover:text-white transition-all text-xs font-black uppercase tracking-wider bg-black/40 hover:bg-black/60 px-5 py-2.5 rounded-full backdrop-blur-md border border-white/20 shadow-lg">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Explore
           </Link>
           
-          {session && (
-            <button 
-              onClick={toggleFavorite}
-              disabled={isTogglingFavorite}
-              className={`p-3 rounded-full backdrop-blur-md border border-white/20 transition-all ${isFavorite ? 'bg-red-500/80 text-white' : 'bg-black/40 text-white/80 hover:bg-black/60 hover:text-white'}`}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleAudioGuide}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider backdrop-blur-md transition-all shadow-lg border ${
+                isPlayingAudio 
+                  ? 'bg-green-600 text-white border-green-400 animate-pulse' 
+                  : 'bg-black/40 hover:bg-green-700/80 text-white border-white/20'
+              }`}
+              title="Listen to Cultural Guide"
             >
-              <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+              {isPlayingAudio ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-green-400" />}
+              <span>{isPlayingAudio ? 'Pause Audio' : 'Audio Guide'}</span>
             </button>
-          )}
+
+            {session && (
+              <button 
+                onClick={toggleFavorite}
+                disabled={isTogglingFavorite}
+                className={`p-3 rounded-full backdrop-blur-md border border-white/20 transition-all shadow-lg ${isFavorite ? 'bg-red-500/90 text-white' : 'bg-black/40 text-white/80 hover:bg-black/60 hover:text-white'}`}
+              >
+                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+              </button>
+            )}
+          </div>
         </div>
         
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
+        {/* Hero Overlay Content */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14">
           <div className="max-w-7xl mx-auto">
             
-            <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="flex flex-wrap items-center gap-3 mb-4">
               {culture.isUnesco && (
-                <span className="bg-yellow-400 text-yellow-900 text-xs font-bold px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wide">
-                  UNESCO Intangible Heritage
+                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-amber-950 text-xs font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wide flex items-center gap-1.5 border border-amber-300">
+                  <Star className="w-3.5 h-3.5 fill-current" />
+                  UNESCO Intangible Cultural Heritage
                 </span>
               )}
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight drop-shadow-lg">
               {culture.name}
             </h1>
             
-            <div className="flex items-start md:items-center text-white/90 max-w-3xl">
-              <MapPin className="w-6 h-6 mr-3 text-green-400 shrink-0 mt-1 md:mt-0" />
-              <span className="text-xl md:text-2xl font-light drop-shadow-md">{culture.location}</span>
+            <div className="flex items-start md:items-center text-white/90 max-w-3xl mb-6">
+              <MapPin className="w-5 h-5 mr-2 text-green-400 shrink-0 mt-0.5" />
+              <span className="text-base md:text-lg font-medium drop-shadow-md">{culture.location}</span>
             </div>
+
+            {/* Prominent Hero Audio Button */}
+            <button
+              onClick={toggleAudioGuide}
+              className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl font-extrabold text-sm transition-all shadow-2xl border ${
+                isPlayingAudio 
+                  ? 'bg-green-500 text-white border-green-300 animate-pulse scale-[1.02]' 
+                  : 'bg-white text-gray-900 hover:bg-green-600 hover:text-white border-white/40'
+              }`}
+            >
+              {isPlayingAudio ? (
+                <>
+                  <VolumeX className="w-5 h-5 text-white" />
+                  <span>Pause Audio Narration</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-5 h-5 text-green-600" />
+                  <span>Listen to Audio Guide</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         
+        {/* Prominent Audio Player Banner Card */}
+        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-green-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-800 mb-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg ${isPlayingAudio ? 'bg-green-500 text-white animate-bounce' : 'bg-white/10 text-green-400'}`}>
+              <Volume2 className="w-7 h-7" />
+            </div>
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-green-400">Interactive Audio Experience</span>
+              <h3 className="text-xl font-bold text-white">Audio Guide Narration</h3>
+              <p className="text-xs sm:text-sm text-gray-300">Listen to an AI-narrated summary of {culture.name}</p>
+            </div>
+          </div>
+
+          <button
+            onClick={toggleAudioGuide}
+            className={`w-full sm:w-auto px-6 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-lg shrink-0 flex items-center justify-center gap-2 ${
+              isPlayingAudio 
+                ? 'bg-red-500 hover:bg-red-600 text-white' 
+                : 'bg-green-600 hover:bg-green-700 text-white'
+            }`}
+          >
+            {isPlayingAudio ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            <span>{isPlayingAudio ? 'Stop Narration' : 'Play Audio Guide'}</span>
+          </button>
+        </div>
+
         {/* Quick Facts Grid */}
         {culture.quickFacts && Object.keys(culture.quickFacts).length > 0 && (
           <motion.section 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-            className="bg-green-50/50 rounded-3xl p-8 border border-green-100 mb-16"
+            className="bg-emerald-50/40 rounded-3xl p-6 sm:p-8 border border-emerald-100/80 shadow-sm mb-16"
           >
-            <div className="flex items-center mb-8">
-              <Info className="w-8 h-8 text-green-600 mr-3" />
-              <h2 className="text-3xl font-bold text-gray-900">Quick Facts</h2>
+            <div className="flex items-center mb-6">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center mr-3 shadow-md">
+                <Info className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Key Cultural Facts</h2>
+                <p className="text-xs text-gray-500 font-medium">Essential cultural and historical details at a glance</p>
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {Object.entries(culture.quickFacts).map(([key, value]) => (
-                <div key={key} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-50">
-                  <h4 className="text-sm font-bold text-green-600 uppercase tracking-wider mb-2">{key}</h4>
-                  <p className="text-gray-800 font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: value.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*/g, '') }}></p>
-                </div>
-              ))}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {Object.entries(culture.quickFacts).map(([key, value]) => {
+                const keyLower = key.toLowerCase();
+                let IconComponent = Sparkles;
+                
+                if (keyLower.includes('era') || keyLower.includes('built') || keyLower.includes('date') || keyLower.includes('period') || keyLower.includes('season') || keyLower.includes('month')) {
+                  IconComponent = Calendar;
+                } else if (keyLower.includes('architect') || keyLower.includes('structure') || keyLower.includes('style') || keyLower.includes('ritual') || keyLower.includes('type')) {
+                  IconComponent = Landmark;
+                } else if (keyLower.includes('region') || keyLower.includes('location') || keyLower.includes('city') || keyLower.includes('place') || keyLower.includes('people')) {
+                  IconComponent = Globe;
+                } else if (keyLower.includes('significan') || keyLower.includes('status') || keyLower.includes('unesco') || keyLower.includes('importance')) {
+                  IconComponent = Award;
+                }
+
+                return (
+                  <div 
+                    key={key} 
+                    className="bg-white p-5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-150 flex items-start gap-4 group"
+                  >
+                    <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-200 shadow-inner">
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-[11px] font-extrabold text-emerald-800 uppercase tracking-wider mb-1">
+                        {key}
+                      </h4>
+                      <p 
+                        className="text-gray-800 text-xs sm:text-sm font-semibold leading-relaxed" 
+                        dangerouslySetInnerHTML={{ __html: value.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\*/g, '') }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </motion.section>
         )}

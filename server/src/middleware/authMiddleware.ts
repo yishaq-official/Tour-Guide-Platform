@@ -39,3 +39,28 @@ export const requireAdmin = async (req: Request, res: Response, next: NextFuncti
   
   next();
 };
+
+export const requireHotel = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized: No active session" });
+  }
+  
+  if (req.user.role !== "hotel" && req.user.role !== "admin") {
+    return res.status(403).json({ message: "Forbidden: Hotel Partner or Admin access required" });
+  }
+  
+  next();
+};
+
+export const requirePartner = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized: No active session" });
+  }
+  
+  const role = req.user.role;
+  if (role !== "hotel" && role !== "car" && role !== "agency" && role !== "admin") {
+    return res.status(403).json({ message: "Forbidden: Partner or Admin access required" });
+  }
+  
+  next();
+};

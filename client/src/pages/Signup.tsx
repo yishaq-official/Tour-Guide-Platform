@@ -13,6 +13,10 @@ export function Signup() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const queryParams = new URLSearchParams(location.search);
+  const initialRole = queryParams.get('role') || 'user';
+  const [role, setRole] = useState(initialRole);
+
   const from = location.state?.from || '/explore';
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -25,11 +29,16 @@ export function Signup() {
           email,
           password,
           name,
-      });
+          role,
+      } as any);
       if (error) {
           setError(error.message || 'Failed to create account');
       } else {
-          navigate(from);
+          if (role === 'hotel' || role === 'car' || role === 'agency') {
+            navigate('/partner/dashboard');
+          } else {
+            navigate(from);
+          }
       }
     } catch (err) {
       setError('An unexpected error occurred.');
@@ -51,25 +60,26 @@ export function Signup() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="absolute top-8 left-8 z-10">
-        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-green-600 transition-colors font-medium">
-          <ArrowLeft className="w-5 h-5 mr-2" /> Back to Home
+      <div className="absolute top-6 left-6">
+        <Link
+          to="/"
+          className="flex items-center text-sm font-semibold text-gray-500 hover:text-gray-800 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
         </Link>
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center">
-          <div className="flex items-center gap-2 text-green-700">
-            <span className="font-black text-3xl tracking-tighter">TravelAssist</span>
-          </div>
-        </motion.div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-          Create an account
+        <div className="flex justify-center">
+          <span className="text-3xl font-black text-green-700 tracking-tight">TravelAssist</span>
+        </div>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="font-medium text-green-600 hover:text-green-500">
-            Sign in instead
+          Or{' '}
+          <Link to="/login" className="font-semibold text-green-600 hover:text-green-500">
+            sign in to your existing account
           </Link>
         </p>
       </div>
@@ -80,17 +90,17 @@ export function Signup() {
         transition={{ delay: 0.1 }}
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
       >
-        <div className="bg-white py-8 px-4 shadow sm:rounded-2xl sm:px-10 border border-gray-100">
-          {error && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm font-medium">
-              {error}
-            </div>
-          )}
-
+        <div className="bg-white py-8 px-4 shadow sm:rounded-3xl sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleSignup}>
+            {error && (
+              <div className="rounded-xl bg-red-50 p-4 border border-red-200">
+                <div className="text-sm font-semibold text-red-700">{error}</div>
+              </div>
+            )}
+
             <div>
-              <label className="block text-sm font-medium text-gray-700">Full Name</label>
-              <div className="mt-1 relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <User className="h-5 w-5 text-gray-400" />
                 </div>
@@ -106,8 +116,8 @@ export function Signup() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email address</label>
-              <div className="mt-1 relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+              <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
                 </div>
@@ -123,8 +133,8 @@ export function Signup() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
-              <div className="mt-1 relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
@@ -136,6 +146,53 @@ export function Signup() {
                   className="appearance-none block w-full pl-10 px-3 py-3 border border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   placeholder="••••••••"
                 />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setRole('user')}
+                  className={`py-3 px-4 border rounded-xl text-sm font-medium transition-all ${
+                    role === 'user'
+                      ? 'border-green-600 bg-green-50 text-green-700 ring-2 ring-green-600/20'
+                      : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Traveler
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('hotel')}
+                  className={`py-3 px-4 border rounded-xl text-sm font-medium transition-all ${
+                    role === 'hotel'
+                      ? 'border-green-600 bg-green-50 text-green-700 ring-2 ring-green-600/20'
+                      : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Hotel Partner
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole('car')}
+                  className={`py-3 px-4 border rounded-xl text-sm font-medium transition-all ${
+                    role === 'car'
+                      ? 'border-green-600 bg-green-50 text-green-700 ring-2 ring-green-600/20'
+                      : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  Car Rental Partner
+                </button>
+                <button
+                  type="button"
+                  disabled
+                  className="py-3 px-4 border border-gray-150 bg-gray-50 text-gray-400 rounded-xl text-sm font-medium cursor-not-allowed flex items-center justify-center gap-1"
+                >
+                  <span>Agency Partner</span>
+                  <span className="text-[9px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded font-black uppercase">Soon</span>
+                </button>
               </div>
             </div>
 
