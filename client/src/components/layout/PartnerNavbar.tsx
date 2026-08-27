@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, LogOut, Building, ShieldAlert, ChevronDown, User, Layers } from 'lucide-react';
+import { Menu, X, LogOut, ShieldAlert, ChevronDown, User, Layers } from 'lucide-react';
 import { useSession, signOut } from '../../lib/auth-client';
 
 export function PartnerNavbar() {
@@ -39,10 +39,10 @@ export function PartnerNavbar() {
         <div className="flex justify-between h-16">
           {/* Logo and Brand */}
           <div className="flex items-center">
-            <Link to="/partner" className="flex items-center gap-2.5">
+            <Link to="/partner" className="flex items-center gap-1">
+              <img src="/logo.png" alt="TravelAssist Logo" className="h-13 w-auto object-contain mt-1" />
               <span className="text-xl font-black text-green-700 tracking-tight flex items-center">
-                <Building className="w-6 h-6 mr-1.5" />
-                TravelAssist <span className="text-gray-400 font-medium ml-1">Partner Portal</span>
+                Travel<span className="text-gray-900">Assist</span> <span className="text-gray-400 font-medium text-sm ml-1.5 border-l border-gray-200 pl-2">Partner Portal</span>
               </span>
             </Link>
 

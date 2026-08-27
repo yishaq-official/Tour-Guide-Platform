@@ -8,6 +8,7 @@ import heritageRoutes from "./routes/heritageRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import cultureRoutes from "./routes/cultureRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import ragRoutes from "./routes/ragRoutes.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/api/heritages", heritageRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/cultures", cultureRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/rag", ragRoutes);
 
 app.get("/api/hello", (req: Request, res: Response) => {
     res.send("Hello World");

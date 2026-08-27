@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, MapPin, LogOut, Navigation, Building, ShieldAlert } from 'lucide-react';
+import { Menu, X, LogOut, Navigation, Building, ShieldAlert } from 'lucide-react';
 import { useSession, signOut } from '../../lib/auth-client';
 
 const NAV_LINKS = [
@@ -30,10 +30,12 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="p-2 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors">
-              <MapPin className="w-6 h-6 text-green-700" />
-            </div>
+          <Link to="/" className="flex items-center gap-1 group">
+            <img 
+              src="/logo.png" 
+              alt="TravelAssist Logo" 
+              className="h-13 w-auto object-contain mt-1 drop-shadow-sm group-hover:scale-105 transition-transform" 
+            />
             <span className="font-bold text-xl text-gray-900 tracking-tight">
               Travel<span className="text-green-700">Assist</span>
             </span>

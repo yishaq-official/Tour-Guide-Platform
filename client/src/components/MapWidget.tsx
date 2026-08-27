@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, LayersControl, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Maximize2, Minimize2, MapPin, Layers, Navigation, Crosshair, Satellite } from 'lucide-react';
+import { Maximize2, Minimize2, MapPin, Navigation, Crosshair, Satellite } from 'lucide-react';
 
 // Fix for default marker icons in React Leaflet with Vite
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
@@ -74,7 +74,7 @@ export function MapWidget({ lat, lng, name }: { lat: number; lng: number; name: 
   };
 
   const wrapperClasses = isExpanded
-    ? "fixed inset-0 z-[1000] w-full h-full bg-white shadow-2xl"
+    ? "fixed inset-0 z-[60] w-full h-full bg-white shadow-2xl"
     : "relative w-full h-72 md:h-96 rounded-3xl overflow-hidden shadow-xl border border-amber-100/50 group";
 
   return (
@@ -129,10 +129,22 @@ export function MapWidget({ lat, lng, name }: { lat: number; lng: number; name: 
         </Marker>
       </MapContainer>
 
+      {/* Prominent Top-Right Exit Fullscreen Button (Expanded Mode) */}
+      {isExpanded && (
+        <button
+          onClick={() => setIsExpanded(false)}
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[600] bg-gray-900/95 hover:bg-emerald-700 text-white font-extrabold px-4 py-2.5 sm:px-5 sm:py-3 rounded-2xl shadow-2xl backdrop-blur-md border border-gray-700 hover:border-emerald-400 transition-all duration-300 flex items-center gap-2.5 cursor-pointer group"
+          title="Minimize Fullscreen Map"
+        >
+          <Minimize2 className="w-5 h-5 text-amber-400 group-hover:text-white transition-colors" />
+          <span className="text-xs sm:text-sm font-bold tracking-wide">Exit Fullscreen</span>
+        </button>
+      )}
+
       {/* Clickable location badge - top left */}
       <button
         onClick={handleReturnToLocation}
-        className="absolute top-4 left-4 z-[400] bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-xl shadow-lg border border-amber-200 hover:border-amber-400 hover:shadow-xl transition-all duration-300 flex items-center gap-2 group/badge cursor-pointer max-w-[calc(100%-120px)]"
+        className="absolute top-4 left-4 z-[400] bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-xl shadow-lg border border-amber-200 hover:border-amber-400 hover:shadow-xl transition-all duration-300 flex items-center gap-2 group/badge cursor-pointer max-w-[calc(100%-180px)]"
         title="Click to return to location"
       >
         <MapPin className="w-4 h-4 text-amber-600 group-hover/badge:scale-110 transition-transform duration-300 shrink-0" />
@@ -142,16 +154,20 @@ export function MapWidget({ lat, lng, name }: { lat: number; lng: number; name: 
         <Crosshair className="w-3.5 h-3.5 text-gray-400 group-hover/badge:text-amber-600 opacity-0 group-hover/badge:opacity-100 transition-all duration-300 shrink-0" />
       </button>
 
-      {/* Satellite indicator - top right */}
-      <div className="absolute top-4 right-4 z-[400] bg-white/90 backdrop-blur-md p-2 rounded-xl shadow-lg border border-amber-100 pointer-events-none flex items-center gap-1.5">
-        <Satellite className="w-4 h-4 text-amber-600" />
-        <span className="text-xs font-medium text-gray-600 hidden sm:inline">Satellite</span>
-      </div>
+      {/* Satellite indicator - top right (only when not expanded) */}
+      {!isExpanded && (
+        <div className="absolute top-4 right-4 z-[400] bg-white/90 backdrop-blur-md p-2 rounded-xl shadow-lg border border-amber-100 pointer-events-none flex items-center gap-1.5">
+          <Satellite className="w-4 h-4 text-amber-600" />
+          <span className="text-xs font-medium text-gray-600 hidden sm:inline">Satellite</span>
+        </div>
+      )}
 
-      {/* Toggle Button - bottom right with extra margin */}
+      {/* Expand / Minimize Toggle Button */}
       <button 
         onClick={() => setIsExpanded(!isExpanded)}
-        className="absolute bottom-8 right-4 z-[500] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-lg border border-amber-100 text-gray-700 hover:text-amber-600 hover:bg-amber-50 hover:shadow-xl transition-all duration-300 flex items-center justify-center group/btn"
+        className={`absolute z-[500] bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-lg border border-amber-100 text-gray-700 hover:text-amber-600 hover:bg-amber-50 hover:shadow-xl transition-all duration-300 flex items-center justify-center group/btn ${
+          isExpanded ? 'bottom-8 right-24 sm:right-40' : 'bottom-8 right-4'
+        }`}
         title={isExpanded ? "Minimize map" : "Maximize map"}
       >
         {isExpanded ? (
@@ -178,9 +194,9 @@ export function MapWidget({ lat, lng, name }: { lat: number; lng: number; name: 
         </button>
       )}
 
-      {/* Coordinates badge - top right when expanded */}
+      {/* Coordinates badge - top center when expanded */}
       {isExpanded && (
-        <div className="absolute top-6 right-6 z-[400] bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-amber-100 pointer-events-none">
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[400] bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-amber-100 pointer-events-none hidden md:block">
           <div className="flex items-center gap-2">
             <Navigation className="w-4 h-4 text-amber-600" />
             <span className="text-sm font-mono text-gray-600">
@@ -190,7 +206,7 @@ export function MapWidget({ lat, lng, name }: { lat: number; lng: number; name: 
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         :global(.custom-marker) {
           position: relative;
           width: 36px;

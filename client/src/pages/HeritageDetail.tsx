@@ -9,6 +9,8 @@ import { MapWidget } from '../components/MapWidget';
 import { WeatherWidget } from '../components/WeatherWidget';
 import { API_URL, apiFetch } from '../config';
 import { useSession } from '../lib/auth-client';
+import { useToast } from '../context/ToastContext';
+import { SkeletonCard } from '../components/SkeletonCard';
 
 interface TouristHighlight {
   title: string;
@@ -100,8 +102,11 @@ export function HeritageDetail() {
     }
   }, [id, session]);
 
+  const { showToast } = useToast();
+
   const toggleFavorite = async () => {
     if (!session) {
+      showToast('Please sign in to save places to your favorites', 'info', 'Authentication Required');
       return;
     }
     setIsTogglingFavorite(true);
@@ -111,10 +116,17 @@ export function HeritageDetail() {
         body: JSON.stringify({ itemId: id, itemModel: 'Heritage' })
       });
       if (res.ok) {
-        setIsFavorite(!isFavorite);
+        const nextState = !isFavorite;
+        setIsFavorite(nextState);
+        showToast(
+          nextState ? `${heritage?.name || 'Item'} added to favorites!` : `${heritage?.name || 'Item'} removed from favorites`,
+          nextState ? 'success' : 'info',
+          nextState ? 'Favorite Saved' : 'Favorite Removed'
+        );
       }
     } catch (err) {
       console.error(err);
+      showToast('Failed to update favorites', 'error', 'Error');
     } finally {
       setIsTogglingFavorite(false);
     }
@@ -122,8 +134,8 @@ export function HeritageDetail() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-gray-50/50 py-16">
+        <SkeletonCard type="detail" />
       </div>
     );
   }
@@ -410,6 +422,28 @@ export function HeritageDetail() {
                     <span className="leading-relaxed">This site is accessible via domestic flights (Ethiopian Airlines) or organized overland tours departing from Addis Ababa.</span>
                   </div>
                 </div>
+              </div>
+
+              {/* RAG AI Assistant Card */}
+              <div className="bg-gradient-to-br from-gray-950 via-gray-900 to-green-950 text-white rounded-3xl p-6 shadow-xl border border-gray-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-base text-white">Ask AI RAG Assistant</h3>
+                    <p className="text-xs text-emerald-300">Contextual query for {heritage.name}</p>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-300 mb-4 leading-relaxed">
+                  Get instant historical answers, hotel recommendations, and transportation advice for visiting {heritage.name}.
+                </p>
+                <Link
+                  to="/services"
+                  className="inline-flex items-center justify-center w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md gap-2"
+                >
+                  <span>Book Nearby Stays & Vehicles</span>
+                </Link>
               </div>
 
               {/* Weather Widget */}
