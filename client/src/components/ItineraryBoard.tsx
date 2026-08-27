@@ -236,7 +236,7 @@ export function ItineraryBoard({ favorites, initialItinerary }: ItineraryBoardPr
             className="min-w-[320px] w-[320px] bg-white border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center text-gray-500 hover:text-green-600 hover:border-green-300 hover:bg-green-50 transition-all cursor-pointer h-[150px] snap-center"
           >
             <Plus className="w-8 h-8 mb-2" />
-            <span className="font-bold">Add Another Day</span>
+            <span className="font-bold">Add another Day</span>
           </button>
         </div>
 
