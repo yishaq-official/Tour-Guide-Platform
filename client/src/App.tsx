@@ -19,43 +19,47 @@ import { PartnerRoute } from './components/PartnerRoute';
 import { PartnerDashboard } from './pages/PartnerDashboard';
 import { PartnerLanding } from './pages/PartnerLanding';
 
+import { ToastProvider } from './context/ToastContext';
+
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        
-        {/* Main Website Route Group with Layout */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="explore" element={<Explore />} />
-          <Route path="explore/heritage/:id" element={<HeritageDetail />} />
-          <Route path="explore/culture/:id" element={<CultureDetail />} />
-          <Route path="transport" element={<TransportInfo />} />
-          <Route path="services" element={<Services />} />
-          <Route path="services/hotel/:id" element={<HotelDetail />} />
-          <Route path="services/vehicle/:id" element={<VehicleDetail />} />
-          <Route path="essentials" element={<Essentials />} />
+    <ToastProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           
-          <Route element={<ProtectedRoute />}>
-            <Route path="my-trips" element={<MyTrips />} />
+          {/* Main Website Route Group with Layout */}
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="explore" element={<Explore />} />
+            <Route path="explore/heritage/:id" element={<HeritageDetail />} />
+            <Route path="explore/culture/:id" element={<CultureDetail />} />
+            <Route path="transport" element={<TransportInfo />} />
+            <Route path="services" element={<Services />} />
+            <Route path="services/hotel/:id" element={<HotelDetail />} />
+            <Route path="services/vehicle/:id" element={<VehicleDetail />} />
+            <Route path="essentials" element={<Essentials />} />
+            
+            <Route element={<ProtectedRoute />}>
+              <Route path="my-trips" element={<MyTrips />} />
+            </Route>
+
+            <Route element={<AdminRoute />}>
+              <Route path="admin" element={<AdminDashboard />} />
+            </Route>
           </Route>
 
-          <Route element={<AdminRoute />}>
-            <Route path="admin" element={<AdminDashboard />} />
+          {/* Dedicated Partner Portal Route Group */}
+          <Route path="/partner">
+            <Route index element={<PartnerLanding />} />
+            <Route element={<PartnerRoute />}>
+              <Route path="dashboard" element={<PartnerDashboard />} />
+            </Route>
           </Route>
-        </Route>
-
-        {/* Dedicated Partner Portal Route Group */}
-        <Route path="/partner">
-          <Route index element={<PartnerLanding />} />
-          <Route element={<PartnerRoute />}>
-            <Route path="dashboard" element={<PartnerDashboard />} />
-          </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
 

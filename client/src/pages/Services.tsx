@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X } from 'lucide-react';
 import { API_URL } from '../config';
+import { SkeletonGrid } from '../components/SkeletonCard';
+import { useToast } from '../context/ToastContext';
 
 interface Hotel {
   _id: string;
@@ -79,6 +81,8 @@ export function Services() {
     fetchServices();
   }, []);
 
+  const { showToast } = useToast();
+
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!bookingModal.item) return;
@@ -117,9 +121,11 @@ export function Services() {
       }
 
       setBookingSuccess(true);
+      showToast('Reservation request submitted successfully!', 'success', 'Booking Confirmed');
     } catch (err) {
       console.error(err);
       setBookingError('An error occurred while confirming your reservation. Please try again.');
+      showToast('Failed to confirm reservation', 'error', 'Error');
     } finally {
       setIsSubmitting(false);
     }
@@ -138,54 +144,50 @@ export function Services() {
             transition={{ delay: 0.1 }}
             className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
           >
-            Premium Travel <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-200">Services</span>
+            Hospitality & Transport
           </motion.h1>
 
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed"
+            className="text-gray-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-8"
           >
-            Book verified luxury accommodations and reliable vehicle rentals to make your journey across Ethiopia effortless and memorable.
+            Book verified luxury stays, boutique lodges, and reliable 4x4 vehicles with driver options across Ethiopia.
           </motion.p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Custom Tabs Switcher */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-2xl border border-gray-200 shadow-md inline-flex gap-2">
+        {/* Navigation Tabs */}
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
+          <div className="flex gap-3">
             <button
               onClick={() => handleTabChange('hotels')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-200 ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-extrabold text-sm transition-all duration-300 ${
                 activeTab === 'hotels' 
-                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-600/20 scale-[1.02]' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/60'
+                  ? 'bg-green-700 text-white shadow-lg shadow-green-700/20 scale-[1.02]' 
+                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >
-              <Building2 className="w-4 h-4" />
-              Hotels & Stays
+              <Building2 className="w-5 h-5" /> Stays & Hotels
             </button>
             <button
               onClick={() => handleTabChange('vehicles')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-extrabold uppercase tracking-wider transition-all duration-200 ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-extrabold text-sm transition-all duration-300 ${
                 activeTab === 'vehicles' 
-                  ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-600/20 scale-[1.02]' 
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/60'
+                  ? 'bg-green-700 text-white shadow-lg shadow-green-700/20 scale-[1.02]' 
+                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >
-              <CarFront className="w-4 h-4" />
-              Car Rentals
+              <CarFront className="w-5 h-5" /> Vehicle Rentals
             </button>
           </div>
         </div>
 
         {/* Content Area */}
         {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-          </div>
+          <SkeletonGrid count={6} />
         ) : error ? (
           <div className="text-center py-20">
             <p className="text-red-500 text-lg mb-4">{error}</p>

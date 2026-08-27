@@ -6,6 +6,8 @@ import {
   Star, X, RotateCcw, ArrowRight, AlertCircle
 } from 'lucide-react';
 import { API_URL } from '../config';
+import { SkeletonGrid } from '../components/SkeletonCard';
+import { useToast } from '../context/ToastContext';
 
 interface BaseItem {
   _id: string;
@@ -35,6 +37,7 @@ const CATEGORY_CHIPS = [
 ];
 
 export function Explore() {
+  const { showToast } = useToast();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') === 'heritages' ? 'heritages' : 'cultures';
   const search = searchParams.get('search') || '';
@@ -84,9 +87,10 @@ export function Explore() {
     .catch(err => {
       console.error("Failed to fetch data", err);
       setError('Failed to load explore data. Please check your connection and try again.');
+      showToast('Failed to load explore catalog data', 'error', 'Network Error');
       setLoading(false);
     });
-  }, []);
+  }, [showToast]);
 
   const regions = ['All', ...Array.from(new Set(heritages.map(h => h.region).filter(Boolean)))];
 
@@ -117,6 +121,7 @@ export function Explore() {
 
   const clearAllFilters = () => {
     updateParams({ search: '', region: 'All', unesco: 'false', category: 'All' });
+    showToast('Search & filters reset to default', 'info', 'Filters Cleared');
   };
 
   return (
@@ -275,25 +280,7 @@ export function Explore() {
 
         {/* Content Area */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-3xl overflow-hidden border border-gray-150 shadow-sm animate-pulse flex flex-col h-full">
-                <div className="aspect-[16/10] bg-gray-200" />
-                <div className="p-6 sm:p-7 flex-grow flex flex-col justify-between space-y-4">
-                  <div className="space-y-3">
-                    <div className="h-6 bg-gray-200 rounded-lg w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded-md w-1/2" />
-                    <div className="space-y-2 pt-2">
-                      <div className="h-3 bg-gray-150 rounded w-full" />
-                      <div className="h-3 bg-gray-150 rounded w-5/6" />
-                      <div className="h-3 bg-gray-150 rounded w-2/3" />
-                    </div>
-                  </div>
-                  <div className="h-12 bg-gray-200 rounded-2xl w-full" />
-                </div>
-              </div>
-            ))}
-          </div>
+          <SkeletonGrid count={6} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence mode="popLayout">

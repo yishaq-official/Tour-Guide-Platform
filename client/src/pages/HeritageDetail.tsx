@@ -9,6 +9,8 @@ import { MapWidget } from '../components/MapWidget';
 import { WeatherWidget } from '../components/WeatherWidget';
 import { API_URL, apiFetch } from '../config';
 import { useSession } from '../lib/auth-client';
+import { useToast } from '../context/ToastContext';
+import { SkeletonCard } from '../components/SkeletonCard';
 
 interface TouristHighlight {
   title: string;
@@ -100,8 +102,11 @@ export function HeritageDetail() {
     }
   }, [id, session]);
 
+  const { showToast } = useToast();
+
   const toggleFavorite = async () => {
     if (!session) {
+      showToast('Please sign in to save places to your favorites', 'info', 'Authentication Required');
       return;
     }
     setIsTogglingFavorite(true);
@@ -111,10 +116,17 @@ export function HeritageDetail() {
         body: JSON.stringify({ itemId: id, itemModel: 'Heritage' })
       });
       if (res.ok) {
-        setIsFavorite(!isFavorite);
+        const nextState = !isFavorite;
+        setIsFavorite(nextState);
+        showToast(
+          nextState ? `${heritage?.name || 'Item'} added to favorites!` : `${heritage?.name || 'Item'} removed from favorites`,
+          nextState ? 'success' : 'info',
+          nextState ? 'Favorite Saved' : 'Favorite Removed'
+        );
       }
     } catch (err) {
       console.error(err);
+      showToast('Failed to update favorites', 'error', 'Error');
     } finally {
       setIsTogglingFavorite(false);
     }
@@ -122,8 +134,8 @@ export function HeritageDetail() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-gray-50/50 py-16">
+        <SkeletonCard type="detail" />
       </div>
     );
   }
