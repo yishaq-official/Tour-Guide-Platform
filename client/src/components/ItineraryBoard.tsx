@@ -3,8 +3,9 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { SortableItem } from './SortableItem';
-import { Plus, Trash2, MapPin, GripVertical } from 'lucide-react';
+import { Plus, Trash2, MapPin, GripVertical, Copy, Check } from 'lucide-react';
 import { API_URL, apiFetch } from '../config';
+import { useToast } from '../context/ToastContext';
 
 interface ItineraryBoardProps {
   favorites: any[];
@@ -156,6 +157,9 @@ export function ItineraryBoard({ favorites, initialItinerary }: ItineraryBoardPr
     }
   };
 
+  const { showToast } = useToast();
+  const [copied, setCopied] = useState(false);
+
   const removeItem = async (containerId: string, itemId: string) => {
     const newItems = { ...items };
     newItems[containerId] = newItems[containerId].filter(i => i.id !== itemId);
@@ -163,8 +167,54 @@ export function ItineraryBoard({ favorites, initialItinerary }: ItineraryBoardPr
     await syncToBackend(newItems);
   };
 
+  const exportItinerary = () => {
+    const dayKeys = Object.keys(items).filter(k => k.startsWith('day-')).sort((a, b) => parseInt(a.replace('day-', '')) - parseInt(b.replace('day-', '')));
+    let exportText = `📍 My Ethiopia Travel Itinerary\n=================================\n\n`;
+    let totalItemsCount = 0;
+
+    dayKeys.forEach(dayKey => {
+      const dayNum = dayKey.replace('day-', '');
+      const dayItems = items[dayKey] || [];
+      exportText += `📅 Day ${dayNum}:\n`;
+      if (dayItems.length === 0) {
+        exportText += `   (Free / Unscheduled Day)\n\n`;
+      } else {
+        dayItems.forEach((item, idx) => {
+          totalItemsCount++;
+          const name = item.itemId?.name || 'Destination';
+          const model = item.itemModel || 'Place';
+          const loc = item.itemId?.location ? ` (${item.itemId.location})` : '';
+          exportText += `   ${idx + 1}. ${name} - ${model}${loc}\n`;
+        });
+        exportText += `\n`;
+      }
+    });
+
+    exportText += `Generated via TravelAssist Platform\n`;
+
+    navigator.clipboard.writeText(exportText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+    showToast(`Copied ${totalItemsCount} scheduled itinerary items to clipboard!`, 'success', 'Itinerary Exported');
+  };
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      {/* Top Action Header Bar */}
+      <div className="flex items-center justify-between mb-6 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
+        <div>
+          <h3 className="text-lg font-extrabold text-gray-900">Interactive Trip Builder</h3>
+          <p className="text-xs text-gray-500">Organize your saved favorites into daily schedules.</p>
+        </div>
+        <button
+          onClick={exportItinerary}
+          className="flex items-center gap-2 px-4 py-2.5 bg-green-700 hover:bg-green-800 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md shadow-green-700/20 shrink-0"
+        >
+          {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
+          <span>{copied ? 'Copied to Clipboard!' : 'Export / Copy Itinerary'}</span>
+        </button>
+      </div>
+
       <div className="flex flex-col lg:flex-row gap-8">
         
         {/* Favorites Pool */}

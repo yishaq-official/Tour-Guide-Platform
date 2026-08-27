@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X } from 'lucide-react';
+import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X, Search, ArrowUpDown, SlidersHorizontal, RotateCcw } from 'lucide-react';
 import { API_URL } from '../config';
 import { SkeletonGrid } from '../components/SkeletonCard';
 import { useToast } from '../context/ToastContext';
@@ -40,6 +40,12 @@ export function Services() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // Filtering & Sorting States
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'featured' | 'price_low' | 'price_high' | 'rating'>('featured');
+  const [minRating, setMinRating] = useState<number>(0);
+
   const [bookingModal, setBookingModal] = useState<{ isOpen: boolean; item: Hotel | Vehicle | null; type: 'hotel' | 'vehicle' }>({ isOpen: false, item: null, type: 'hotel' });
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -131,6 +137,40 @@ export function Services() {
     }
   };
 
+  const filteredHotels = hotels
+    .filter(h => {
+      const q = searchQuery.toLowerCase();
+      const matchesSearch = !q || h.name.toLowerCase().includes(q) || h.location.toLowerCase().includes(q) || h.description.toLowerCase().includes(q);
+      const matchesRating = minRating === 0 || h.rating >= minRating;
+      return matchesSearch && matchesRating;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'price_low') return a.pricePerNight - b.pricePerNight;
+      if (sortBy === 'price_high') return b.pricePerNight - a.pricePerNight;
+      if (sortBy === 'rating') return b.rating - a.rating;
+      return 0;
+    });
+
+  const filteredVehicles = vehicles
+    .filter(v => {
+      const q = searchQuery.toLowerCase();
+      const matchesSearch = !q || v.name.toLowerCase().includes(q) || v.type.toLowerCase().includes(q) || v.transmission.toLowerCase().includes(q);
+      return matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'price_low') return a.pricePerDay - b.pricePerDay;
+      if (sortBy === 'price_high') return b.pricePerDay - a.pricePerDay;
+      return 0;
+    });
+
+  const resetFilters = () => {
+    setSearchQuery('');
+    setSortBy('featured');
+    setMinRating(0);
+  };
+
+  const isFilteringActive = searchQuery || sortBy !== 'featured' || minRating !== 0;
+
   return (
     <div className="w-full bg-gray-50/50 min-h-screen pb-24">
       {/* Immersive Hero Header */}
@@ -159,9 +199,10 @@ export function Services() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Navigation Tabs */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
-          <div className="flex gap-3">
+        {/* Navigation & Controls Bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-200">
+          {/* Tab Buttons */}
+          <div className="flex gap-3 shrink-0">
             <button
               onClick={() => handleTabChange('hotels')}
               className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-extrabold text-sm transition-all duration-300 ${
@@ -183,6 +224,67 @@ export function Services() {
               <CarFront className="w-5 h-5" /> Vehicle Rentals
             </button>
           </div>
+
+          {/* Search & Sort Options */}
+          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+            {/* Search Input */}
+            <div className="relative flex-1 sm:w-64 min-w-[200px]">
+              <Search className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder={activeTab === 'hotels' ? "Search stays, cities..." : "Search vehicles, types..."}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-8 py-2.5 bg-white rounded-xl border border-gray-200 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-green-600 outline-none"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Sort Selector */}
+            <div className="relative flex items-center">
+              <ArrowUpDown className="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="pl-9 pr-8 py-2.5 bg-white rounded-xl border border-gray-200 text-xs sm:text-sm font-bold text-gray-700 focus:ring-2 focus:ring-green-600 outline-none cursor-pointer"
+              >
+                <option value="featured">Sort: Featured</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+                {activeTab === 'hotels' && <option value="rating">Highest Rated</option>}
+              </select>
+            </div>
+
+            {/* Rating Filter (Hotels only) */}
+            {activeTab === 'hotels' && (
+              <div className="relative flex items-center">
+                <Star className="absolute left-3 w-4 h-4 text-amber-500 fill-current pointer-events-none" />
+                <select
+                  value={minRating}
+                  onChange={(e) => setMinRating(Number(e.target.value))}
+                  className="pl-9 pr-8 py-2.5 bg-white rounded-xl border border-gray-200 text-xs sm:text-sm font-bold text-gray-700 focus:ring-2 focus:ring-green-600 outline-none cursor-pointer"
+                >
+                  <option value={0}>All Ratings</option>
+                  <option value={4}>4.0★ & Above</option>
+                  <option value={4.5}>4.5★ & Above</option>
+                </select>
+              </div>
+            )}
+
+            {/* Reset Filters */}
+            {isFilteringActive && (
+              <button
+                onClick={resetFilters}
+                className="flex items-center gap-1 px-3 py-2.5 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-xl transition-colors shrink-0"
+              >
+                <RotateCcw className="w-3.5 h-3.5" /> Reset
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Content Area */}
@@ -193,9 +295,25 @@ export function Services() {
             <p className="text-red-500 text-lg mb-4">{error}</p>
             <button onClick={() => window.location.reload()} className="px-6 py-2 bg-green-600 text-white rounded-lg">Try Again</button>
           </div>
+        ) : (activeTab === 'hotels' ? filteredHotels : filteredVehicles).length === 0 ? (
+          <div className="bg-white rounded-3xl p-12 text-center border border-gray-200 shadow-sm max-w-lg mx-auto my-12">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+              <SlidersHorizontal className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">No results found</h3>
+            <p className="text-gray-500 text-sm mb-6">
+              We couldn't find any {activeTab === 'hotels' ? 'stays' : 'vehicles'} matching your current search or filter criteria.
+            </p>
+            <button
+              onClick={resetFilters}
+              className="px-6 py-2.5 bg-green-700 text-white text-sm font-bold rounded-xl hover:bg-green-800 transition-colors shadow-md shadow-green-700/20"
+            >
+              Clear All Filters
+            </button>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {activeTab === 'hotels' && hotels.map((hotel, index) => (
+            {activeTab === 'hotels' && filteredHotels.map((hotel, index) => (
               <motion.div 
                 key={hotel._id}
                 initial={{ opacity: 0, y: 20 }}
@@ -236,7 +354,7 @@ export function Services() {
               </motion.div>
             ))}
 
-            {activeTab === 'vehicles' && vehicles.map((vehicle, index) => (
+            {activeTab === 'vehicles' && filteredVehicles.map((vehicle, index) => (
               <motion.div 
                 key={vehicle._id}
                 initial={{ opacity: 0, y: 20 }}
