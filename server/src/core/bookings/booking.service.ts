@@ -75,7 +75,7 @@ export class BookingService {
     return await Booking.find({ itemId: { $in: vehicleIds }, itemModel: "Vehicle" });
   }
 
-  async updateBookingStatus(id: string, status: string, user: { id: string; role: string }) {
+  async updateBookingStatus(id: string, status: "Pending" | "Confirmed" | "Cancelled", user: { id: string; role: string }) {
     if (!["Pending", "Confirmed", "Cancelled"].includes(status)) {
       return { status: 400, message: "Invalid status" };
     }

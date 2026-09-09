@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Landmark, Compass, Hotel, Car, Plus, LogOut, ArrowLeft, Trash2, Edit3, Loader2, Star, MapPin, Users, X } from 'lucide-react';
+import { Landmark, Compass, Hotel, Car, Plus, ArrowLeft, Trash2, Edit3, Loader2, Star, MapPin, Users, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { API_URL, apiFetch } from '../config';
 
