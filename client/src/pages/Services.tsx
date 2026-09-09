@@ -1,291 +1,195 @@
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, CarFront, MapPin, Star, Users, Cog, CheckCircle2, X, Search, ArrowUpDown, SlidersHorizontal, RotateCcw } from 'lucide-react';
-import { API_URL } from '../config';
-import { SkeletonGrid } from '../components/SkeletonCard';
-import { useToast } from '../context/ToastContext';
-
-interface Hotel {
-  _id: string;
-  name: string;
-  description: string;
-  location: string;
-  rating: number;
-  pricePerNight: number;
-  image: string;
-  amenities: string[];
-}
-
-interface Vehicle {
-  _id: string;
-  name: string;
-  type: string;
-  transmission: string;
-  seats: number;
-  pricePerDay: number;
-  image: string;
-  available: boolean;
-}
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { SlidersHorizontal } from "lucide-react";
+import { API_URL } from "../config";
+import { SkeletonGrid } from "../components/SkeletonCard";
+import { useToast } from "../context/ToastContext";
+import type { Hotel, Vehicle } from "../features/services/types/service.types";
+import { ServicesHero } from "../features/services/components/catalog/ServicesHero";
+import {
+  ServicesFilterBar,
+  type SortOption,
+} from "../features/services/components/catalog/ServicesFilterBar";
+import { HotelCard } from "../features/services/components/catalog/HotelCard";
+import { VehicleCard } from "../features/services/components/catalog/VehicleCard";
+import {
+  QuickBookingModal,
+  type QuickBookingFormData,
+} from "../features/bookings/components/QuickBookingModal";
 
 export function Services() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get('tab') === 'vehicles' ? 'vehicles' : 'hotels';
-  
-  const handleTabChange = (tab: 'hotels' | 'vehicles') => {
+  const activeTab = searchParams.get("tab") === "vehicles" ? "vehicles" : "hotels";
+
+  const handleTabChange = (tab: "hotels" | "vehicles") => {
     setSearchParams({ tab }, { replace: true });
   };
-  
+
   const [hotels, setHotels] = useState<Hotel[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // Filtering & Sorting States
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'featured' | 'price_low' | 'price_high' | 'rating'>('featured');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("featured");
   const [minRating, setMinRating] = useState<number>(0);
 
-  const [bookingModal, setBookingModal] = useState<{ isOpen: boolean; item: Hotel | Vehicle | null; type: 'hotel' | 'vehicle' }>({ isOpen: false, item: null, type: 'hotel' });
+  const [bookingModal, setBookingModal] = useState<{
+    isOpen: boolean;
+    item: Hotel | Vehicle | null;
+    type: "hotel" | "vehicle";
+  }>({ isOpen: false, item: null, type: "hotel" });
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [bookingError, setBookingError] = useState('');
-  const [bookingFormData, setBookingFormData] = useState({
-    startDate: '',
-    endDate: '',
-    customerName: '',
-    customerEmail: ''
+  const [bookingError, setBookingError] = useState("");
+  const [bookingFormData, setBookingFormData] = useState<QuickBookingFormData>({
+    startDate: "",
+    endDate: "",
+    customerName: "",
+    customerEmail: "",
   });
+
+  const { showToast } = useToast();
 
   useEffect(() => {
     setLoading(true);
-    setError('');
+    setError("");
     const fetchServices = async () => {
       try {
         const [hotelsRes, vehiclesRes] = await Promise.all([
           fetch(`${API_URL}/services/hotels`),
-          fetch(`${API_URL}/services/vehicles`)
+          fetch(`${API_URL}/services/vehicles`),
         ]);
-        
+
         if (!hotelsRes.ok || !vehiclesRes.ok) {
-          throw new Error('Failed to fetch services data');
+          throw new Error("Failed to fetch services data");
         }
-        
+
         const hotelsData = await hotelsRes.json();
         const vehiclesData = await vehiclesRes.json();
-        
+
         setHotels(hotelsData);
         setVehicles(vehiclesData);
         setLoading(false);
       } catch (err) {
         console.error("Failed to fetch services", err);
-        setError('Failed to load services. Please check your connection and try again.');
+        setError("Failed to load services. Please check your connection and try again.");
         setLoading(false);
       }
     };
-    
+
     fetchServices();
   }, []);
-
-  const { showToast } = useToast();
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!bookingModal.item) return;
 
     setIsSubmitting(true);
-    setBookingError('');
+    setBookingError("");
 
     try {
-      const isHotel = bookingModal.type === 'hotel';
-      const pricePerUnit = isHotel 
-        ? (bookingModal.item as Hotel).pricePerNight 
+      const isHotel = bookingModal.type === "hotel";
+      const pricePerUnit = isHotel
+        ? (bookingModal.item as Hotel).pricePerNight
         : (bookingModal.item as Vehicle).pricePerDay;
 
-      // Calculate total price based on dates
       const start = new Date(bookingFormData.startDate);
       const end = new Date(bookingFormData.endDate);
       const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
       const totalPrice = days * pricePerUnit;
 
       const response = await fetch(`${API_URL}/services/book`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           itemId: bookingModal.item._id,
-          itemModel: isHotel ? 'Hotel' : 'Vehicle',
+          itemModel: isHotel ? "Hotel" : "Vehicle",
           customerName: bookingFormData.customerName,
           customerEmail: bookingFormData.customerEmail,
           startDate: bookingFormData.startDate,
           endDate: bookingFormData.endDate,
-          totalPrice
-        })
+          totalPrice,
+        }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create booking');
+        throw new Error("Failed to create booking");
       }
 
       setBookingSuccess(true);
-      showToast('Reservation request submitted successfully!', 'success', 'Booking Confirmed');
+      showToast("Reservation request submitted successfully!", "success", "Booking Confirmed");
     } catch (err) {
       console.error(err);
-      setBookingError('An error occurred while confirming your reservation. Please try again.');
-      showToast('Failed to confirm reservation', 'error', 'Error');
+      setBookingError("An error occurred while confirming your reservation. Please try again.");
+      showToast("Failed to confirm reservation", "error", "Error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const filteredHotels = hotels
-    .filter(h => {
+    .filter((h) => {
       const q = searchQuery.toLowerCase();
-      const matchesSearch = !q || h.name.toLowerCase().includes(q) || h.location.toLowerCase().includes(q) || h.description.toLowerCase().includes(q);
+      const matchesSearch =
+        !q ||
+        h.name.toLowerCase().includes(q) ||
+        h.location.toLowerCase().includes(q) ||
+        h.description.toLowerCase().includes(q);
       const matchesRating = minRating === 0 || h.rating >= minRating;
       return matchesSearch && matchesRating;
     })
     .sort((a, b) => {
-      if (sortBy === 'price_low') return a.pricePerNight - b.pricePerNight;
-      if (sortBy === 'price_high') return b.pricePerNight - a.pricePerNight;
-      if (sortBy === 'rating') return b.rating - a.rating;
+      if (sortBy === "price_low") return a.pricePerNight - b.pricePerNight;
+      if (sortBy === "price_high") return b.pricePerNight - a.pricePerNight;
+      if (sortBy === "rating") return b.rating - a.rating;
       return 0;
     });
 
   const filteredVehicles = vehicles
-    .filter(v => {
+    .filter((v) => {
       const q = searchQuery.toLowerCase();
-      const matchesSearch = !q || v.name.toLowerCase().includes(q) || v.type.toLowerCase().includes(q) || v.transmission.toLowerCase().includes(q);
+      const matchesSearch =
+        !q ||
+        v.name.toLowerCase().includes(q) ||
+        v.type.toLowerCase().includes(q) ||
+        v.transmission.toLowerCase().includes(q);
       return matchesSearch;
     })
     .sort((a, b) => {
-      if (sortBy === 'price_low') return a.pricePerDay - b.pricePerDay;
-      if (sortBy === 'price_high') return b.pricePerDay - a.pricePerDay;
+      if (sortBy === "price_low") return a.pricePerDay - b.pricePerDay;
+      if (sortBy === "price_high") return b.pricePerDay - a.pricePerDay;
       return 0;
     });
 
   const resetFilters = () => {
-    setSearchQuery('');
-    setSortBy('featured');
+    setSearchQuery("");
+    setSortBy("featured");
     setMinRating(0);
   };
 
-  const isFilteringActive = searchQuery || sortBy !== 'featured' || minRating !== 0;
+  const isFilteringActive = searchQuery !== "" || sortBy !== "featured" || minRating !== 0;
 
   return (
     <div className="w-full bg-gray-50/50 min-h-screen pb-24">
-      {/* Immersive Hero Header */}
-      <div className="relative bg-gradient-to-r from-gray-950 via-gray-900 to-green-950 text-white py-16 sm:py-20 mb-12 rounded-b-3xl sm:rounded-b-[2.5rem] overflow-hidden shadow-2xl">
-        <div className="absolute inset-0 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight mb-6"
-          >
-            Hospitality & Transport
-          </motion.h1>
-
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-300 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed mb-8"
-          >
-            Book verified luxury stays, boutique lodges, and reliable 4x4 vehicles with driver options across Ethiopia.
-          </motion.p>
-        </div>
-      </div>
+      {/* Hero Header */}
+      <ServicesHero />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Navigation & Controls Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-200">
-          {/* Tab Buttons */}
-          <div className="flex gap-3 shrink-0">
-            <button
-              onClick={() => handleTabChange('hotels')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-extrabold text-sm transition-all duration-300 ${
-                activeTab === 'hotels' 
-                  ? 'bg-green-700 text-white shadow-lg shadow-green-700/20 scale-[1.02]' 
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-              }`}
-            >
-              <Building2 className="w-5 h-5" /> Stays & Hotels
-            </button>
-            <button
-              onClick={() => handleTabChange('vehicles')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-extrabold text-sm transition-all duration-300 ${
-                activeTab === 'vehicles' 
-                  ? 'bg-green-700 text-white shadow-lg shadow-green-700/20 scale-[1.02]' 
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-              }`}
-            >
-              <CarFront className="w-5 h-5" /> Vehicle Rentals
-            </button>
-          </div>
-
-          {/* Search & Sort Options */}
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-            {/* Search Input */}
-            <div className="relative flex-1 sm:w-64 min-w-[200px]">
-              <Search className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder={activeTab === 'hotels' ? "Search stays, cities..." : "Search vehicles, types..."}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-8 py-2.5 bg-white rounded-xl border border-gray-200 text-xs sm:text-sm font-medium focus:ring-2 focus:ring-green-600 outline-none"
-              />
-              {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-
-            {/* Sort Selector */}
-            <div className="relative flex items-center">
-              <ArrowUpDown className="absolute left-3 w-4 h-4 text-gray-400 pointer-events-none" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="pl-9 pr-8 py-2.5 bg-white rounded-xl border border-gray-200 text-xs sm:text-sm font-bold text-gray-700 focus:ring-2 focus:ring-green-600 outline-none cursor-pointer"
-              >
-                <option value="featured">Sort: Featured</option>
-                <option value="price_low">Price: Low to High</option>
-                <option value="price_high">Price: High to Low</option>
-                {activeTab === 'hotels' && <option value="rating">Highest Rated</option>}
-              </select>
-            </div>
-
-            {/* Rating Filter (Hotels only) */}
-            {activeTab === 'hotels' && (
-              <div className="relative flex items-center">
-                <Star className="absolute left-3 w-4 h-4 text-amber-500 fill-current pointer-events-none" />
-                <select
-                  value={minRating}
-                  onChange={(e) => setMinRating(Number(e.target.value))}
-                  className="pl-9 pr-8 py-2.5 bg-white rounded-xl border border-gray-200 text-xs sm:text-sm font-bold text-gray-700 focus:ring-2 focus:ring-green-600 outline-none cursor-pointer"
-                >
-                  <option value={0}>All Ratings</option>
-                  <option value={4}>4.0★ & Above</option>
-                  <option value={4.5}>4.5★ & Above</option>
-                </select>
-              </div>
-            )}
-
-            {/* Reset Filters */}
-            {isFilteringActive && (
-              <button
-                onClick={resetFilters}
-                className="flex items-center gap-1 px-3 py-2.5 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-xl transition-colors shrink-0"
-              >
-                <RotateCcw className="w-3.5 h-3.5" /> Reset
-              </button>
-            )}
-          </div>
-        </div>
+        <ServicesFilterBar
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          minRating={minRating}
+          onMinRatingChange={setMinRating}
+          onReset={resetFilters}
+          isFilteringActive={isFilteringActive}
+        />
 
         {/* Content Area */}
         {loading ? (
@@ -293,16 +197,22 @@ export function Services() {
         ) : error ? (
           <div className="text-center py-20">
             <p className="text-red-500 text-lg mb-4">{error}</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2 bg-green-600 text-white rounded-lg">Try Again</button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg"
+            >
+              Try Again
+            </button>
           </div>
-        ) : (activeTab === 'hotels' ? filteredHotels : filteredVehicles).length === 0 ? (
+        ) : (activeTab === "hotels" ? filteredHotels : filteredVehicles).length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center border border-gray-200 shadow-sm max-w-lg mx-auto my-12">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
               <SlidersHorizontal className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">No results found</h3>
             <p className="text-gray-500 text-sm mb-6">
-              We couldn't find any {activeTab === 'hotels' ? 'stays' : 'vehicles'} matching your current search or filter criteria.
+              We couldn't find any {activeTab === "hotels" ? "stays" : "vehicles"} matching your
+              current search or filter criteria.
             </p>
             <button
               onClick={resetFilters}
@@ -313,236 +223,32 @@ export function Services() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {activeTab === 'hotels' && filteredHotels.map((hotel, index) => (
-              <motion.div 
-                key={hotel._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-shadow flex flex-col"
-              >
-                <div className="relative h-56">
-                  <img src={hotel.image} alt={hotel.name} className="w-full h-full object-cover" />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 shadow-sm flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                    {hotel.rating}
-                  </div>
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{hotel.name}</h3>
-                  <div className="flex items-center text-gray-500 text-sm mb-4">
-                    <MapPin className="w-4 h-4 mr-1 text-green-600" />
-                    {hotel.location}
-                  </div>
-                  <p className="text-gray-600 text-sm mb-6 line-clamp-3 flex-grow">
-                    {hotel.description}
-                  </p>
-                  
-                  <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
-                    <div>
-                      <span className="text-2xl font-bold text-gray-900">${hotel.pricePerNight}</span>
-                      <span className="text-gray-500 text-sm"> / night</span>
-                    </div>
-                    <Link 
-                      to={`/services/hotel/${hotel._id}`}
-                      className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            {activeTab === "hotels" &&
+              filteredHotels.map((hotel, index) => (
+                <HotelCard key={hotel._id} hotel={hotel} index={index} />
+              ))}
 
-            {activeTab === 'vehicles' && filteredVehicles.map((vehicle, index) => (
-              <motion.div 
-                key={vehicle._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-shadow flex flex-col"
-              >
-                <div className="relative h-56 bg-gray-100 flex items-center justify-center p-4">
-                  <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-contain mix-blend-multiply" />
-                  {vehicle.available && (
-                    <div className="absolute top-4 right-4 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">
-                      <CheckCircle2 className="w-4 h-4" />
-                      Available
-                    </div>
-                  )}
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{vehicle.type}</div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4 line-clamp-1">{vehicle.name}</h3>
-                  
-                  <div className="grid grid-cols-2 gap-4 mb-6 flex-grow">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Users className="w-4 h-4 mr-2 text-gray-400" />
-                      {vehicle.seats} Seats
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Cog className="w-4 h-4 mr-2 text-gray-400" />
-                      {vehicle.transmission}
-                    </div>
-                  </div>
-                  
-                  <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
-                    <div>
-                      <span className="text-2xl font-bold text-gray-900">${vehicle.pricePerDay}</span>
-                      <span className="text-gray-500 text-sm"> / day</span>
-                    </div>
-                    <Link 
-                      to={`/services/vehicle/${vehicle._id}`}
-                      className="px-5 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            {activeTab === "vehicles" &&
+              filteredVehicles.map((vehicle, index) => (
+                <VehicleCard key={vehicle._id} vehicle={vehicle} index={index} />
+              ))}
           </div>
         )}
       </div>
 
-      {/* Booking Modal */}
-      <AnimatePresence>
-        {bookingModal.isOpen && bookingModal.item && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setBookingModal({ ...bookingModal, isOpen: false })}
-              className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden z-10"
-            >
-              <div className="flex justify-between items-center p-6 border-b border-gray-100">
-                <h3 className="text-xl font-bold text-gray-900">
-                  {bookingModal.type === 'hotel' ? 'Book Hotel' : 'Rent Vehicle'}
-                </h3>
-                <button 
-                  onClick={() => setBookingModal({ ...bookingModal, isOpen: false })}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-              
-              <div className="p-6">
-                <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
-                  <img src={bookingModal.item.image} alt={bookingModal.item.name} className="w-16 h-16 rounded-lg object-cover" />
-                  <div>
-                    <h4 className="font-bold text-gray-900">{bookingModal.item.name}</h4>
-                    <p className="text-sm text-gray-500">
-                      {bookingModal.type === 'hotel' 
-                        ? `$${(bookingModal.item as Hotel).pricePerNight} / night` 
-                        : `$${(bookingModal.item as Vehicle).pricePerDay} / day`}
-                    </p>
-                  </div>
-                </div>
-
-                {bookingSuccess ? (
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-center py-8"
-                  >
-                    <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle2 className="w-8 h-8" />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Reservation Confirmed!</h3>
-                    <p className="text-gray-600">Your booking was successfully processed. Check your email for details.</p>
-                    <button 
-                      onClick={() => setBookingModal({ ...bookingModal, isOpen: false })}
-                      className="mt-6 w-full py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors"
-                    >
-                      Close
-                    </button>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleBookingSubmit} className="space-y-4">
-                    {bookingError && (
-                      <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-                        {bookingError}
-                      </div>
-                    )}
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {bookingModal.type === 'hotel' ? 'Check-in' : 'Pick-up'}
-                        </label>
-                        <input 
-                          type="date" 
-                          required 
-                          value={bookingFormData.startDate}
-                          onChange={e => setBookingFormData({...bookingFormData, startDate: e.target.value})}
-                          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          {bookingModal.type === 'hotel' ? 'Check-out' : 'Drop-off'}
-                        </label>
-                        <input 
-                          type="date" 
-                          required 
-                          min={bookingFormData.startDate}
-                          value={bookingFormData.endDate}
-                          onChange={e => setBookingFormData({...bookingFormData, endDate: e.target.value})}
-                          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                      <input 
-                        type="text" 
-                        required 
-                        placeholder="John Doe" 
-                        value={bookingFormData.customerName}
-                        onChange={e => setBookingFormData({...bookingFormData, customerName: e.target.value})}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                      <input 
-                        type="email" 
-                        required 
-                        placeholder="john@example.com" 
-                        value={bookingFormData.customerEmail}
-                        onChange={e => setBookingFormData({...bookingFormData, customerEmail: e.target.value})}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none" 
-                      />
-                    </div>
-
-                    <button 
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors mt-2 disabled:bg-green-400 disabled:cursor-not-allowed flex items-center justify-center"
-                    >
-                      {isSubmitting ? (
-                        <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                      ) : (
-                        "Confirm Reservation"
-                      )}
-                    </button>
-                  </form>
-                )}
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* Quick Booking Modal */}
+      <QuickBookingModal
+        isOpen={bookingModal.isOpen}
+        onClose={() => setBookingModal({ ...bookingModal, isOpen: false })}
+        item={bookingModal.item}
+        type={bookingModal.type}
+        formData={bookingFormData}
+        setFormData={setBookingFormData}
+        onSubmit={handleBookingSubmit}
+        isSubmitting={isSubmitting}
+        bookingSuccess={bookingSuccess}
+        bookingError={bookingError}
+      />
     </div>
   );
 }
