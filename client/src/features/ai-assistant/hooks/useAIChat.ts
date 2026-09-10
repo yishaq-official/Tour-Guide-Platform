@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { API_URL } from "../../../config";
+import { aiApi } from "../services/aiApi";
 import type { Message } from "../types/ai.types";
+
 
 export const STARTER_PROMPTS = [
   "🏰 History of Lalibela churches & nearby hotels",
@@ -49,17 +50,10 @@ export function useAIChat(isOpen: boolean) {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/rag/query`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: activeQuery }),
-      });
-
-      if (!res.ok) throw new Error("RAG Query failed");
-
-      const data = await res.json();
+      const data = await aiApi.queryAssistant({ query: activeQuery });
 
       const aiMessage: Message = {
+
         id: `ai-${Date.now()}`,
         sender: "ai",
         text: data.answer,

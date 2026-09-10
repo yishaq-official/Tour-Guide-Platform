@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { API_URL, apiFetch } from "../../../config";
+import { adminApi } from "../services/adminApi";
 import type { TabType, EditItemState } from "../types/admin.types";
 
 export function useAdminCatalog() {
@@ -18,17 +18,11 @@ export function useAdminCatalog() {
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const [heritagesRes, culturesRes, hotelsRes, vehiclesRes] = await Promise.all([
-        apiFetch(`${API_URL}/heritages`),
-        apiFetch(`${API_URL}/cultures`),
-        apiFetch(`${API_URL}/services/hotels`),
-        apiFetch(`${API_URL}/services/vehicles`),
-      ]);
-
-      if (heritagesRes.ok) setHeritages(await heritagesRes.json());
-      if (culturesRes.ok) setCultures(await culturesRes.json());
-      if (hotelsRes.ok) setHotels(await hotelsRes.json());
-      if (vehiclesRes.ok) setVehicles(await vehiclesRes.json());
+      const data = await adminApi.getDashboardData();
+      setHeritages(data.heritages);
+      setCultures(data.cultures);
+      setHotels(data.hotels);
+      setVehicles(data.vehicles);
     } catch (err) {
       console.error("Failed to fetch dashboard data:", err);
     } finally {
@@ -44,26 +38,17 @@ export function useAdminCatalog() {
     if (!window.confirm(`Are you sure you want to delete this ${type.slice(0, -1)}?`)) return;
 
     try {
-      let endpoint = "";
-      if (type === "heritages") endpoint = `${API_URL}/heritages/${id}`;
-      else if (type === "cultures") endpoint = `${API_URL}/cultures/${id}`;
-      else if (type === "hotels") endpoint = `${API_URL}/services/hotels/${id}`;
-      else if (type === "vehicles") endpoint = `${API_URL}/services/vehicles/${id}`;
-
-      const res = await apiFetch(endpoint, { method: "DELETE" });
-      if (res.ok) {
-        if (type === "heritages") setHeritages((prev) => prev.filter((item) => item._id !== id));
-        else if (type === "cultures") setCultures((prev) => prev.filter((item) => item._id !== id));
-        else if (type === "hotels") setHotels((prev) => prev.filter((item) => item._id !== id));
-        else if (type === "vehicles") setVehicles((prev) => prev.filter((item) => item._id !== id));
-      } else {
-        alert("Failed to delete item. Please ensure you have administrator privileges.");
-      }
+      await adminApi.deleteEntity(type, id);
+      if (type === "heritages") setHeritages((prev) => prev.filter((item) => item._id !== id));
+      else if (type === "cultures") setCultures((prev) => prev.filter((item) => item._id !== id));
+      else if (type === "hotels") setHotels((prev) => prev.filter((item) => item._id !== id));
+      else if (type === "vehicles") setVehicles((prev) => prev.filter((item) => item._id !== id));
     } catch (err) {
       console.error(err);
       alert("Error occurred while deleting item.");
     }
   };
+
 
   const openAddModal = () => {
     let initial = {};
@@ -148,34 +133,19 @@ export function useAdminCatalog() {
     }
 
     const isEditing = Boolean(editItem);
-    const method = isEditing ? "PUT" : "POST";
-    let url = "";
-    if (activeTab === "heritages") url = `${API_URL}/heritages${isEditing ? `/${editItem?.data._id}` : ""}`;
-    else if (activeTab === "cultures") url = `${API_URL}/cultures${isEditing ? `/${editItem?.data._id}` : ""}`;
-    else if (activeTab === "hotels") url = `${API_URL}/services/hotels${isEditing ? `/${editItem?.data._id}` : ""}`;
-    else if (activeTab === "vehicles") url = `${API_URL}/services/vehicles${isEditing ? `/${editItem?.data._id}` : ""}`;
 
     try {
-      const res = await apiFetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.ok) {
-        alert(`Successfully ${isEditing ? "updated" : "added"} item!`);
-        setIsModalOpen(false);
-        setEditItem(null);
-        fetchAllData();
-      } else {
-        const errData = await res.json();
-        alert(`Error saving item: ${errData.message || "Server error"}`);
-      }
+      await adminApi.saveEntity(activeTab, payload, editItem?.data?._id);
+      alert(`Successfully ${isEditing ? "updated" : "added"} item!`);
+      setIsModalOpen(false);
+      setEditItem(null);
+      fetchAllData();
     } catch (err) {
       console.error(err);
       alert("Error saving item.");
     }
   };
+
 
   const getActiveList = () => {
     switch (activeTab) {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { API_URL, apiFetch } from "../../../config";
+import { partnerApi } from "../services/partnerApi";
 import { useSession } from "../../../lib/auth-client";
 import type { TabType, HotelFormData, VehicleFormData, RoomType } from "../types/partner.types";
 
@@ -58,23 +58,18 @@ export function usePartnerDashboard() {
     image: "",
     galleryRaw: "",
     description: "",
-    providerName: "",
-    providerPhone: "",
     featuresRaw: "",
-    policyMileage: "Unlimited mileage included",
-    policyFuel: "Full to Full",
-    policyCancellation: "Free cancellation 24h prior",
+    lat: 9.03,
+    lng: 38.74,
+    location: "",
   });
 
+  // Auto-set tab based on role
   useEffect(() => {
-    if (userRole) {
-      if (userRole === "car") {
-        setActiveWorkspace("car");
-        setActiveTab("vehicles");
-      } else {
-        setActiveWorkspace("hotel");
-        setActiveTab("hotels");
-      }
+    if (userRole === "hotel") {
+      setActiveTab("hotels");
+    } else if (userRole === "car") {
+      setActiveTab("vehicles");
     }
   }, [userRole]);
 
@@ -85,37 +80,19 @@ export function usePartnerDashboard() {
       const isHotelView = userRole === "hotel" || (userRole === "admin" && activeWorkspace === "hotel");
 
       if (isHotelView) {
-        const hotelsRes = await apiFetch(`${API_URL}/services/partner/hotels`);
-        if (hotelsRes.ok) {
-          const data = await hotelsRes.json();
-          setHotels(Array.isArray(data) ? data : []);
-        } else {
-          setHotels([]);
-        }
-
-        const bookingsRes = await apiFetch(`${API_URL}/services/partner/bookings`);
-        if (bookingsRes.ok) {
-          const data = await bookingsRes.json();
-          setBookings(Array.isArray(data) ? data : []);
-        } else {
-          setBookings([]);
-        }
+        const [hotelsData, bookingsData] = await Promise.all([
+          partnerApi.getPartnerHotels().catch(() => []),
+          partnerApi.getPartnerHotelReservations().catch(() => []),
+        ]);
+        setHotels(Array.isArray(hotelsData) ? hotelsData : []);
+        setBookings(Array.isArray(bookingsData) ? bookingsData : []);
       } else {
-        const vehiclesRes = await apiFetch(`${API_URL}/services/partner/vehicles`);
-        if (vehiclesRes.ok) {
-          const data = await vehiclesRes.json();
-          setVehicles(Array.isArray(data) ? data : []);
-        } else {
-          setVehicles([]);
-        }
-
-        const bookingsRes = await apiFetch(`${API_URL}/services/partner/vehicle-bookings`);
-        if (bookingsRes.ok) {
-          const data = await bookingsRes.json();
-          setBookings(Array.isArray(data) ? data : []);
-        } else {
-          setBookings([]);
-        }
+        const [vehiclesData, bookingsData] = await Promise.all([
+          partnerApi.getPartnerVehicles().catch(() => []),
+          partnerApi.getPartnerVehicleReservations().catch(() => []),
+        ]);
+        setVehicles(Array.isArray(vehiclesData) ? vehiclesData : []);
+        setBookings(Array.isArray(bookingsData) ? bookingsData : []);
       }
     } catch (err) {
       console.error("Failed to fetch dashboard data:", err);
@@ -226,24 +203,13 @@ export function usePartnerDashboard() {
     };
 
     try {
-      const url = editHotel
-        ? `${API_URL}/services/partner/hotels/${editHotel._id}`
-        : `${API_URL}/services/partner/hotels`;
-      const method = editHotel ? "PUT" : "POST";
-
-      const response = await apiFetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        setIsHotelModalOpen(false);
-        fetchData();
+      if (editHotel) {
+        await partnerApi.updatePartnerHotel(editHotel._id, payload);
       } else {
-        const errData = await response.json();
-        alert(errData.message || "Failed to save hotel listing.");
+        await partnerApi.createPartnerHotel(payload);
       }
+      setIsHotelModalOpen(false);
+      fetchData();
     } catch (err) {
       console.error("Error saving hotel:", err);
       alert("Failed to save hotel listing.");
@@ -253,17 +219,14 @@ export function usePartnerDashboard() {
   const handleHotelDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this hotel property?")) return;
     try {
-      const response = await apiFetch(`${API_URL}/services/partner/hotels/${id}`, { method: "DELETE" });
-      if (response.ok) {
-        fetchData();
-      } else {
-        alert("Failed to delete hotel.");
-      }
+      await partnerApi.deletePartnerHotel(id);
+      fetchData();
     } catch (err) {
       console.error("Error deleting hotel:", err);
       alert("Failed to delete hotel.");
     }
   };
+
 
   // Vehicle Handlers
   const openAddVehicleModal = () => {
@@ -344,24 +307,13 @@ export function usePartnerDashboard() {
     };
 
     try {
-      const url = editVehicle
-        ? `${API_URL}/services/partner/vehicles/${editVehicle._id}`
-        : `${API_URL}/services/partner/vehicles`;
-      const method = editVehicle ? "PUT" : "POST";
-
-      const response = await apiFetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        setIsVehicleModalOpen(false);
-        fetchData();
+      if (editVehicle) {
+        await partnerApi.updatePartnerVehicle(editVehicle._id, payload);
       } else {
-        const errData = await response.json();
-        alert(errData.message || "Failed to save vehicle listing.");
+        await partnerApi.createPartnerVehicle(payload);
       }
+      setIsVehicleModalOpen(false);
+      fetchData();
     } catch (err) {
       console.error("Error saving vehicle:", err);
       alert("Failed to save vehicle listing.");
@@ -371,12 +323,8 @@ export function usePartnerDashboard() {
   const handleVehicleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this vehicle from your fleet?")) return;
     try {
-      const response = await apiFetch(`${API_URL}/services/partner/vehicles/${id}`, { method: "DELETE" });
-      if (response.ok) {
-        fetchData();
-      } else {
-        alert("Failed to delete vehicle.");
-      }
+      await partnerApi.deletePartnerVehicle(id);
+      fetchData();
     } catch (err) {
       console.error("Error deleting vehicle:", err);
       alert("Failed to delete vehicle.");
@@ -386,21 +334,14 @@ export function usePartnerDashboard() {
   const handleUpdateBookingStatus = async (bookingId: string, status: "Confirmed" | "Cancelled") => {
     if (!window.confirm(`Are you sure you want to mark this reservation as ${status}?`)) return;
     try {
-      const response = await apiFetch(`${API_URL}/services/partner/bookings/${bookingId}/status`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
-      });
-      if (response.ok) {
-        fetchData();
-      } else {
-        alert("Failed to update status.");
-      }
+      await partnerApi.updateReservationStatus(bookingId, status);
+      fetchData();
     } catch (err) {
       console.error("Error updating booking status:", err);
       alert("Failed to update status.");
     }
   };
+
 
   return {
     session,
