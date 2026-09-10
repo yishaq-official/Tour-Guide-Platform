@@ -24,13 +24,14 @@ export const errorHandler = (
 
   // Zod Validation Errors
   if (err instanceof ZodError) {
+    const issues = (err as unknown as { issues?: Array<{ path: (string | number)[]; message: string }> }).issues || [];
     res.status(400).json({
       success: false,
       error: {
         code: "VALIDATION_ERROR",
         message: "Invalid request data",
-        details: err.errors.map((e) => ({
-          field: e.path.join("."),
+        details: issues.map((e) => ({
+          field: Array.isArray(e.path) ? e.path.join(".") : String(e.path || ""),
           message: e.message,
         })),
       },
