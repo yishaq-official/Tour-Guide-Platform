@@ -7,8 +7,9 @@ import {
 } from "@dnd-kit/core";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { API_URL, apiFetch } from "../../../config";
+import { itineraryApi } from "../services/itineraryApi";
 import { useToast } from "../../../context/ToastContext";
+
 
 export function useItineraryDnD(favorites: any[], initialItinerary: any[]) {
   const [items, setItems] = useState<Record<string, any[]>>({});
@@ -83,13 +84,11 @@ export function useItineraryDnD(favorites: any[], initialItinerary: any[]) {
     });
 
     try {
-      await apiFetch(`${API_URL}/user/itinerary/sync`, {
-        method: "PUT",
-        body: JSON.stringify({ itinerary: payload }),
-      });
+      await itineraryApi.syncItinerary(payload);
     } catch (err) {
       console.error("Failed to sync itinerary", err);
     }
+
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
