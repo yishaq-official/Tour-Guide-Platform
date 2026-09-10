@@ -1,25 +1,28 @@
-import { Heritage } from "../../models/Heritage.js";
+import { catalogRepository, CatalogRepository } from "./catalog.repository.js";
 
 export class HeritageService {
+  constructor(private repo: CatalogRepository = catalogRepository) {}
+
   async getAllHeritages() {
-    return await Heritage.find();
+    return await this.repo.getAllHeritages();
   }
 
   async getHeritageById(id: string) {
-    return await Heritage.findById(id);
+    return await this.repo.getHeritageById(id);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createHeritage(data: any) {
-    const heritage = new Heritage(data);
-    return await heritage.save();
+    return await this.repo.createHeritage(data);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updateHeritage(id: string, data: any) {
-    return await Heritage.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    return await this.repo.updateHeritage(id, data);
   }
 
   async deleteHeritage(id: string) {
-    return await Heritage.findByIdAndDelete(id);
+    return await this.repo.deleteHeritage(id);
   }
 }
 

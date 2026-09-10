@@ -1,25 +1,28 @@
-import { Culture } from "../../models/Culture.js";
+import { catalogRepository, CatalogRepository } from "./catalog.repository.js";
 
 export class CultureService {
+  constructor(private repo: CatalogRepository = catalogRepository) {}
+
   async getAllCultures() {
-    return await Culture.find({});
+    return await this.repo.getAllCultures();
   }
 
   async getCultureById(id: string) {
-    return await Culture.findById(id);
+    return await this.repo.getCultureById(id);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createCulture(data: any) {
-    const culture = new Culture(data);
-    return await culture.save();
+    return await this.repo.createCulture(data);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updateCulture(id: string, data: any) {
-    return await Culture.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    return await this.repo.updateCulture(id, data);
   }
 
   async deleteCulture(id: string) {
-    return await Culture.findByIdAndDelete(id);
+    return await this.repo.deleteCulture(id);
   }
 }
 
