@@ -1,60 +1,64 @@
-import { Vehicle } from "../../models/Vehicle.js";
+import { servicesRepository, ServicesRepository } from "./services.repository.js";
 
 export class VehicleService {
+  constructor(private repo: ServicesRepository = servicesRepository) {}
+
   async getAllVehicles() {
-    return await Vehicle.find();
+    return await this.repo.getAllVehicles();
   }
 
   async getVehicleById(id: string) {
-    return await Vehicle.findById(id);
+    return await this.repo.getVehicleById(id);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createVehicle(data: any) {
-    const vehicle = new Vehicle(data);
-    return await vehicle.save();
+    return await this.repo.createVehicle(data);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updateVehicle(id: string, data: any) {
-    return await Vehicle.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    return await this.repo.updateVehicle(id, data);
   }
 
   async deleteVehicle(id: string) {
-    return await Vehicle.findByIdAndDelete(id);
+    return await this.repo.deleteVehicle(id);
   }
 
   async getPartnerVehicles(ownerId: string) {
-    return await Vehicle.find({ ownerId });
+    return await this.repo.getVehiclesByOwner(ownerId);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createPartnerVehicle(data: any, ownerId: string) {
-    const vehicle = new Vehicle({
+    return await this.repo.createVehicle({
       ...data,
       ownerId,
     });
-    return await vehicle.save();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updatePartnerVehicle(id: string, data: any, ownerId: string, isAdmin: boolean) {
-    const vehicle = await Vehicle.findById(id);
+    const vehicle = await this.repo.getVehicleById(id);
     if (!vehicle) {
       return { status: 404, message: "Vehicle not found" };
     }
     if (vehicle.ownerId !== ownerId && !isAdmin) {
       return { status: 403, message: "Forbidden: Not the owner of this vehicle" };
     }
-    const updated = await Vehicle.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    const updated = await this.repo.updateVehicle(id, data);
     return { status: 200, data: updated };
   }
 
   async deletePartnerVehicle(id: string, ownerId: string, isAdmin: boolean) {
-    const vehicle = await Vehicle.findById(id);
+    const vehicle = await this.repo.getVehicleById(id);
     if (!vehicle) {
       return { status: 404, message: "Vehicle not found" };
     }
     if (vehicle.ownerId !== ownerId && !isAdmin) {
       return { status: 403, message: "Forbidden: Not the owner of this vehicle" };
     }
-    await Vehicle.findByIdAndDelete(id);
+    await this.repo.deleteVehicle(id);
     return { status: 200, message: "Vehicle deleted successfully" };
   }
 }

@@ -1,60 +1,64 @@
-import { Hotel } from "../../models/Hotel.js";
+import { servicesRepository, ServicesRepository } from "./services.repository.js";
 
 export class HotelService {
+  constructor(private repo: ServicesRepository = servicesRepository) {}
+
   async getAllHotels() {
-    return await Hotel.find();
+    return await this.repo.getAllHotels();
   }
 
   async getHotelById(id: string) {
-    return await Hotel.findById(id);
+    return await this.repo.getHotelById(id);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createHotel(data: any) {
-    const hotel = new Hotel(data);
-    return await hotel.save();
+    return await this.repo.createHotel(data);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updateHotel(id: string, data: any) {
-    return await Hotel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    return await this.repo.updateHotel(id, data);
   }
 
   async deleteHotel(id: string) {
-    return await Hotel.findByIdAndDelete(id);
+    return await this.repo.deleteHotel(id);
   }
 
   async getPartnerHotels(ownerId: string) {
-    return await Hotel.find({ ownerId });
+    return await this.repo.getHotelsByOwner(ownerId);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async createPartnerHotel(data: any, ownerId: string) {
-    const hotel = new Hotel({
+    return await this.repo.createHotel({
       ...data,
       ownerId,
     });
-    return await hotel.save();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async updatePartnerHotel(id: string, data: any, ownerId: string, isAdmin: boolean) {
-    const hotel = await Hotel.findById(id);
+    const hotel = await this.repo.getHotelById(id);
     if (!hotel) {
       return { status: 404, message: "Hotel not found" };
     }
     if (hotel.ownerId !== ownerId && !isAdmin) {
       return { status: 403, message: "Forbidden: Not the owner of this hotel" };
     }
-    const updated = await Hotel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    const updated = await this.repo.updateHotel(id, data);
     return { status: 200, data: updated };
   }
 
   async deletePartnerHotel(id: string, ownerId: string, isAdmin: boolean) {
-    const hotel = await Hotel.findById(id);
+    const hotel = await this.repo.getHotelById(id);
     if (!hotel) {
       return { status: 404, message: "Hotel not found" };
     }
     if (hotel.ownerId !== ownerId && !isAdmin) {
       return { status: 403, message: "Forbidden: Not the owner of this hotel" };
     }
-    await Hotel.findByIdAndDelete(id);
+    await this.repo.deleteHotel(id);
     return { status: 200, message: "Hotel deleted successfully" };
   }
 }

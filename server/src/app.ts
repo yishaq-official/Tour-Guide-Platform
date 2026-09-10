@@ -20,6 +20,14 @@ app.use(cors({
 app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json());
 
+// Versioned API v1 routes
+app.use("/api/v1/heritages", heritageRoutes);
+app.use("/api/v1/services", serviceRoutes);
+app.use("/api/v1/cultures", cultureRoutes);
+app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/rag", ragRoutes);
+
+// Legacy unversioned backwards-compatible route aliases
 app.use("/api/heritages", heritageRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/cultures", cultureRoutes);
@@ -29,6 +37,7 @@ app.use("/api/rag", ragRoutes);
 app.get("/api/hello", (req: Request, res: Response) => {
     res.send("Hello World");
 });
+
 
 // Centralized error handler
 app.use(errorHandler);
