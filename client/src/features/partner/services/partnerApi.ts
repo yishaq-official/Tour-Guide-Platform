@@ -20,9 +20,9 @@ export const partnerApi = {
 
   // Reservations
   getPartnerHotelReservations: () =>
-    api.get<any[]>(`${ENDPOINTS.BOOKINGS}/partner/bookings`),
+    api.get<any[]>(ENDPOINTS.PARTNER_HOTEL_BOOKINGS),
   getPartnerVehicleReservations: () =>
-    api.get<any[]>(`${ENDPOINTS.BOOKINGS}/partner/vehicle-bookings`),
+    api.get<any[]>(ENDPOINTS.PARTNER_VEHICLE_BOOKINGS),
   updateReservationStatus: (id: string, status: "Pending" | "Confirmed" | "Cancelled") =>
-    api.put<any>(ENDPOINTS.BOOKING_STATUS(id), { status }),
+    api.put<any>(ENDPOINTS.PARTNER_BOOKING_STATUS(id), { status }),
 };
