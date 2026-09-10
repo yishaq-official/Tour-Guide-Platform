@@ -58,11 +58,14 @@ export function usePartnerDashboard() {
     image: "",
     galleryRaw: "",
     description: "",
+    providerName: "",
+    providerPhone: "",
     featuresRaw: "",
-    lat: 9.03,
-    lng: 38.74,
-    location: "",
+    policyMileage: "Unlimited mileage included",
+    policyFuel: "Full to Full",
+    policyCancellation: "Free cancellation 24h prior",
   });
+
 
   // Auto-set tab based on role
   useEffect(() => {
