@@ -14,7 +14,7 @@ export const heritageSchema = z.object({
       lng: z.number(),
     })
     .optional(),
-  quickFacts: z.record(z.string()).optional(),
+  quickFacts: z.record(z.string(), z.string()).optional(),
   highlights: z
     .array(
       z.object({
@@ -31,7 +31,8 @@ export const cultureSchema = z.object({
   location: z.string().min(1, "Location is required"),
   image: z.string().optional(),
   isUnesco: z.boolean().optional(),
-  quickFacts: z.record(z.string()).optional(),
+  quickFacts: z.record(z.string(), z.string()).optional(),
+
   culturalHighlights: z
     .array(
       z.object({

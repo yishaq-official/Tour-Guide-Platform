@@ -94,12 +94,12 @@ export class BookingService {
 
     if (user.role !== "admin") {
       if (booking.itemModel === "Hotel") {
-        const hotel = await this.repo.findHotelById(booking.itemId);
+        const hotel = await this.repo.findHotelById(booking.itemId.toString());
         if (!hotel || hotel.ownerId !== user.id) {
           return { status: 403, message: "Forbidden: Not authorized to manage bookings for this hotel" };
         }
       } else if (booking.itemModel === "Vehicle") {
-        const vehicle = await this.repo.findVehicleById(booking.itemId);
+        const vehicle = await this.repo.findVehicleById(booking.itemId.toString());
         if (!vehicle || vehicle.ownerId !== user.id) {
           return { status: 403, message: "Forbidden: Not authorized to manage bookings for this vehicle" };
         }
@@ -107,6 +107,7 @@ export class BookingService {
         return { status: 403, message: "Forbidden: Not authorized to manage this booking" };
       }
     }
+
 
     booking.status = status;
     await booking.save();
