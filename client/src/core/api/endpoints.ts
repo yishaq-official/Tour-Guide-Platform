@@ -15,9 +15,13 @@ export const ENDPOINTS = {
   VEHICLE_BY_ID: (id: string) => `${API_BASE_URL}/services/vehicles/${id}`,
 
   // Bookings
-  BOOKINGS: `${API_BASE_URL}/services/bookings`,
-  BOOKINGS_MY: `${API_BASE_URL}/services/bookings/my`,
-  BOOKING_STATUS: (id: string) => `${API_BASE_URL}/services/bookings/${id}/status`,
+  BOOK_SERVICE: `${API_BASE_URL}/services/book`,
+  BOOKINGS: `${API_BASE_URL}/services`,
+  BOOKINGS_MY: `${API_BASE_URL}/user/bookings`,
+  BOOKING_STATUS: (id: string) => `${API_BASE_URL}/services/partner/bookings/${id}/status`,
+  PARTNER_HOTEL_BOOKINGS: `${API_BASE_URL}/services/partner/bookings`,
+  PARTNER_VEHICLE_BOOKINGS: `${API_BASE_URL}/services/partner/vehicle-bookings`,
+  PARTNER_BOOKING_STATUS: (id: string) => `${API_BASE_URL}/services/partner/bookings/${id}/status`,
 
   // User Trip Data
   USER_FAVORITES: `${API_BASE_URL}/user/favorites`,
