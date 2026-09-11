@@ -1,0 +1,90 @@
+# ==============================================================================
+# Development Docker Compose Configuration with Live Reloading
+# Usage:
+#   docker compose -f docker-compose.dev.yml up --build
+# ==============================================================================
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: travelassist-mongo-dev
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data_dev:/data/db
+    healthcheck:
+      test: >
+        mongosh --quiet --eval "
+          try {
+            rs.status().ok;
+          } catch (e) {
+            rs.initiate({
+              _id: 'rs0',
+              members: [{ _id: 0, host: 'mongodb:27017' }]
+            }).ok;
+          }
+        "
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - travelassist-network-dev
+
+  server:
+    container_name: travelassist-server-dev
+    image: node:20-alpine
+    working_dir: /app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      NODE_ENV: development
+      MONGODB_URI: mongodb://mongodb:27017/travelAssist?replicaSet=rs0
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-travel-assist-secure-secret-key-at-least-32-chars-long}
+      BETTER_AUTH_URL: http://localhost:5000
+      FRONTEND_URL: http://localhost:5173
+      AI_PROVIDER: ${AI_PROVIDER:-mock}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - travelassist-network-dev
+
+  client:
+    container_name: travelassist-client-dev
+    image: node:20-alpine
+    working_dir: /app
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+      VITE_AUTH_URL: http://localhost:5000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    depends_on:
+      - server
+    networks:
+      - travelassist-network-dev
+
+volumes:
+  mongo_data_dev:
+    driver: local
+
+networks:
+  travelassist-network-dev:
+    driver: bridge

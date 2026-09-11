@@ -1,2 +1,5 @@
 improvement.md
 walkthrough.md
+.env
+.env.*
+!.env.docker.example
